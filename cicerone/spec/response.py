@@ -9,6 +9,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.header import Header
+from cicerone.spec.link import Link
+from cicerone.spec.media_type import MediaType
+
 
 class Response(BaseModel):
     """Represents an OpenAPI response object."""
@@ -17,9 +21,9 @@ class Response(BaseModel):
     model_config = {"extra": "allow"}
 
     description: str | None = None
-    content: dict[str, Any] = Field(default_factory=dict)
-    headers: dict[str, Any] = Field(default_factory=dict)
-    links: dict[str, Any] = Field(default_factory=dict)
+    content: dict[str, MediaType] = Field(default_factory=dict)
+    headers: dict[str, Header] = Field(default_factory=dict)
+    links: dict[str, Link] = Field(default_factory=dict)
     # Swagger 2.0 fields
     schema_: dict[str, Any] | None = Field(None, alias="schema")
     examples: dict[str, Any] = Field(default_factory=dict)
@@ -27,4 +31,37 @@ class Response(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Response":
         """Create a Response from a dictionary."""
-        return cls(**data)
+        response_data: dict[str, Any] = {
+            "description": data.get("description"),
+            "schema": data.get("schema"),
+            "examples": data.get("examples", {}),
+        }
+
+        # Parse content as MediaType objects
+        if "content" in data:
+            response_data["content"] = {
+                media_type: MediaType.from_dict(media_data)
+                for media_type, media_data in data["content"].items()
+            }
+
+        # Parse headers as Header objects
+        if "headers" in data:
+            response_data["headers"] = {
+                header_name: Header.from_dict(header_data)
+                for header_name, header_data in data["headers"].items()
+            }
+
+        # Parse links as Link objects
+        if "links" in data:
+            response_data["links"] = {
+                link_name: Link.from_dict(link_data)
+                for link_name, link_data in data["links"].items()
+            }
+
+        # Add any extra fields
+        for key, value in data.items():
+            if key not in response_data:
+                response_data[key] = value
+
+        return cls(**response_data)
+

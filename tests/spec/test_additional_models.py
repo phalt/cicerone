@@ -1,0 +1,90 @@
+"""Tests for additional component models."""
+
+from cicerone.spec.link import Link
+from cicerone.spec.media_type import MediaType
+from cicerone.spec.oauth_flows import OAuthFlow, OAuthFlows
+
+
+class TestMediaType:
+    """Tests for MediaType model."""
+
+    def test_media_type_from_dict(self):
+        """Test creating MediaType from dict."""
+        data = {
+            "schema": {"type": "object", "properties": {"id": {"type": "string"}}},
+            "example": {"id": "123"},
+        }
+        media_type = MediaType.from_dict(data)
+        assert media_type.schema_ == {"type": "object", "properties": {"id": {"type": "string"}}}
+        assert media_type.example == {"id": "123"}
+
+    def test_media_type_with_examples(self):
+        """Test creating MediaType with examples."""
+        data = {
+            "schema": {"type": "string"},
+            "examples": {
+                "user1": {"value": "John"},
+                "user2": {"value": "Jane"},
+            },
+        }
+        media_type = MediaType.from_dict(data)
+        assert "user1" in media_type.examples
+        assert "user2" in media_type.examples
+
+
+class TestLink:
+    """Tests for Link model."""
+
+    def test_link_from_dict(self):
+        """Test creating Link from dict."""
+        data = {
+            "operationId": "getUser",
+            "parameters": {"userId": "$response.body#/id"},
+            "description": "Link to user",
+        }
+        link = Link.from_dict(data)
+        assert link.operationId == "getUser"
+        assert link.description == "Link to user"
+        assert "userId" in link.parameters
+
+
+class TestOAuthFlow:
+    """Tests for OAuthFlow model."""
+
+    def test_oauth_flow_from_dict(self):
+        """Test creating OAuthFlow from dict."""
+        data = {
+            "authorizationUrl": "https://example.com/oauth/authorize",
+            "tokenUrl": "https://example.com/oauth/token",
+            "scopes": {
+                "read": "Read access",
+                "write": "Write access",
+            },
+        }
+        flow = OAuthFlow.from_dict(data)
+        assert flow.authorizationUrl == "https://example.com/oauth/authorize"
+        assert flow.tokenUrl == "https://example.com/oauth/token"
+        assert flow.scopes == {"read": "Read access", "write": "Write access"}
+
+
+class TestOAuthFlows:
+    """Tests for OAuthFlows model."""
+
+    def test_oauth_flows_from_dict(self):
+        """Test creating OAuthFlows from dict."""
+        data = {
+            "implicit": {
+                "authorizationUrl": "https://example.com/oauth/authorize",
+                "scopes": {"read": "Read access"},
+            },
+            "authorizationCode": {
+                "authorizationUrl": "https://example.com/oauth/authorize",
+                "tokenUrl": "https://example.com/oauth/token",
+                "scopes": {"write": "Write access"},
+            },
+        }
+        flows = OAuthFlows.from_dict(data)
+        assert flows.implicit is not None
+        assert flows.implicit.authorizationUrl == "https://example.com/oauth/authorize"
+        assert flows.authorizationCode is not None
+        assert flows.authorizationCode.tokenUrl == "https://example.com/oauth/token"
