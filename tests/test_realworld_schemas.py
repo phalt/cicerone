@@ -102,9 +102,9 @@ class TestRealWorldSchemas:
         # Verify various component types are present
         assert len(spec.components.schemas) > 0, "Should have schemas"
         assert len(spec.components.responses) > 0, "Should have responses"
-        assert len(spec.components.requestBodies) > 0, "Should have requestBodies"
+        assert len(spec.components.request_bodies) > 0, "Should have requestBodies"
         assert len(spec.components.examples) > 0, "Should have examples"
-        assert len(spec.components.securitySchemes) > 0, "Should have securitySchemes"
+        assert len(spec.components.security_schemes) > 0, "Should have securitySchemes"
 
         # Test medium schema which has parameters
         spec = parse_spec_from_file(fixtures_dir / "medium.yaml")
@@ -114,7 +114,7 @@ class TestRealWorldSchemas:
         # Test ably schema which has securitySchemes
         spec = parse_spec_from_file(fixtures_dir / "ably.yaml")
         assert len(spec.components.schemas) > 0, "Should have schemas"
-        assert len(spec.components.securitySchemes) > 0, "Should have securitySchemes"
+        assert len(spec.components.security_schemes) > 0, "Should have securitySchemes"
 
     def test_extensions_preserved(self, fixtures_dir: Path) -> None:
         """Test that OpenAPI extensions (x-* fields) are preserved in parsed specs."""

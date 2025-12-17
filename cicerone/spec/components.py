@@ -20,15 +20,16 @@ class Components(BaseModel):
     # - Vendor extensions (x-* fields) per OpenAPI spec
     # - Future spec additions without breaking compatibility
     # - Preservation of all data for raw access
-    model_config = {"extra": "allow"}
+    # populate_by_name: Allow using either field name or alias
+    model_config = {"extra": "allow", "populate_by_name": True}
 
     schemas: dict[str, Schema] = Field(default_factory=dict)
     responses: dict[str, Any] = Field(default_factory=dict)
     parameters: dict[str, Any] = Field(default_factory=dict)
     examples: dict[str, Any] = Field(default_factory=dict)
-    requestBodies: dict[str, Any] = Field(default_factory=dict, alias="requestBodies")
+    request_bodies: dict[str, Any] = Field(default_factory=dict, alias="requestBodies")
     headers: dict[str, Any] = Field(default_factory=dict)
-    securitySchemes: dict[str, Any] = Field(default_factory=dict, alias="securitySchemes")
+    security_schemes: dict[str, Any] = Field(default_factory=dict, alias="securitySchemes")
     links: dict[str, Any] = Field(default_factory=dict)
     callbacks: dict[str, Any] = Field(default_factory=dict)
 
@@ -41,12 +42,12 @@ class Components(BaseModel):
             parts.append(f"{len(self.responses)} responses")
         if self.parameters:
             parts.append(f"{len(self.parameters)} parameters")
-        if self.requestBodies:
-            parts.append(f"{len(self.requestBodies)} requestBodies")
+        if self.request_bodies:
+            parts.append(f"{len(self.request_bodies)} requestBodies")
         if self.examples:
             parts.append(f"{len(self.examples)} examples")
-        if self.securitySchemes:
-            parts.append(f"{len(self.securitySchemes)} securitySchemes")
+        if self.security_schemes:
+            parts.append(f"{len(self.security_schemes)} securitySchemes")
         if self.headers:
             parts.append(f"{len(self.headers)} headers")
         if self.links:
