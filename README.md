@@ -7,7 +7,7 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/cicerone)
 ![PyPI - License](https://img.shields.io/pypi/l/cicerone)
 
-Cicerone lets you parse OpenAPI/Swagger schemas into rich, traversable Python objects.
+Cicerone lets you parse OpenAPI/Swagger schemas into Python objects for inspection, traversal, and tooling.
 
 ## Installation
 
