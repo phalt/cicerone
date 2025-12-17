@@ -1,0 +1,50 @@
+name: CI - Lint and Test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{matrix.python-version}}
+      #----------------------------------------------
+      #  -----  install & configure uv  -----
+      #----------------------------------------------
+      - name: Install UV
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      #----------------------------------------------
+      # install dependencies
+      #----------------------------------------------
+      - name: Install dependencies
+        run: uv sync --frozen
+      #----------------------------------------------
+      # Run linting and tests
+      #----------------------------------------------
+      - name: Ruff format check
+        run: |
+          uv run ruff format --check .
+      - name: Ruff linting
+        run: |
+          uv run ruff check .
+      - name: Type check with mypy
+        run: |
+          uv run mypy .
+      - name: Test with pytest
+        run: |
+          uv run pytest -vv
