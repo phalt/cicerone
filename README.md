@@ -25,37 +25,85 @@ uv add cicerone
 
 ## Quick Start
 
+### Parsing Specifications
+
+Load OpenAPI/Swagger specifications from various sources:
+
 ```python
-from cicerone.spec import OpenAPISpec
+from cicerone.parse import (
+    parse_spec_from_file,
+    parse_spec_from_url,
+    parse_spec_from_dict,
+    parse_spec_from_json,
+    parse_spec_from_yaml,
+)
 
-# Load from a file (auto-detects YAML/JSON)
-spec = OpenAPISpec.from_file("openapi.yaml")
+# From a file (auto-detects YAML/JSON)
+file_spec = parse_spec_from_file("openapi.yaml")
 
-# Or from a URL
-spec = OpenAPISpec.from_url("https://api.example.com/openapi.json")
+# From a URL
+url_spec = parse_spec_from_url("https://api.example.com/openapi.json")
 
-# Or from a dict/JSON/YAML string
-spec = OpenAPISpec.from_dict({"openapi": "3.0.0", ...})
-spec = OpenAPISpec.from_json('{"openapi": "3.0.0", ...}')
-spec = OpenAPISpec.from_yaml('openapi: "3.0.0"\n...')
+# From a dictionary
+dict_spec = parse_spec_from_dict({"openapi": "3.0.0", ...})
 
-# Traverse operations
+# From JSON string
+json_spec = parse_spec_from_json('{"openapi": "3.0.0", ...}')
+
+# From YAML string
+yaml_spec = parse_spec_from_yaml('openapi: "3.0.0"\n...')
+```
+
+### Exploring Operations
+
+Once parsed, traverse operations in your spec:
+
+```python
+from cicerone.parse import parse_spec_from_file
+
+spec = parse_spec_from_file("openapi.yaml")
+
+# Iterate through all operations
 for operation in spec.all_operations():
     print(f"{operation.method} {operation.path} - {operation.operation_id}")
 
-# Find specific operations
+# Find a specific operation by ID
 list_users = spec.operation_by_operation_id("listUsers")
 if list_users:
-    print(f"Found: {list_users.summary}")
+    print(f"Summary: {list_users.summary}")
+    print(f"Tags: {list_users.tags}")
+```
 
-# Access schemas/components
+### Accessing Schemas
+
+Explore data models defined in your spec:
+
+```python
+# Get a schema by name
 user_schema = spec.components.get("User")
-if user_schema:
-    print(f"User properties: {list(user_schema.properties.keys())}")
-    print(f"Required fields: {user_schema.required}")
 
-# Access raw spec data
+if user_schema:
+    # Access properties
+    print(f"Properties: {list(user_schema.properties.keys())}")
+    
+    # Check required fields
+    print(f"Required: {user_schema.required}")
+    
+    # Examine nested properties
+    for prop_name, prop_schema in user_schema.properties.items():
+        print(f"  {prop_name}: {prop_schema.type}")
+```
+
+### Accessing Raw Data
+
+Access the original specification dictionary when needed:
+
+```python
+# Version information
 print(f"API Version: {spec.version}")
+print(f"Major: {spec.version.major}, Minor: {spec.version.minor}")
+
+# Raw spec data
 print(f"Title: {spec.raw['info']['title']}")
 ```
 

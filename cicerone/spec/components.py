@@ -1,0 +1,37 @@
+"""Components container model for reusable component definitions."""
+
+from typing import Any, Mapping
+
+from pydantic import BaseModel, Field
+
+from cicerone.spec.schema import Schema
+from cicerone.spec.version import Version
+
+
+class Components(BaseModel):
+    """Container for reusable component definitions."""
+
+    model_config = {"extra": "allow"}
+
+    schemas: dict[str, Schema] = Field(default_factory=dict)
+
+    def get(self, schema_name: str) -> Schema | None:
+        """Get a schema by name."""
+        return self.schemas.get(schema_name)
+
+    @classmethod
+    def from_spec(cls, raw: Mapping[str, Any], version: Version) -> "Components":
+        """Create Components from spec data, handling both OpenAPI 3.x and Swagger 2.0."""
+        schemas = {}
+
+        # OpenAPI 3.x: components.schemas
+        if version.major >= 3 and "components" in raw and "schemas" in raw["components"]:
+            for name, schema_data in raw["components"]["schemas"].items():
+                schemas[name] = Schema.from_dict(schema_data)
+
+        # Swagger 2.0: definitions
+        elif version.major == 2 and "definitions" in raw:
+            for name, schema_data in raw["definitions"].items():
+                schemas[name] = Schema.from_dict(schema_data)
+
+        return cls(schemas=schemas)
