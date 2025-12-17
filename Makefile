@@ -37,34 +37,3 @@ test:  ## Run tests
 
 shell:  ## Run an ipython shell
 	uv run ipython
-
-generate-test-clients:  ## regenerate the test clients in the tests/ directory
-	uv sync
-	uv run cicerone generate -f example_openapi_specs/best.json -o tests/test_client/ --regen t
-	uv run cicerone generate -f example_openapi_specs/best.json -o tests/async_test_client/ --asyncio t --regen t
-	uv run cicerone generate-class -f example_openapi_specs/best.json -o tests/test_class_client/ --regen t
-	uv run cicerone generate-class -f example_openapi_specs/best.json -o tests/async_test_class_client/ --asyncio t --regen t
-
-brew-status:  ## Check the status of Homebrew publishing setup
-	@homebrew/check_status.sh
-
-brew-formula:  ## Generate Homebrew formula for current version
-	uv run python homebrew/generate_formula.py
-
-brew-verify:  ## Verify the generated Homebrew formula (requires Homebrew installed)
-	@if command -v brew >/dev/null 2>&1; then \
-		brew audit --strict --online homebrew/cicerone.rb; \
-	else \
-		echo "Homebrew is not installed. Skipping verification."; \
-	fi
-
-brew-test-local:  ## Test installing the formula locally (requires Homebrew installed)
-	@if command -v brew >/dev/null 2>&1; then \
-		echo "Testing formula installation..."; \
-		brew install --build-from-source homebrew/cicerone.rb; \
-		echo "Running version check..."; \
-		cicerone version; \
-	else \
-		echo "Error: Homebrew is not installed."; \
-		exit 1; \
-	fi
