@@ -34,11 +34,35 @@ class Components(BaseModel):
 
     def __str__(self) -> str:
         """Return a readable string representation of the components container."""
-        num_schemas = len(self.schemas)
-        schemas_preview = ", ".join(list(self.schemas.keys())[:5])
-        if num_schemas > 5:
-            schemas_preview += f", ... (+{num_schemas - 5} more)"
-        return f"<Components: {num_schemas} schemas [{schemas_preview}]>"
+        parts = []
+        if self.schemas:
+            parts.append(f"{len(self.schemas)} schemas")
+        if self.responses:
+            parts.append(f"{len(self.responses)} responses")
+        if self.parameters:
+            parts.append(f"{len(self.parameters)} parameters")
+        if self.requestBodies:
+            parts.append(f"{len(self.requestBodies)} requestBodies")
+        if self.examples:
+            parts.append(f"{len(self.examples)} examples")
+        if self.securitySchemes:
+            parts.append(f"{len(self.securitySchemes)} securitySchemes")
+        if self.headers:
+            parts.append(f"{len(self.headers)} headers")
+        if self.links:
+            parts.append(f"{len(self.links)} links")
+        if self.callbacks:
+            parts.append(f"{len(self.callbacks)} callbacks")
+
+        if not parts:
+            return "<Components: empty>"
+
+        # Show first few component types and count
+        summary = ", ".join(parts[:3])
+        if len(parts) > 3:
+            summary += f" (+{len(parts) - 3} more types)"
+
+        return f"<Components: {summary}>"
 
     def get_schema(self, schema_name: str) -> Schema | None:
         """Get a schema by name.
