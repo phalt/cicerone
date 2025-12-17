@@ -60,7 +60,7 @@ class TestPerformance:
         spec = parse_spec_from_file(complex_spec_path)
 
         def access_schema():
-            schema = spec.components.get("Resource10")
+            schema = spec.components.get_schema("Resource10")
             if schema:
                 # Access nested properties
                 _ = list(schema.properties.keys())

@@ -80,7 +80,7 @@ Explore data models defined in your spec:
 
 ```python
 # Get a schema by name
-user_schema = spec.components.get("User")
+user_schema = spec.components.get_schema("User")
 
 if user_schema:
     # Access properties

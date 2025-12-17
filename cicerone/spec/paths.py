@@ -1,4 +1,9 @@
-"""Paths container model for all path items."""
+"""Paths container model for all path items.
+
+References:
+- OpenAPI 3.x Paths Object: https://spec.openapis.org/oas/v3.1.0#paths-object
+- Swagger 2.0 Paths Object: https://swagger.io/specification/v2/#paths-object
+"""
 
 from typing import Any, Generator, Mapping
 
@@ -11,6 +16,7 @@ from cicerone.spec.path_item import PathItem
 class Paths(BaseModel):
     """Container for all path items in the spec."""
 
+    # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
     items: dict[str, PathItem] = Field(default_factory=dict)

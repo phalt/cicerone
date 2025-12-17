@@ -1,4 +1,9 @@
-"""Operation model for HTTP operations."""
+"""Operation model for HTTP operations.
+
+References:
+- OpenAPI 3.x Operation Object: https://spec.openapis.org/oas/v3.1.0#operation-object
+- Swagger 2.0 Operation Object: https://swagger.io/specification/v2/#operation-object
+"""
 
 from typing import Any, ClassVar, Mapping
 
@@ -8,10 +13,18 @@ from pydantic import BaseModel, Field
 class Operation(BaseModel):
     """Represents an HTTP operation (GET, POST, etc.)."""
 
+    # Allow extra fields to support vendor extensions and future spec additions
     model_config = {"extra": "allow"}
 
-    # Fields that are explicitly handled
-    HANDLED_FIELDS: ClassVar[set[str]] = {"operationId", "summary", "description", "tags", "parameters", "responses"}
+    # Fields that are explicitly mapped in from_dict() to avoid double-processing
+    EXPLICITLY_MAPPED_FIELDS: ClassVar[set[str]] = {
+        "operationId",
+        "summary",
+        "description",
+        "tags",
+        "parameters",
+        "responses",
+    }
 
     method: str
     path: str
@@ -45,5 +58,5 @@ class Operation(BaseModel):
             tags=data.get("tags", []),
             parameters=data.get("parameters", []),
             responses=data.get("responses", {}),
-            **{k: v for k, v in data.items() if k not in cls.HANDLED_FIELDS},
+            **{k: v for k, v in data.items() if k not in cls.EXPLICITLY_MAPPED_FIELDS},
         )

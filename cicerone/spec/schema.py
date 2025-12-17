@@ -1,4 +1,10 @@
-"""Schema model for JSON Schema / OpenAPI Schema objects."""
+"""Schema model for JSON Schema / OpenAPI Schema objects.
+
+References:
+- OpenAPI 3.x Schema Object: https://spec.openapis.org/oas/v3.1.0#schema-object
+- JSON Schema: https://json-schema.org/specification
+- Swagger 2.0 Schema Object: https://swagger.io/specification/v2/#schema-object
+"""
 
 from typing import Any, Mapping
 
@@ -8,6 +14,7 @@ from pydantic import BaseModel, Field
 class Schema(BaseModel):
     """Represents a JSON Schema / OpenAPI Schema object."""
 
+    # Allow extra fields to support full JSON Schema vocabulary and vendor extensions
     model_config = {"extra": "allow"}
 
     title: str | None = None

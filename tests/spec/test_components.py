@@ -23,7 +23,7 @@ class TestComponents:
         version = Version("3.0.0")
         components = Components.from_spec(raw, version)
         assert "User" in components.schemas
-        user_schema = components.get("User")
+        user_schema = components.get_schema("User")
         assert user_schema is not None
         assert user_schema.type == "object"
 
@@ -41,4 +41,4 @@ class TestComponents:
         version = Version("2.0")
         components = Components.from_spec(raw, version)
         assert "Pet" in components.schemas
-        assert components.get("Pet") is not None
+        assert components.get_schema("Pet") is not None

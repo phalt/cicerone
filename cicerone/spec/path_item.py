@@ -1,4 +1,9 @@
-"""PathItem model representing a single path with operations."""
+"""PathItem model representing a single path with operations.
+
+References:
+- OpenAPI 3.x Path Item Object: https://spec.openapis.org/oas/v3.1.0#path-item-object
+- Swagger 2.0 Path Item Object: https://swagger.io/specification/v2/#path-item-object
+"""
 
 from typing import Any, Mapping
 
@@ -10,6 +15,7 @@ from cicerone.spec.operation import Operation
 class PathItem(BaseModel):
     """Represents a path item with its operations."""
 
+    # Allow extra fields to support vendor extensions and path-level parameters
     model_config = {"extra": "allow"}
 
     path: str

@@ -50,7 +50,7 @@ class TestOpenAPISpec:
         assert spec.paths["/users"].operations["get"].operation_id == "listUsers"
 
         # Verify components
-        user_schema = spec.components.get("User")
+        user_schema = spec.components.get_schema("User")
         assert user_schema is not None
         assert user_schema.type == "object"
         assert user_schema.required == ["id", "username"]
@@ -85,7 +85,7 @@ class TestOpenAPISpec:
         assert get_user_op.path == "/users/{userId}"
 
         # Verify schemas
-        user_schema = spec.components.get("User")
+        user_schema = spec.components.get_schema("User")
         assert user_schema is not None
         assert user_schema.type == "object"
         assert "id" in user_schema.required
@@ -97,7 +97,7 @@ class TestOpenAPISpec:
         assert "age" in user_schema.properties
         assert "roles" in user_schema.properties
 
-        error_schema = spec.components.get("Error")
+        error_schema = spec.components.get_schema("Error")
         assert error_schema is not None
 
         # Verify all_operations
@@ -126,7 +126,7 @@ class TestOpenAPISpec:
         assert create_pet_op.method == "POST"
 
         # Verify schemas from definitions
-        pet_schema = spec.components.get("Pet")
+        pet_schema = spec.components.get_schema("Pet")
         assert pet_schema is not None
         assert pet_schema.type == "object"
         assert "id" in pet_schema.required

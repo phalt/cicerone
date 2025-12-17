@@ -1,8 +1,13 @@
-"""Top-level OpenAPISpec model."""
+"""Top-level OpenAPISpec model.
+
+References:
+- OpenAPI 3.x Specification: https://spec.openapis.org/oas/v3.1.0
+- Swagger 2.0 Specification: https://swagger.io/specification/v2/
+"""
 
 from typing import Any, Generator
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel
 
 from cicerone.spec.components import Components
 from cicerone.spec.operation import Operation
@@ -13,6 +18,9 @@ from cicerone.spec.version import Version
 class OpenAPISpec(BaseModel):
     """Top-level OpenAPI specification model."""
 
+    # Model configuration:
+    # - extra="allow": Supports vendor extensions (x-* fields) and preserves all spec data
+    # - arbitrary_types_allowed=True: Required for the custom Version class (non-Pydantic)
     model_config = {"extra": "allow", "arbitrary_types_allowed": True}
 
     raw: dict[str, Any]
@@ -26,14 +34,6 @@ class OpenAPISpec(BaseModel):
         num_paths = len(self.paths.items)
         num_schemas = len(self.components.schemas)
         return f"<OpenAPISpec: '{title}' v{self.version}, {num_paths} paths, {num_schemas} schemas>"
-
-    @model_validator(mode="before")
-    @classmethod
-    def convert_version(cls, data: Any) -> Any:
-        """Convert version string to Version object if needed."""
-        if isinstance(data, dict) and "version" in data and isinstance(data["version"], str):
-            data["version"] = Version(data["version"])
-        return data
 
     def operation_by_operation_id(self, operation_id: str) -> Operation | None:
         """Find an operation by its operationId.

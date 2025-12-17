@@ -1,4 +1,9 @@
-"""Components container model for reusable component definitions."""
+"""Components container model for reusable component definitions.
+
+References:
+- OpenAPI 3.x Components Object: https://spec.openapis.org/oas/v3.1.0#components-object
+- Swagger 2.0 Definitions Object: https://swagger.io/specification/v2/#definitions-object
+"""
 
 from typing import Any, Mapping
 
@@ -11,6 +16,10 @@ from cicerone.spec.version import Version
 class Components(BaseModel):
     """Container for reusable component definitions."""
 
+    # Allow extra fields to support:
+    # - Vendor extensions (x-* fields) per OpenAPI spec
+    # - Future spec additions without breaking compatibility
+    # - Preservation of all data for raw access
     model_config = {"extra": "allow"}
 
     schemas: dict[str, Schema] = Field(default_factory=dict)
@@ -23,8 +32,15 @@ class Components(BaseModel):
             schemas_preview += f", ... (+{num_schemas - 5} more)"
         return f"<Components: {num_schemas} schemas [{schemas_preview}]>"
 
-    def get(self, schema_name: str) -> Schema | None:
-        """Get a schema by name."""
+    def get_schema(self, schema_name: str) -> Schema | None:
+        """Get a schema by name.
+
+        Args:
+            schema_name: Name of the schema to retrieve
+
+        Returns:
+            Schema object if found, None otherwise
+        """
         return self.schemas.get(schema_name)
 
     @classmethod
