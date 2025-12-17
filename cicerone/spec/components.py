@@ -79,15 +79,15 @@ class Components(BaseModel):
     @classmethod
     def from_spec(cls, raw: Mapping[str, Any], version: Version) -> "Components":
         """Create Components from spec data, handling both OpenAPI 3.x and Swagger 2.0."""
-        schemas = {}
-        responses = {}
-        parameters = {}
-        examples = {}
-        request_bodies = {}
-        headers = {}
-        security_schemes = {}
-        links = {}
-        callbacks = {}
+        schemas: dict[str, Schema] = {}
+        responses: dict[str, Any] = {}
+        parameters: dict[str, Any] = {}
+        examples: dict[str, Any] = {}
+        request_bodies: dict[str, Any] = {}
+        headers: dict[str, Any] = {}
+        security_schemes: dict[str, Any] = {}
+        links: dict[str, Any] = {}
+        callbacks: dict[str, Any] = {}
 
         # OpenAPI 3.x: components object
         if version.major >= 3 and "components" in raw:
@@ -99,22 +99,20 @@ class Components(BaseModel):
                     schemas[name] = Schema.from_dict(schema_data)
 
             # Store other component types as raw data for now
-            if "responses" in components:
-                responses = dict(components["responses"])
-            if "parameters" in components:
-                parameters = dict(components["parameters"])
-            if "examples" in components:
-                examples = dict(components["examples"])
-            if "requestBodies" in components:
-                request_bodies = dict(components["requestBodies"])
-            if "headers" in components:
-                headers = dict(components["headers"])
-            if "securitySchemes" in components:
-                security_schemes = dict(components["securitySchemes"])
-            if "links" in components:
-                links = dict(components["links"])
-            if "callbacks" in components:
-                callbacks = dict(components["callbacks"])
+            component_mappings = {
+                "responses": responses,
+                "parameters": parameters,
+                "examples": examples,
+                "requestBodies": request_bodies,
+                "headers": headers,
+                "securitySchemes": security_schemes,
+                "links": links,
+                "callbacks": callbacks,
+            }
+
+            for component_key, target_dict in component_mappings.items():
+                if component_key in components:
+                    target_dict.update(components[component_key])
 
         # Swagger 2.0: definitions
         elif version.major == 2 and "definitions" in raw:
@@ -122,12 +120,15 @@ class Components(BaseModel):
                 schemas[name] = Schema.from_dict(schema_data)
 
             # Swagger 2.0 also has top-level parameters and responses
-            if "parameters" in raw:
-                parameters = dict(raw["parameters"])
-            if "responses" in raw:
-                responses = dict(raw["responses"])
-            if "securityDefinitions" in raw:
-                security_schemes = dict(raw["securityDefinitions"])
+            swagger_mappings = {
+                "parameters": parameters,
+                "responses": responses,
+                "securityDefinitions": security_schemes,
+            }
+
+            for swagger_key, target_dict in swagger_mappings.items():
+                if swagger_key in raw:
+                    target_dict.update(raw[swagger_key])
 
         return cls(
             schemas=schemas,
