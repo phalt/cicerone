@@ -9,7 +9,13 @@ from typing import Any, Mapping
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.example import Example
+from cicerone.spec.header import Header
+from cicerone.spec.parameter import Parameter
+from cicerone.spec.request_body import RequestBody
+from cicerone.spec.response import Response
 from cicerone.spec.schema import Schema
+from cicerone.spec.security_scheme import SecurityScheme
 from cicerone.spec.version import Version
 
 
@@ -24,12 +30,12 @@ class Components(BaseModel):
     model_config = {"extra": "allow", "populate_by_name": True}
 
     schemas: dict[str, Schema] = Field(default_factory=dict)
-    responses: dict[str, Any] = Field(default_factory=dict)
-    parameters: dict[str, Any] = Field(default_factory=dict)
-    examples: dict[str, Any] = Field(default_factory=dict)
-    request_bodies: dict[str, Any] = Field(default_factory=dict, alias="requestBodies")
-    headers: dict[str, Any] = Field(default_factory=dict)
-    security_schemes: dict[str, Any] = Field(default_factory=dict, alias="securitySchemes")
+    responses: dict[str, Response] = Field(default_factory=dict)
+    parameters: dict[str, Parameter] = Field(default_factory=dict)
+    examples: dict[str, Example] = Field(default_factory=dict)
+    request_bodies: dict[str, RequestBody] = Field(default_factory=dict, alias="requestBodies")
+    headers: dict[str, Header] = Field(default_factory=dict)
+    security_schemes: dict[str, SecurityScheme] = Field(default_factory=dict, alias="securitySchemes")
     links: dict[str, Any] = Field(default_factory=dict)
     callbacks: dict[str, Any] = Field(default_factory=dict)
 
@@ -80,12 +86,12 @@ class Components(BaseModel):
     def from_spec(cls, raw: Mapping[str, Any], version: Version) -> "Components":
         """Create Components from spec data, handling both OpenAPI 3.x and Swagger 2.0."""
         schemas: dict[str, Schema] = {}
-        responses: dict[str, Any] = {}
-        parameters: dict[str, Any] = {}
-        examples: dict[str, Any] = {}
-        request_bodies: dict[str, Any] = {}
-        headers: dict[str, Any] = {}
-        security_schemes: dict[str, Any] = {}
+        responses: dict[str, Response] = {}
+        parameters: dict[str, Parameter] = {}
+        examples: dict[str, Example] = {}
+        request_bodies: dict[str, RequestBody] = {}
+        headers: dict[str, Header] = {}
+        security_schemes: dict[str, SecurityScheme] = {}
         links: dict[str, Any] = {}
         callbacks: dict[str, Any] = {}
 
@@ -98,37 +104,55 @@ class Components(BaseModel):
                 for name, schema_data in components["schemas"].items():
                     schemas[name] = Schema.from_dict(schema_data)
 
-            # Store other component types as raw data for now
-            component_mappings = {
-                "responses": responses,
-                "parameters": parameters,
-                "examples": examples,
-                "requestBodies": request_bodies,
-                "headers": headers,
-                "securitySchemes": security_schemes,
-                "links": links,
-                "callbacks": callbacks,
-            }
+            # Parse typed component types
+            if "responses" in components:
+                for name, response_data in components["responses"].items():
+                    responses[name] = Response.from_dict(response_data)
 
-            for component_key, target_dict in component_mappings.items():
-                if component_key in components:
-                    target_dict.update(components[component_key])
+            if "parameters" in components:
+                for name, param_data in components["parameters"].items():
+                    parameters[name] = Parameter.from_dict(param_data)
+
+            if "examples" in components:
+                for name, example_data in components["examples"].items():
+                    examples[name] = Example.from_dict(example_data)
+
+            if "requestBodies" in components:
+                for name, body_data in components["requestBodies"].items():
+                    request_bodies[name] = RequestBody.from_dict(body_data)
+
+            if "headers" in components:
+                for name, header_data in components["headers"].items():
+                    headers[name] = Header.from_dict(header_data)
+
+            if "securitySchemes" in components:
+                for name, scheme_data in components["securitySchemes"].items():
+                    security_schemes[name] = SecurityScheme.from_dict(scheme_data)
+
+            # Store remaining component types as raw data
+            if "links" in components:
+                links = dict(components["links"])
+
+            if "callbacks" in components:
+                callbacks = dict(components["callbacks"])
 
         # Swagger 2.0: definitions
         elif version.major == 2 and "definitions" in raw:
             for name, schema_data in raw["definitions"].items():
                 schemas[name] = Schema.from_dict(schema_data)
 
-            # Swagger 2.0 also has top-level parameters and responses
-            swagger_mappings = {
-                "parameters": parameters,
-                "responses": responses,
-                "securityDefinitions": security_schemes,
-            }
+            # Swagger 2.0 also has top-level parameters, responses, and securityDefinitions
+            if "parameters" in raw:
+                for name, param_data in raw["parameters"].items():
+                    parameters[name] = Parameter.from_dict(param_data)
 
-            for swagger_key, target_dict in swagger_mappings.items():
-                if swagger_key in raw:
-                    target_dict.update(raw[swagger_key])
+            if "responses" in raw:
+                for name, response_data in raw["responses"].items():
+                    responses[name] = Response.from_dict(response_data)
+
+            if "securityDefinitions" in raw:
+                for name, scheme_data in raw["securityDefinitions"].items():
+                    security_schemes[name] = SecurityScheme.from_dict(scheme_data)
 
         return cls(
             schemas=schemas,
