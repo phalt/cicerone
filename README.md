@@ -11,8 +11,6 @@ Cicerone lets you parse OpenAPI/Swagger schemas into rich, traversable Python ob
 
 ## Installation
 
-Install cicerone as a global CLI tool:
-
 ### With pip (Python)
 
 ```sh
