@@ -94,3 +94,36 @@ class TestRealWorldSchemas:
             spec = parse_spec_from_file(fixtures_dir / schema_file)
             assert spec is not None, f"Failed to parse {schema_file}"
             assert spec.version.major in (2, 3), f"Unsupported version in {schema_file}"
+
+    def test_components_parsing(self, fixtures_dir: Path) -> None:
+        """Test that component types are correctly parsed from real-world schemas."""
+        # Test 1password schema which has multiple component types
+        spec = parse_spec_from_file(fixtures_dir / "1password.yaml")
+        assert len(spec.components.schemas) == 21
+        assert len(spec.components.responses) == 8
+        assert len(spec.components.requestBodies) == 4
+        assert len(spec.components.examples) == 2
+        assert len(spec.components.securitySchemes) == 1
+
+        # Test medium schema which has parameters
+        spec = parse_spec_from_file(fixtures_dir / "medium.yaml")
+        assert len(spec.components.schemas) == 52
+        assert len(spec.components.parameters) == 11
+
+        # Test ably schema which has securitySchemes
+        spec = parse_spec_from_file(fixtures_dir / "ably.yaml")
+        assert len(spec.components.schemas) == 63
+        assert len(spec.components.securitySchemes) == 1
+
+    def test_extensions_preserved(self, fixtures_dir: Path) -> None:
+        """Test that OpenAPI extensions (x-* fields) are preserved in parsed specs."""
+        # Test ably schema which has multiple extensions
+        spec = parse_spec_from_file(fixtures_dir / "ably.yaml")
+
+        # Check info-level extensions
+        info = spec.raw.get("info", {})
+        assert "x-providerName" in info
+        assert info["x-providerName"] == "ably.net"
+        assert "x-serviceName" in info
+        assert "x-logo" in info
+        assert "x-apisguru-categories" in info
