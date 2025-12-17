@@ -2,7 +2,7 @@
 
 import json
 from pathlib import Path
-from typing import Any, Generator, Mapping
+from typing import Any, ClassVar, Generator, Mapping
 from urllib.request import Request, urlopen
 
 import yaml
@@ -69,6 +69,9 @@ class Operation(BaseModel):
 
     model_config = {"extra": "allow"}
 
+    # Fields that are explicitly handled
+    HANDLED_FIELDS: ClassVar[set[str]] = {"operationId", "summary", "description", "tags", "parameters", "responses"}
+
     method: str
     path: str
     operation_id: str | None = Field(None, alias="operationId")
@@ -90,7 +93,7 @@ class Operation(BaseModel):
             tags=data.get("tags", []),
             parameters=data.get("parameters", []),
             responses=data.get("responses", {}),
-            **{k: v for k, v in data.items() if k not in ["operationId", "summary", "description", "tags", "parameters", "responses"]},
+            **{k: v for k, v in data.items() if k not in cls.HANDLED_FIELDS},
         )
 
 
@@ -217,8 +220,8 @@ class OpenAPISpec(BaseModel):
         # Parse components
         components = Components.from_spec(data, version)
 
-        # Store raw data as regular dict
-        raw_dict = dict(data) if not isinstance(data, dict) else data
+        # Convert Mapping to dict for storage
+        raw_dict = dict(data)
 
         return cls(raw=raw_dict, version=version, paths=paths, components=components)
 
