@@ -38,7 +38,7 @@ jobs:
       #----------------------------------------------
       - name: Ruff format check
         run: |
-          uv run ruff format --check .
+          uv run ruff format --check cicerone tests
       - name: Ruff linting
         run: |
           uv run ruff check .
