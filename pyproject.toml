@@ -1,0 +1,75 @@
+[project]
+name = "cicerone"
+version = "0.1.0"
+description = "Explore OpenAPI schemas, the Pythonic way"
+authors = [{ name = "Paul Hallett", email = "paulandrewhallett@gmail.com" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "httpx>=0.27.0",
+    "click>=8.1.3",
+    "pydantic>=2.9",
+    "rich>=13.4.2",
+    "pyyaml>=6.0.1",
+    "types-pyyaml>=6.0.12.11",
+]
+
+[project.urls]
+Homepage = "https://phalt.github.io/cicerone/"
+Changelog = "https://phalt.github.io/cicerone/CHANGELOG/"
+Documentation = "https://phalt.github.io/cicerone/"
+Issues = "https://github.com/phalt/cicerone/issues"
+
+[project.scripts]
+cicerone = "cicerone.cli:cli_group"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.4.0",
+    "mkdocs>=1.4.3",
+    "ipython>=8.14.0",
+    "mkdocs-material>=9.1.19",
+    "pytest>=7.4.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cicerone"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I001",
+]
+
+[tool.mypy]
+python_version = "3.14"
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+files = ["cicerone", "tests"]
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = "$MYPY_CONFIG_FILE_DIR"
+
+# Ignore missing imports for test libraries
+[[tool.mypy.overrides]]
+module = ["pytest.*", "respx.*"]
+ignore_missing_imports = true

@@ -1,0 +1,26 @@
+site_name: 📜 Cicerone
+site_url: https://phalt.github.io/cicerone/
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: blue grey
+repo_name: phalt/cicerone
+repo_url: https://github.com/phalt/cicerone
+nav:
+  - Home: index.md
+  - Install: install.md
+  - Change log: CHANGELOG.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.highlight
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - codehilite
