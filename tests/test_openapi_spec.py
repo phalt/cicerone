@@ -4,8 +4,6 @@ import json
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-import pytest
-
 from cicerone.spec import Components, OpenAPISpec, Operation, PathItem, Paths, Schema, Version
 
 
@@ -191,8 +189,9 @@ class TestComponents:
         version = Version("3.0.0")
         components = Components.from_spec(raw, version)
         assert "User" in components.schemas
-        assert components.get("User") is not None
-        assert components.get("User").type == "object"
+        user_schema = components.get("User")
+        assert user_schema is not None
+        assert user_schema.type == "object"
 
     def test_components_swagger2(self):
         """Test creating Components from Swagger 2.0 spec."""
