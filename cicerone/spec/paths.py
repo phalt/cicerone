@@ -15,6 +15,15 @@ class Paths(BaseModel):
 
     items: dict[str, PathItem] = Field(default_factory=dict)
 
+    def __str__(self) -> str:
+        """Return a readable string representation of the paths container."""
+        num_paths = len(self.items)
+        num_ops = sum(len(item.operations) for item in self.items.values())
+        paths_preview = ", ".join(list(self.items.keys())[:3])
+        if num_paths > 3:
+            paths_preview += f", ... (+{num_paths - 3} more)"
+        return f"<Paths: {num_paths} paths, {num_ops} operations [{paths_preview}]>"
+
     def __getitem__(self, path: str) -> PathItem:
         """Get a path item by path string."""
         return self.items[path]

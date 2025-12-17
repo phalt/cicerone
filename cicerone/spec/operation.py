@@ -22,6 +22,17 @@ class Operation(BaseModel):
     parameters: list[Any] = Field(default_factory=list)
     responses: dict[str, Any] = Field(default_factory=dict)
 
+    def __str__(self) -> str:
+        """Return a readable string representation of the operation."""
+        parts = [f"{self.method} {self.path}"]
+        if self.operation_id:
+            parts.append(f"id={self.operation_id}")
+        if self.summary:
+            parts.append(f"'{self.summary}'")
+        if self.tags:
+            parts.append(f"tags={self.tags}")
+        return f"<Operation: {', '.join(parts)}>"
+
     @classmethod
     def from_dict(cls, method: str, path: str, data: Mapping[str, Any]) -> "Operation":
         """Create an Operation from a dictionary."""

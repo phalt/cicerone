@@ -20,6 +20,13 @@ class OpenAPISpec(BaseModel):
     paths: Paths
     components: Components
 
+    def __str__(self) -> str:
+        """Return a readable string representation of the OpenAPI spec."""
+        title = self.raw.get("info", {}).get("title", "Untitled")
+        num_paths = len(self.paths.items)
+        num_schemas = len(self.components.schemas)
+        return f"<OpenAPISpec: '{title}' v{self.version}, {num_paths} paths, {num_schemas} schemas>"
+
     @model_validator(mode="before")
     @classmethod
     def convert_version(cls, data: Any) -> Any:

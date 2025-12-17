@@ -15,6 +15,14 @@ class Components(BaseModel):
 
     schemas: dict[str, Schema] = Field(default_factory=dict)
 
+    def __str__(self) -> str:
+        """Return a readable string representation of the components container."""
+        num_schemas = len(self.schemas)
+        schemas_preview = ", ".join(list(self.schemas.keys())[:5])
+        if num_schemas > 5:
+            schemas_preview += f", ... (+{num_schemas - 5} more)"
+        return f"<Components: {num_schemas} schemas [{schemas_preview}]>"
+
     def get(self, schema_name: str) -> Schema | None:
         """Get a schema by name."""
         return self.schemas.get(schema_name)

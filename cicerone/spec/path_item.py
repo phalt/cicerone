@@ -15,6 +15,11 @@ class PathItem(BaseModel):
     path: str
     operations: dict[str, Operation] = Field(default_factory=dict)
 
+    def __str__(self) -> str:
+        """Return a readable string representation of the path item."""
+        methods = ", ".join(m.upper() for m in self.operations.keys())
+        return f"<PathItem: {self.path} [{methods}]>"
+
     @classmethod
     def from_dict(cls, path: str, data: Mapping[str, Any]) -> "PathItem":
         """Create a PathItem from a dictionary."""

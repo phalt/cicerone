@@ -17,6 +17,23 @@ class Schema(BaseModel):
     required: list[str] = Field(default_factory=list)
     items: "Schema | None" = None
 
+    def __str__(self) -> str:
+        """Return a readable string representation of the schema."""
+        parts = []
+        if self.title:
+            parts.append(f"'{self.title}'")
+        if self.type:
+            parts.append(f"type={self.type}")
+        if self.properties:
+            parts.append(f"{len(self.properties)} properties")
+        if self.required:
+            parts.append(f"required={self.required}")
+        if self.items:
+            parts.append(f"items={self.items.type or 'object'}")
+
+        content = ", ".join(parts) if parts else "empty schema"
+        return f"<Schema: {content}>"
+
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "Schema":
         """Create a Schema from a dictionary, handling nested schemas."""
