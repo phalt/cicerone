@@ -9,6 +9,8 @@
 
 Cicerone lets you parse OpenAPI/Swagger schemas into Python objects for inspection, traversal, and tooling.
 
+The goal of Cicerone is to be fast, minimal, fully typed, and designed for Python developers by Python developers.
+
 ## Installation
 
 ### pip
