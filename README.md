@@ -11,13 +11,13 @@ Cicerone lets you parse OpenAPI/Swagger schemas into Python objects for inspecti
 
 ## Installation
 
-### With pip (Python)
+### pip
 
 ```sh
-pipx install cicerone
+pip install cicerone
 ```
 
-### With uv (Python)
+### uv
 
 ```sh
 uv add cicerone
@@ -54,45 +54,34 @@ json_spec = parse_spec_from_json('{"openapi": "3.0.0", ...}')
 yaml_spec = parse_spec_from_yaml('openapi: "3.0.0"\n...')
 ```
 
-### Exploring Operations
+### Exploring the schema
 
-Once parsed, traverse operations in your spec:
+Once parsed, traverse the schema:
 
 ```python
 from cicerone.parse import parse_spec_from_file
 
-spec = parse_spec_from_file("openapi.yaml")
+spec = parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
 
-# Iterate through all operations
-for operation in spec.all_operations():
-    print(f"{operation.method} {operation.path} - {operation.operation_id}")
+print("OpenAPISpec:", spec)
+print("Paths:", spec.paths)
+print("PathItem:", spec.paths["/users"])
+print("Operation:", spec.operation_by_operation_id("listUsers"))
+print("Components:", spec.components)
+print("Schema:", spec.components.get_schema("User"))
+user = spec.components.get_schema("User")
+print(f"User properties: {list(user.properties.keys())}")
 
-# Find a specific operation by ID
-list_users = spec.operation_by_operation_id("listUsers")
-if list_users:
-    print(f"Summary: {list_users.summary}")
-    print(f"Tags: {list_users.tags}")
+>>> OpenAPISpec: <OpenAPISpec: 'Test API' v3.0.0, 2 paths, 2 schemas>
+>>> Paths: <Paths: 2 paths, 3 operations [/users, /users/{userId}]>
+>>> PathItem: <PathItem: /users [GET, POST]>
+>>> Operation: <Operation: GET /users, id=listUsers, 'List all users', tags=['users']>
+>>> Components: <Components: 2 schemas [User, Error]>
+>>> Schema: <Schema: type=object, 5 properties, required=['id', 'username', 'email']>
+>>> User properties: ['id', 'username', 'email', 'age', 'roles']
 ```
 
-### Accessing Schemas
 
-Explore data models defined in your spec:
-
-```python
-# Get a schema by name
-user_schema = spec.components.get_schema("User")
-
-if user_schema:
-    # Access properties
-    print(f"Properties: {list(user_schema.properties.keys())}")
-    
-    # Check required fields
-    print(f"Required: {user_schema.required}")
-    
-    # Examine nested properties
-    for prop_name, prop_schema in user_schema.properties.items():
-        print(f"  {prop_name}: {prop_schema.type}")
-```
 
 ### Accessing Raw Data
 
