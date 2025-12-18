@@ -90,6 +90,7 @@ class Schema(BaseModel):
             allOf=all_of,
             oneOf=one_of,
             anyOf=any_of,
+            # Use dict unpacking for 'not' since it's a Python keyword
             **{"not": not_} if not_ else {},
             **{k: v for k, v in data.items() if k not in excluded},
         )

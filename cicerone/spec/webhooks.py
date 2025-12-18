@@ -45,6 +45,7 @@ class Webhooks(BaseModel):
         items = {}
         for webhook_name, webhook_data in data.items():
             # Each webhook is like a PathItem but without a path
-            # We'll use the webhook name as the "path" for consistency
+            # We use a webhook: prefix to distinguish these from real API paths
+            # This is internal to cicerone and not part of the OpenAPI spec
             items[webhook_name] = PathItem.from_dict(f"webhook:{webhook_name}", webhook_data)
         return cls(items=items)

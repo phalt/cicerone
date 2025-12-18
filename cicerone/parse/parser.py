@@ -12,7 +12,7 @@ from cicerone.spec.info import Info
 from cicerone.spec.openapi_spec import OpenAPISpec
 from cicerone.spec.paths import Paths
 from cicerone.spec.server import Server
-from cicerone.spec.tag import Tag
+from cicerone.spec.tag import ExternalDocumentation, Tag
 from cicerone.spec.version import Version
 from cicerone.spec.webhooks import Webhooks
 
@@ -70,8 +70,6 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     # Parse externalDocs
     external_docs = None
     if "externalDocs" in data:
-        from cicerone.spec.tag import ExternalDocumentation
-
         external_docs = ExternalDocumentation.from_dict(data["externalDocs"])
 
     # Convert Mapping to dict for storage
