@@ -4,6 +4,9 @@ References:
 - OpenAPI 3.x Specification: https://spec.openapis.org/oas/v3.1.0
 """
 
+from __future__ import annotations
+
+from itertools import chain
 from typing import Any, Generator
 
 from pydantic import BaseModel, Field
@@ -36,7 +39,7 @@ class OpenAPISpec(BaseModel):
     components: Components
     security: list[dict[str, list[str]]] = Field(default_factory=list)
     tags: list[Tag] = Field(default_factory=list)
-    external_docs: "ExternalDocumentation | None" = Field(None, alias="externalDocs")
+    external_docs: ExternalDocumentation | None = Field(None, alias="externalDocs")
 
     def __str__(self) -> str:
         """Return a readable string representation of the OpenAPI spec."""
@@ -76,5 +79,4 @@ class OpenAPISpec(BaseModel):
             >>> for op in spec.all_operations():
             ...     print(op.method, op.path, op.operation_id)
         """
-        yield from self.paths.all_operations()
-        yield from self.webhooks.all_operations()
+        yield from chain(self.paths.all_operations(), self.webhooks.all_operations())

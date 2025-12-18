@@ -6,9 +6,13 @@ References:
 - OpenAPI 3.x License Object: https://spec.openapis.org/oas/v3.1.0#license-object
 """
 
-from typing import Any, Mapping
+from __future__ import annotations
+
+from typing import Any
 
 from pydantic import BaseModel, Field
+
+from cicerone.spec.model_utils import parse_nested_object
 
 
 class Contact(BaseModel):
@@ -22,13 +26,14 @@ class Contact(BaseModel):
     email: str | None = None
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "Contact":
+    def from_dict(cls, data: dict[str, Any]) -> Contact:
         """Create a Contact from a dictionary."""
+        excluded = {"name", "url", "email"}
         return cls(
             name=data.get("name"),
             url=data.get("url"),
             email=data.get("email"),
-            **{k: v for k, v in data.items() if k not in {"name", "url", "email"}},
+            **{k: v for k, v in data.items() if k not in excluded},
         )
 
 
@@ -43,13 +48,14 @@ class License(BaseModel):
     identifier: str | None = None
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "License":
+    def from_dict(cls, data: dict[str, Any]) -> License:
         """Create a License from a dictionary."""
+        excluded = {"name", "url", "identifier"}
         return cls(
             name=data["name"],
             url=data.get("url"),
             identifier=data.get("identifier"),
-            **{k: v for k, v in data.items() if k not in {"name", "url", "identifier"}},
+            **{k: v for k, v in data.items() if k not in excluded},
         )
 
 
@@ -76,27 +82,16 @@ class Info(BaseModel):
         return f"<Info: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "Info":
+    def from_dict(cls, data: dict[str, Any]) -> Info:
         """Create an Info object from a dictionary."""
-        contact = None
-        if "contact" in data:
-            contact = Contact.from_dict(data["contact"])
-
-        license_obj = None
-        if "license" in data:
-            license_obj = License.from_dict(data["license"])
-
+        excluded = {"title", "version", "summary", "description", "termsOfService", "contact", "license"}
         return cls(
             title=data["title"],
             version=data["version"],
             summary=data.get("summary"),
             description=data.get("description"),
             termsOfService=data.get("termsOfService"),
-            contact=contact,
-            license=license_obj,
-            **{
-                k: v
-                for k, v in data.items()
-                if k not in {"title", "version", "summary", "description", "termsOfService", "contact", "license"}
-            },
+            contact=parse_nested_object(data, "contact", Contact.from_dict),
+            license=parse_nested_object(data, "license", License.from_dict),
+            **{k: v for k, v in data.items() if k not in excluded},
         )

@@ -4,7 +4,9 @@ References:
 - OpenAPI 3.1.x Webhooks: https://spec.openapis.org/oas/v3.1.0#fixed-fields
 """
 
-from typing import Any, Generator, Mapping
+from __future__ import annotations
+
+from typing import Any, Generator
 
 from pydantic import BaseModel, Field
 
@@ -40,7 +42,7 @@ class Webhooks(BaseModel):
                 yield operation
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "Webhooks":
+    def from_dict(cls, data: dict[str, Any]) -> Webhooks:
         """Create Webhooks from a dictionary of webhook definitions."""
         items = {}
         for webhook_name, webhook_data in data.items():

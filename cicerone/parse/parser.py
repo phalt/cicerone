@@ -9,6 +9,7 @@ import yaml
 
 from cicerone.spec.components import Components
 from cicerone.spec.info import Info
+from cicerone.spec.model_utils import parse_nested_object
 from cicerone.spec.openapi_spec import OpenAPISpec
 from cicerone.spec.paths import Paths
 from cicerone.spec.server import Server
@@ -35,9 +36,7 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     version = Version(version_str)
 
     # Parse info
-    info = None
-    if "info" in data:
-        info = Info.from_dict(data["info"])
+    info = parse_nested_object(data, "info", Info.from_dict)
 
     # Parse jsonSchemaDialect (OpenAPI 3.1+)
     json_schema_dialect = data.get("jsonSchemaDialect")
@@ -68,9 +67,7 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
         tags = [Tag.from_dict(tag_data) for tag_data in data["tags"]]
 
     # Parse externalDocs
-    external_docs = None
-    if "externalDocs" in data:
-        external_docs = ExternalDocumentation.from_dict(data["externalDocs"])
+    external_docs = parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict)
 
     # Convert Mapping to dict for storage
     # This ensures we have a real dict (not just a Mapping) for the raw field

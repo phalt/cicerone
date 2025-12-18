@@ -4,9 +4,13 @@ References:
 - OpenAPI 3.x Tag Object: https://spec.openapis.org/oas/v3.1.0#tag-object
 """
 
-from typing import Any, Mapping
+from __future__ import annotations
+
+from typing import Any
 
 from pydantic import BaseModel
+
+from cicerone.spec.model_utils import parse_nested_object
 
 
 class ExternalDocumentation(BaseModel):
@@ -19,12 +23,13 @@ class ExternalDocumentation(BaseModel):
     description: str | None = None
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "ExternalDocumentation":
+    def from_dict(cls, data: dict[str, Any]) -> ExternalDocumentation:
         """Create ExternalDocumentation from a dictionary."""
+        excluded = {"url", "description"}
         return cls(
             url=data["url"],
             description=data.get("description"),
-            **{k: v for k, v in data.items() if k not in {"url", "description"}},
+            **{k: v for k, v in data.items() if k not in excluded},
         )
 
 
@@ -47,15 +52,12 @@ class Tag(BaseModel):
         return f"<Tag: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "Tag":
+    def from_dict(cls, data: dict[str, Any]) -> Tag:
         """Create a Tag from a dictionary."""
-        external_docs = None
-        if "externalDocs" in data:
-            external_docs = ExternalDocumentation.from_dict(data["externalDocs"])
-
+        excluded = {"name", "description", "externalDocs"}
         return cls(
             name=data["name"],
             description=data.get("description"),
-            external_docs=external_docs,
-            **{k: v for k, v in data.items() if k not in {"name", "description", "externalDocs"}},
+            external_docs=parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict),
+            **{k: v for k, v in data.items() if k not in excluded},
         )

@@ -5,9 +5,13 @@ References:
 - OpenAPI 3.x Server Variable Object: https://spec.openapis.org/oas/v3.1.0#server-variable-object
 """
 
-from typing import Any, Mapping
+from __future__ import annotations
+
+from typing import Any
 
 from pydantic import BaseModel, Field
+
+from cicerone.spec.model_utils import parse_collection
 
 
 class ServerVariable(BaseModel):
@@ -21,13 +25,14 @@ class ServerVariable(BaseModel):
     description: str | None = None
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "ServerVariable":
+    def from_dict(cls, data: dict[str, Any]) -> ServerVariable:
         """Create a ServerVariable from a dictionary."""
+        excluded = {"enum", "default", "description"}
         return cls(
             enum=data.get("enum", []),
             default=data["default"],
             description=data.get("description"),
-            **{k: v for k, v in data.items() if k not in {"enum", "default", "description"}},
+            **{k: v for k, v in data.items() if k not in excluded},
         )
 
 
@@ -51,16 +56,12 @@ class Server(BaseModel):
         return f"<Server: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "Server":
+    def from_dict(cls, data: dict[str, Any]) -> Server:
         """Create a Server from a dictionary."""
-        variables = {}
-        if "variables" in data:
-            for name, var_data in data["variables"].items():
-                variables[name] = ServerVariable.from_dict(var_data)
-
+        excluded = {"url", "description", "variables"}
         return cls(
             url=data["url"],
             description=data.get("description"),
-            variables=variables,
-            **{k: v for k, v in data.items() if k not in {"url", "description", "variables"}},
+            variables=parse_collection(data, "variables", ServerVariable.from_dict),
+            **{k: v for k, v in data.items() if k not in excluded},
         )
