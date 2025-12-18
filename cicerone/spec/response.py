@@ -15,6 +15,7 @@ from cicerone.spec.example import Example
 from cicerone.spec.header import Header
 from cicerone.spec.link import Link
 from cicerone.spec.media_type import MediaType
+from cicerone.spec.model_utils import parse_collection, parse_nested_object
 from cicerone.spec.schema import Schema
 
 
@@ -35,8 +36,6 @@ class Response(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Response:
         """Create a Response from a dictionary."""
-        from cicerone.spec.model_utils import parse_collection, parse_nested_object
-
         excluded = {"description", "schema", "content", "headers", "links", "examples"}
         return cls(
             description=data.get("description"),

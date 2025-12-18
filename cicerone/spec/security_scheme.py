@@ -9,6 +9,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.model_utils import parse_nested_object
 from cicerone.spec.oauth_flows import OAuthFlows
 
 
@@ -30,8 +31,6 @@ class SecurityScheme(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "SecurityScheme":
         """Create a SecurityScheme from a dictionary."""
-        from cicerone.spec.model_utils import parse_nested_object
-
         excluded = {"type", "description", "name", "in", "scheme", "bearerFormat", "flows", "openIdConnectUrl"}
         return cls(
             type=data.get("type"),

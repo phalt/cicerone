@@ -9,6 +9,8 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.model_utils import parse_nested_object
+
 
 class OAuthFlow(BaseModel):
     """Represents an OpenAPI OAuth Flow Object."""
@@ -42,8 +44,6 @@ class OAuthFlows(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "OAuthFlows":
         """Create an OAuthFlows from a dictionary."""
-        from cicerone.spec.model_utils import parse_nested_object
-
         excluded = {"implicit", "password", "clientCredentials", "authorizationCode"}
         return cls(
             implicit=parse_nested_object(data, "implicit", OAuthFlow.from_dict),

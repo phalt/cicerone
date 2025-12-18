@@ -1,7 +1,7 @@
-"""Utility functions for model parsing to reduce code duplication.
+"""Utility functions for model parsing.
 
-This module provides common patterns used across model from_dict() methods,
-centralizing field extraction, nested object parsing, and collection handling.
+This module provides reusable helpers for parsing OpenAPI specification data
+into model objects, including nested object parsing and collection handling.
 """
 
 from typing import Any, Callable, Mapping, TypeVar

@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 
 from cicerone.spec.encoding import Encoding
 from cicerone.spec.example import Example
+from cicerone.spec.model_utils import parse_collection
 
 
 class MediaType(BaseModel):
@@ -28,8 +29,6 @@ class MediaType(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> MediaType:
         """Create a MediaType from a dictionary."""
-        from cicerone.spec.model_utils import parse_collection
-
         return cls(
             schema=data.get("schema"),
             example=data.get("example"),

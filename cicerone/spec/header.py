@@ -11,6 +11,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from cicerone.spec.example import Example
+from cicerone.spec.model_utils import parse_collection, parse_nested_object
 from cicerone.spec.schema import Schema
 
 
@@ -31,8 +32,6 @@ class Header(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Header:
         """Create a Header from a dictionary."""
-        from cicerone.spec.model_utils import parse_collection, parse_nested_object
-
         excluded = {"description", "required", "schema", "style", "explode", "example", "examples"}
         return cls(
             description=data.get("description"),

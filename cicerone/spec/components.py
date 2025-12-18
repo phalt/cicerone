@@ -13,6 +13,7 @@ from cicerone.spec.callback import Callback
 from cicerone.spec.example import Example
 from cicerone.spec.header import Header
 from cicerone.spec.link import Link
+from cicerone.spec.model_utils import parse_collection
 from cicerone.spec.parameter import Parameter
 from cicerone.spec.request_body import RequestBody
 from cicerone.spec.response import Response
@@ -87,8 +88,6 @@ class Components(BaseModel):
     @classmethod
     def from_spec(cls, raw: Mapping[str, Any], version: Version) -> "Components":
         """Create Components from spec data, handling both OpenAPI 3.x and Swagger 2.0."""
-        from cicerone.spec.model_utils import parse_collection
-
         # OpenAPI 3.x: components object
         if version.major >= 3 and "components" in raw:
             components = raw["components"]

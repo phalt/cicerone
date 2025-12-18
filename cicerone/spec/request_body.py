@@ -9,6 +9,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from cicerone.spec.media_type import MediaType
+from cicerone.spec.model_utils import parse_collection
 
 
 class RequestBody(BaseModel):
@@ -24,8 +25,6 @@ class RequestBody(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "RequestBody":
         """Create a RequestBody from a dictionary."""
-        from cicerone.spec.model_utils import parse_collection
-
         return cls(
             description=data.get("description"),
             content=parse_collection(data, "content", MediaType.from_dict),

@@ -10,6 +10,8 @@ from typing import Any, Mapping
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.model_utils import parse_collection, parse_nested_object
+
 
 class Schema(BaseModel):
     """Represents a JSON Schema / OpenAPI Schema object."""
@@ -44,8 +46,6 @@ class Schema(BaseModel):
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "Schema":
         """Create a Schema from a dictionary, handling nested schemas."""
-        from cicerone.spec.model_utils import parse_collection, parse_nested_object
-
         excluded = {"title", "type", "description", "required", "properties", "items"}
         return cls(
             title=data.get("title"),
