@@ -137,3 +137,18 @@ class TestComponents:
         str_repr = str(components)
         assert "<Components:" in str_repr
         assert "1 headers" in str_repr or "1 links" in str_repr or "1 callbacks" in str_repr
+
+    def test_components_str_with_security_schemes(self):
+        """Test __str__ method includes securitySchemes."""
+        raw = {
+            "openapi": "3.0.0",
+            "components": {
+                "securitySchemes": {
+                    "ApiKey": {"type": "apiKey", "in": "header", "name": "X-API-Key"},
+                },
+            },
+        }
+        components = Components.from_spec(raw)
+        str_repr = str(components)
+        assert "<Components:" in str_repr
+        assert "1 securitySchemes" in str_repr
