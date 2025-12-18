@@ -8,13 +8,20 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.example import Example
-from cicerone.spec.header import Header
-from cicerone.spec.link import Link
-from cicerone.spec.media_type import MediaType
-from cicerone.spec.model_utils import parse_collection
+from cicerone.spec import example as example_module
+from cicerone.spec import header as header_module
+from cicerone.spec import link as link_module
+from cicerone.spec import media_type as media_type_module
+from cicerone.spec import model_utils
+
+# Extract classes for type annotations
+Example = example_module.Example
+Header = header_module.Header
+Link = link_module.Link
+MediaType = media_type_module.MediaType
 
 
 class Response(BaseModel):
@@ -35,9 +42,9 @@ class Response(BaseModel):
         excluded = {"description", "content", "headers", "links", "examples"}
         return cls(
             description=data.get("description"),
-            content=parse_collection(data, "content", MediaType.from_dict),
-            headers=parse_collection(data, "headers", Header.from_dict),
-            links=parse_collection(data, "links", Link.from_dict),
-            examples=parse_collection(data, "examples", Example.from_dict),
+            content=model_utils.parse_collection(data, "content", media_type_module.MediaType.from_dict),
+            headers=model_utils.parse_collection(data, "headers", header_module.Header.from_dict),
+            links=model_utils.parse_collection(data, "links", link_module.Link.from_dict),
+            examples=model_utils.parse_collection(data, "examples", example_module.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

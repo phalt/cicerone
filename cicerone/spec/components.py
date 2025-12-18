@@ -4,20 +4,33 @@ References:
 - OpenAPI 3.x Components Object: https://spec.openapis.org/oas/v3.1.0#components-object
 """
 
-from typing import Any, Mapping
+from typing import Any
+from typing import Mapping
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.callback import Callback
-from cicerone.spec.example import Example
-from cicerone.spec.header import Header
-from cicerone.spec.link import Link
-from cicerone.spec.model_utils import parse_collection
-from cicerone.spec.parameter import Parameter
-from cicerone.spec.request_body import RequestBody
-from cicerone.spec.response import Response
-from cicerone.spec.schema import Schema
-from cicerone.spec.security_scheme import SecurityScheme
+from cicerone.spec import callback as callback_module
+from cicerone.spec import example as example_module
+from cicerone.spec import header as header_module
+from cicerone.spec import link as link_module
+from cicerone.spec import model_utils
+from cicerone.spec import parameter as parameter_module
+from cicerone.spec import request_body as request_body_module
+from cicerone.spec import response as response_module
+from cicerone.spec import schema as schema_module
+from cicerone.spec import security_scheme as security_scheme_module
+
+# Extract classes for type annotations
+Callback = callback_module.Callback
+Example = example_module.Example
+Header = header_module.Header
+Link = link_module.Link
+Parameter = parameter_module.Parameter
+RequestBody = request_body_module.RequestBody
+Response = response_module.Response
+Schema = schema_module.Schema
+SecurityScheme = security_scheme_module.SecurityScheme
 
 
 class Components(BaseModel):
@@ -90,15 +103,15 @@ class Components(BaseModel):
         if "components" in raw:
             components = raw["components"]
             return cls(
-                schemas=parse_collection(components, "schemas", Schema.from_dict),
-                responses=parse_collection(components, "responses", Response.from_dict),
-                parameters=parse_collection(components, "parameters", Parameter.from_dict),
-                examples=parse_collection(components, "examples", Example.from_dict),
-                requestBodies=parse_collection(components, "requestBodies", RequestBody.from_dict),
-                headers=parse_collection(components, "headers", Header.from_dict),
-                securitySchemes=parse_collection(components, "securitySchemes", SecurityScheme.from_dict),
-                links=parse_collection(components, "links", Link.from_dict),
-                callbacks=parse_collection(components, "callbacks", Callback.from_dict),
+                schemas=model_utils.parse_collection(components, "schemas", schema_module.Schema.from_dict),
+                responses=model_utils.parse_collection(components, "responses", response_module.Response.from_dict),
+                parameters=model_utils.parse_collection(components, "parameters", parameter_module.Parameter.from_dict),
+                examples=model_utils.parse_collection(components, "examples", example_module.Example.from_dict),
+                requestBodies=model_utils.parse_collection(components, "requestBodies", request_body_module.RequestBody.from_dict),
+                headers=model_utils.parse_collection(components, "headers", header_module.Header.from_dict),
+                securitySchemes=model_utils.parse_collection(components, "securitySchemes", security_scheme_module.SecurityScheme.from_dict),
+                links=model_utils.parse_collection(components, "links", link_module.Link.from_dict),
+                callbacks=model_utils.parse_collection(components, "callbacks", callback_module.Callback.from_dict),
             )
 
         return cls()

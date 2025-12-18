@@ -7,18 +7,20 @@ References:
 from __future__ import annotations
 
 from itertools import chain
-from typing import Any, Generator
+from typing import Any
+from typing import Generator
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.components import Components
-from cicerone.spec.info import Info
-from cicerone.spec.operation import Operation
-from cicerone.spec.paths import Paths
-from cicerone.spec.server import Server
-from cicerone.spec.tag import ExternalDocumentation, Tag
-from cicerone.spec.version import Version
-from cicerone.spec.webhooks import Webhooks
+from cicerone.spec import components
+from cicerone.spec import info
+from cicerone.spec import operation
+from cicerone.spec import paths
+from cicerone.spec import server
+from cicerone.spec import tag
+from cicerone.spec import version
+from cicerone.spec import webhooks
 
 
 class OpenAPISpec(BaseModel):
@@ -30,16 +32,16 @@ class OpenAPISpec(BaseModel):
     model_config = {"extra": "allow", "arbitrary_types_allowed": True}
 
     raw: dict[str, Any]
-    version: Version
-    info: Info | None = None
+    version: version.Version
+    info: info.Info | None = None
     json_schema_dialect: str | None = Field(None, alias="jsonSchemaDialect")
-    servers: list[Server] = Field(default_factory=list)
-    paths: Paths
-    webhooks: Webhooks = Field(default_factory=lambda: Webhooks(items={}))
-    components: Components
+    servers: list[server.Server] = Field(default_factory=list)
+    paths: paths.Paths
+    webhooks: webhooks.Webhooks = Field(default_factory=lambda: webhooks.Webhooks(items={}))
+    components: components.Components
     security: list[dict[str, list[str]]] = Field(default_factory=list)
-    tags: list[Tag] = Field(default_factory=list)
-    external_docs: ExternalDocumentation | None = Field(None, alias="externalDocs")
+    tags: list[tag.Tag] = Field(default_factory=list)
+    external_docs: tag.ExternalDocumentation | None = Field(None, alias="externalDocs")
 
     def __str__(self) -> str:
         """Return a readable string representation of the OpenAPI spec."""
@@ -48,7 +50,7 @@ class OpenAPISpec(BaseModel):
         num_schemas = len(self.components.schemas)
         return f"<OpenAPISpec: '{title}' v{self.version}, {num_paths} paths, {num_schemas} schemas>"
 
-    def operation_by_operation_id(self, operation_id: str) -> Operation | None:
+    def operation_by_operation_id(self, operation_id: str) -> operation.Operation | None:
         """Find an operation by its operationId.
 
         Args:
@@ -62,12 +64,12 @@ class OpenAPISpec(BaseModel):
             >>> spec = parse_spec_from_file("openapi.yaml")
             >>> op = spec.operation_by_operation_id("listUsers")
         """
-        for operation in self.paths.all_operations():
-            if operation.operation_id == operation_id:
-                return operation
+        for operation_obj in self.paths.all_operations():
+            if operation_obj.operation_id == operation_id:
+                return operation_obj
         return None
 
-    def all_operations(self) -> Generator[Operation, None, None]:
+    def all_operations(self) -> Generator[operation.Operation, None, None]:
         """Yield all operations in the spec (from paths and webhooks).
 
         Yields:

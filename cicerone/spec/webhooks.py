@@ -6,12 +6,14 @@ References:
 
 from __future__ import annotations
 
-from typing import Any, Generator
+from typing import Any
+from typing import Generator
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.operation import Operation
-from cicerone.spec.path_item import PathItem
+from cicerone.spec import operation
+from cicerone.spec import path_item
 
 
 class Webhooks(BaseModel):
@@ -20,7 +22,7 @@ class Webhooks(BaseModel):
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
-    items: dict[str, PathItem] = Field(default_factory=dict)
+    items: dict[str, path_item.PathItem] = Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of webhooks."""
@@ -31,15 +33,15 @@ class Webhooks(BaseModel):
             webhook_list += f" (+{len(self.items) - 3} more)"
         return f"<Webhooks: {len(self.items)} webhooks [{webhook_list}]>"
 
-    def all_operations(self) -> Generator[Operation, None, None]:
+    def all_operations(self) -> Generator[operation.Operation, None, None]:
         """Yield all operations across all webhooks.
 
         Yields:
             Operation objects
         """
-        for webhook_name, path_item in self.items.items():
-            for operation in path_item.operations.values():
-                yield operation
+        for webhook_name, path_item_obj in self.items.items():
+            for operation_obj in path_item_obj.operations.values():
+                yield operation_obj
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Webhooks:
@@ -49,5 +51,5 @@ class Webhooks(BaseModel):
             # Each webhook is like a PathItem but without a path
             # We use a webhook: prefix to distinguish these from real API paths
             # This is internal to cicerone and not part of the OpenAPI spec
-            items[webhook_name] = PathItem.from_dict(f"webhook:{webhook_name}", webhook_data)
+            items[webhook_name] = path_item.PathItem.from_dict(f"webhook:{webhook_name}", webhook_data)
         return cls(items=items)

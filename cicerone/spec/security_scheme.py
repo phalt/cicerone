@@ -6,10 +6,14 @@ References:
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.model_utils import parse_nested_object
-from cicerone.spec.oauth_flows import OAuthFlows
+from cicerone.spec import model_utils
+from cicerone.spec import oauth_flows as oauth_flows_module
+
+# Extract classes for type annotations
+OAuthFlows = oauth_flows_module.OAuthFlows
 
 
 class SecurityScheme(BaseModel):
@@ -38,7 +42,7 @@ class SecurityScheme(BaseModel):
             **{"in": data.get("in")},
             scheme=data.get("scheme"),
             bearerFormat=data.get("bearerFormat"),
-            flows=parse_nested_object(data, "flows", OAuthFlows.from_dict),
+            flows=model_utils.parse_nested_object(data, "flows", oauth_flows_module.OAuthFlows.from_dict),
             openIdConnectUrl=data.get("openIdConnectUrl"),
             **{k: v for k, v in data.items() if k not in excluded},
         )

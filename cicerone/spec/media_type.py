@@ -8,11 +8,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.encoding import Encoding
-from cicerone.spec.example import Example
-from cicerone.spec.model_utils import parse_collection
+from cicerone.spec import encoding as encoding_module
+from cicerone.spec import example as example_module
+from cicerone.spec import model_utils
+
+# Extract classes for type annotations
+Encoding = encoding_module.Encoding
+Example = example_module.Example
 
 
 class MediaType(BaseModel):
@@ -32,7 +37,7 @@ class MediaType(BaseModel):
         return cls(
             schema=data.get("schema"),
             example=data.get("example"),
-            examples=parse_collection(data, "examples", Example.from_dict),
-            encoding=parse_collection(data, "encoding", Encoding.from_dict),
+            examples=model_utils.parse_collection(data, "examples", example_module.Example.from_dict),
+            encoding=model_utils.parse_collection(data, "encoding", encoding_module.Encoding.from_dict),
             **{k: v for k, v in data.items() if k not in {"schema", "example", "examples", "encoding"}},
         )

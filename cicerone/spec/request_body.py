@@ -6,10 +6,14 @@ References:
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.media_type import MediaType
-from cicerone.spec.model_utils import parse_collection
+from cicerone.spec import media_type as media_type_module
+from cicerone.spec import model_utils
+
+# Extract classes for type annotations
+MediaType = media_type_module.MediaType
 
 
 class RequestBody(BaseModel):
@@ -27,7 +31,7 @@ class RequestBody(BaseModel):
         """Create a RequestBody from a dictionary."""
         return cls(
             description=data.get("description"),
-            content=parse_collection(data, "content", MediaType.from_dict),
+            content=model_utils.parse_collection(data, "content", media_type_module.MediaType.from_dict),
             required=data.get("required", False),
             **{k: v for k, v in data.items() if k not in {"description", "content", "required"}},
         )

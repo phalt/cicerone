@@ -7,9 +7,10 @@ References:
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.model_utils import parse_nested_object
+from cicerone.spec import model_utils
 
 
 class OAuthFlow(BaseModel):
@@ -46,9 +47,9 @@ class OAuthFlows(BaseModel):
         """Create an OAuthFlows from a dictionary."""
         excluded = {"implicit", "password", "clientCredentials", "authorizationCode"}
         return cls(
-            implicit=parse_nested_object(data, "implicit", OAuthFlow.from_dict),
-            password=parse_nested_object(data, "password", OAuthFlow.from_dict),
-            clientCredentials=parse_nested_object(data, "clientCredentials", OAuthFlow.from_dict),
-            authorizationCode=parse_nested_object(data, "authorizationCode", OAuthFlow.from_dict),
+            implicit=model_utils.parse_nested_object(data, "implicit", OAuthFlow.from_dict),
+            password=model_utils.parse_nested_object(data, "password", OAuthFlow.from_dict),
+            clientCredentials=model_utils.parse_nested_object(data, "clientCredentials", OAuthFlow.from_dict),
+            authorizationCode=model_utils.parse_nested_object(data, "authorizationCode", OAuthFlow.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

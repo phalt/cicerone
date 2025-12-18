@@ -8,11 +8,16 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.example import Example
-from cicerone.spec.model_utils import parse_collection, parse_nested_object
-from cicerone.spec.schema import Schema
+from cicerone.spec import example as example_module
+from cicerone.spec import model_utils
+from cicerone.spec import schema as schema_module
+
+# Extract classes for type annotations
+Example = example_module.Example
+Schema = schema_module.Schema
 
 
 class Parameter(BaseModel):
@@ -51,10 +56,10 @@ class Parameter(BaseModel):
             **{"in": data.get("in")},
             description=data.get("description"),
             required=data.get("required", False),
-            schema=parse_nested_object(data, "schema", Schema.from_dict),
+            schema=model_utils.parse_nested_object(data, "schema", schema_module.Schema.from_dict),
             style=data.get("style"),
             explode=data.get("explode"),
             example=data.get("example"),
-            examples=parse_collection(data, "examples", Example.from_dict),
+            examples=model_utils.parse_collection(data, "examples", example_module.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

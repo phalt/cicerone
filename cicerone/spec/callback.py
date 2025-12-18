@@ -8,9 +8,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.path_item import PathItem
+from cicerone.spec import path_item as path_item_module
+
+# Extract classes for type annotations
+PathItem = path_item_module.PathItem
 
 
 class Callback(BaseModel):
@@ -39,7 +43,7 @@ class Callback(BaseModel):
         # Parse each expression as a PathItem
         expressions: dict[str, PathItem] = {}
         for expression, path_item_data in data.items():
-            expressions[expression] = PathItem.from_dict(expression, path_item_data)
+            expressions[expression] = path_item_module.PathItem.from_dict(expression, path_item_data)
 
         return cls(expressions=expressions)
 

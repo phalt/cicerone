@@ -1,16 +1,16 @@
 """OpenAPI specification models and utilities."""
 
-from cicerone.spec.components import Components
-from cicerone.spec.info import Contact, Info, License
-from cicerone.spec.openapi_spec import OpenAPISpec
-from cicerone.spec.operation import Operation
-from cicerone.spec.path_item import PathItem
-from cicerone.spec.paths import Paths
-from cicerone.spec.schema import Schema
-from cicerone.spec.server import Server, ServerVariable
-from cicerone.spec.tag import ExternalDocumentation, Tag
-from cicerone.spec.version import Version
-from cicerone.spec.webhooks import Webhooks
+from cicerone.spec import components
+from cicerone.spec import info
+from cicerone.spec import openapi_spec
+from cicerone.spec import operation
+from cicerone.spec import path_item
+from cicerone.spec import paths
+from cicerone.spec import schema
+from cicerone.spec import server
+from cicerone.spec import tag
+from cicerone.spec import version
+from cicerone.spec import webhooks
 
 __all__ = [
     "Components",
@@ -30,12 +30,29 @@ __all__ = [
     "Webhooks",
 ]
 
-# Rebuild models with forward references after all imports are resolved
-from cicerone.spec.header import Header
-from cicerone.spec.parameter import Parameter
-from cicerone.spec.response import Response
+# Re-export for backward compatibility
+Components = components.Components
+Contact = info.Contact
+ExternalDocumentation = tag.ExternalDocumentation
+Info = info.Info
+License = info.License
+OpenAPISpec = openapi_spec.OpenAPISpec
+Operation = operation.Operation
+PathItem = path_item.PathItem
+Paths = paths.Paths
+Schema = schema.Schema
+Server = server.Server
+ServerVariable = server.ServerVariable
+Tag = tag.Tag
+Version = version.Version
+Webhooks = webhooks.Webhooks
 
-Header.model_rebuild()
-Parameter.model_rebuild()
-Response.model_rebuild()
-Components.model_rebuild()
+# Rebuild models with forward references after all imports are resolved
+from cicerone.spec import header
+from cicerone.spec import parameter
+from cicerone.spec import response
+
+header.Header.model_rebuild()
+parameter.Parameter.model_rebuild()
+response.Response.model_rebuild()
+components.Components.model_rebuild()
