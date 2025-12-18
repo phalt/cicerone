@@ -9,8 +9,10 @@ from typing import Any, Mapping
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.callback import Callback
 from cicerone.spec.example import Example
 from cicerone.spec.header import Header
+from cicerone.spec.link import Link
 from cicerone.spec.parameter import Parameter
 from cicerone.spec.request_body import RequestBody
 from cicerone.spec.response import Response
@@ -36,8 +38,8 @@ class Components(BaseModel):
     request_bodies: dict[str, RequestBody] = Field(default_factory=dict, alias="requestBodies")
     headers: dict[str, Header] = Field(default_factory=dict)
     security_schemes: dict[str, SecurityScheme] = Field(default_factory=dict, alias="securitySchemes")
-    links: dict[str, Any] = Field(default_factory=dict)
-    callbacks: dict[str, Any] = Field(default_factory=dict)
+    links: dict[str, Link] = Field(default_factory=dict)
+    callbacks: dict[str, Callback] = Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the components container."""
@@ -92,8 +94,8 @@ class Components(BaseModel):
         request_bodies: dict[str, RequestBody] = {}
         headers: dict[str, Header] = {}
         security_schemes: dict[str, SecurityScheme] = {}
-        links: dict[str, Any] = {}
-        callbacks: dict[str, Any] = {}
+        links: dict[str, Link] = {}
+        callbacks: dict[str, Callback] = {}
 
         # OpenAPI 3.x: components object
         if version.major >= 3 and "components" in raw:
@@ -129,12 +131,15 @@ class Components(BaseModel):
                 for name, scheme_data in components["securitySchemes"].items():
                     security_schemes[name] = SecurityScheme.from_dict(scheme_data)
 
-            # Store remaining component types as raw data
+            # Parse links as Link objects
             if "links" in components:
-                links = dict(components["links"])
+                for name, link_data in components["links"].items():
+                    links[name] = Link.from_dict(link_data)
 
+            # Parse callbacks as Callback objects
             if "callbacks" in components:
-                callbacks = dict(components["callbacks"])
+                for name, callback_data in components["callbacks"].items():
+                    callbacks[name] = Callback.from_dict(callback_data)
 
         # Swagger 2.0: definitions
         elif version.major == 2 and "definitions" in raw:

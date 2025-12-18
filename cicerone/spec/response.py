@@ -5,13 +5,16 @@ References:
 - Swagger 2.0 Response Object: https://swagger.io/specification/v2/#response-object
 """
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
 
 from cicerone.spec.header import Header
 from cicerone.spec.link import Link
 from cicerone.spec.media_type import MediaType
+
+if TYPE_CHECKING:
+    from cicerone.spec.schema import Schema
 
 
 class Response(BaseModel):
@@ -25,17 +28,22 @@ class Response(BaseModel):
     headers: dict[str, Header] = Field(default_factory=dict)
     links: dict[str, Link] = Field(default_factory=dict)
     # Swagger 2.0 fields
-    schema_: dict[str, Any] | None = Field(None, alias="schema")
+    schema_: "Schema | None" = Field(None, alias="schema")
     examples: dict[str, Any] = Field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Response":
         """Create a Response from a dictionary."""
+        from cicerone.spec.schema import Schema
+
         response_data: dict[str, Any] = {
             "description": data.get("description"),
-            "schema": data.get("schema"),
             "examples": data.get("examples", {}),
         }
+
+        # Parse schema as Schema object (Swagger 2.0)
+        if "schema" in data:
+            response_data["schema"] = Schema.from_dict(data["schema"])
 
         # Parse content as MediaType objects
         if "content" in data:
@@ -64,4 +72,5 @@ class Response(BaseModel):
                 response_data[key] = value
 
         return cls(**response_data)
+
 

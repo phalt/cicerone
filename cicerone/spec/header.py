@@ -4,9 +4,12 @@ References:
 - OpenAPI 3.x Header Object: https://spec.openapis.org/oas/v3.1.0#header-object
 """
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
+
+if TYPE_CHECKING:
+    from cicerone.spec.schema import Schema
 
 
 class Header(BaseModel):
@@ -17,7 +20,7 @@ class Header(BaseModel):
 
     description: str | None = None
     required: bool = False
-    schema_: dict[str, Any] | None = Field(None, alias="schema")
+    schema_: "Schema | None" = Field(None, alias="schema")
     style: str | None = None
     explode: bool | None = None
     example: Any | None = None
@@ -26,4 +29,25 @@ class Header(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Header":
         """Create a Header from a dictionary."""
-        return cls(**data)
+        from cicerone.spec.schema import Schema
+
+        header_data: dict[str, Any] = {
+            "description": data.get("description"),
+            "required": data.get("required", False),
+            "style": data.get("style"),
+            "explode": data.get("explode"),
+            "example": data.get("example"),
+            "examples": data.get("examples", {}),
+        }
+
+        # Parse schema as Schema object
+        if "schema" in data:
+            header_data["schema"] = Schema.from_dict(data["schema"])
+
+        # Add any extra fields
+        for key, value in data.items():
+            if key not in header_data:
+                header_data[key] = value
+
+        return cls(**header_data)
+

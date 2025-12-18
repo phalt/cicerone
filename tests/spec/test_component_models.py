@@ -25,7 +25,8 @@ class TestParameter:
         assert param.in_ == "query"
         assert param.description == "Page number"
         assert param.required is False
-        assert param.schema_ == {"type": "integer"}
+        assert param.schema_ is not None
+        assert param.schema_.type == "integer"
 
 
 class TestResponse:
@@ -120,4 +121,5 @@ class TestHeader:
         }
         header = Header.from_dict(data)
         assert header.description == "Rate limit header"
-        assert header.schema_ == {"type": "integer"}
+        assert header.schema_ is not None
+        assert header.schema_.type == "integer"
