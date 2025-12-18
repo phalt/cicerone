@@ -37,8 +37,6 @@ class Parameter(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Parameter:
         """Create a Parameter from a dictionary."""
-        from cicerone.spec.schema import Schema
-
         param_data: dict[str, Any] = {
             "name": data.get("name"),
             "in": data.get("in"),

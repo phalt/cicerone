@@ -31,8 +31,6 @@ class Header(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Header:
         """Create a Header from a dictionary."""
-        from cicerone.spec.schema import Schema
-
         header_data: dict[str, Any] = {
             "description": data.get("description"),
             "required": data.get("required", False),

@@ -2,11 +2,6 @@
 
 References:
 - OpenAPI 3.x Callback Object: https://spec.openapis.org/oas/v3.1.0#callback-object
-
-A Callback Object is a map of possible out-of-band requests and responses
-that may be initiated by the API provider and expected to be handled by the API consumer.
-The key is a runtime expression that identifies a URL to use for the callback operation.
-The value is a Path Item Object or a reference to one.
 """
 
 from __future__ import annotations
@@ -41,8 +36,6 @@ class Callback(BaseModel):
         Returns:
             Callback object with expressions parsed as PathItem objects
         """
-        from cicerone.spec.path_item import PathItem
-
         # Parse each expression as a PathItem
         expressions: dict[str, PathItem] = {}
         for expression, path_item_data in data.items():

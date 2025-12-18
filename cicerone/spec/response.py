@@ -35,8 +35,6 @@ class Response(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Response:
         """Create a Response from a dictionary."""
-        from cicerone.spec.schema import Schema
-
         response_data: dict[str, Any] = {
             "description": data.get("description"),
         }
