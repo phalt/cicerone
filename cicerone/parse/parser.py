@@ -38,9 +38,8 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> openapi_spec.OpenAPISpec:
     paths_obj = paths.Paths.from_dict(paths_data)
 
     # Parse webhooks (OpenAPI 3.1+)
-    webhooks_obj = (
-        model_utils.parse_nested_object(data, "webhooks", webhooks.Webhooks.from_dict)
-        or webhooks.Webhooks(items={})
+    webhooks_obj = model_utils.parse_nested_object(data, "webhooks", webhooks.Webhooks.from_dict) or webhooks.Webhooks(
+        items={}
     )
 
     # Parse components
