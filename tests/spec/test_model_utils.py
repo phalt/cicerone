@@ -28,7 +28,7 @@ class TestParseNestedObject:
 
     def test_parse_nested_object_with_empty_dict(self):
         """Test parsing with an empty dictionary."""
-        data = {}
+        data: dict[str, str] = {}
         result = parse_nested_object(data, "nested", dummy_parser)
         assert result is None
 
@@ -68,7 +68,7 @@ class TestParseCollection:
 
     def test_parse_collection_with_empty_collection(self):
         """Test parsing an empty collection."""
-        data = {"items": {}}
+        data: dict[str, dict[str, dict[str, str]]] = {"items": {}}
         result = parse_collection(data, "items", dummy_parser)
         assert result == {}
 
