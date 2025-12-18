@@ -43,6 +43,11 @@ class TestOpenAPIExamples:
         assert "200" in get_op.responses
         assert "300" in get_op.responses
 
+        # Verify the operation has proper method and path
+        assert get_op.method == "GET"
+        assert get_op.path == "/"
+        assert get_op.operation_id == "listVersionsv2"
+
     def test_parse_callback_example(self, examples_dir: Path) -> None:
         """Test parsing callback-example.json (focuses on callbacks)."""
         spec = parse_spec_from_file(examples_dir / "callback-example.json")
@@ -118,10 +123,25 @@ class TestOpenAPIExamples:
         assert "Pets" in spec.components.schemas
         assert "Error" in spec.components.schemas
 
+        # Verify Pet schema structure
+        pet_schema = spec.components.schemas["Pet"]
+        assert pet_schema.type == "object"
+        assert "id" in pet_schema.properties
+        assert "name" in pet_schema.properties
+        assert pet_schema.required == ["id", "name"]
+
         # Verify paths
         assert len(spec.paths.items) == 2
         assert "/pets" in spec.paths.items
         assert "/pets/{petId}" in spec.paths.items
+
+        # Verify operations are properly parsed
+        pets_path = spec.paths.items["/pets"]
+        assert "get" in pets_path.operations
+        assert "post" in pets_path.operations
+        get_op = pets_path.operations["get"]
+        assert get_op.operation_id == "listPets"
+        assert get_op.summary == "List all pets"
 
     def test_parse_petstore_expanded(self, examples_dir: Path) -> None:
         """Test parsing petstore-expanded.json (extended petstore with more features)."""
@@ -253,6 +273,14 @@ class TestOpenAPIExamples:
         all_ops = list(spec.all_operations())
         assert len(all_ops) == 1  # Only webhook operation
 
+        # Verify schema in components is properly parsed
+        assert "Pet" in spec.components.schemas
+        pet_schema = spec.components.schemas["Pet"]
+        assert pet_schema.type == "object"
+        assert pet_schema.required == ["id", "name"]
+        assert "id" in pet_schema.properties
+        assert "name" in pet_schema.properties
+
     def test_all_examples_parse_successfully(self, examples_dir: Path) -> None:
         """Ensure all example files can be parsed without errors."""
         example_files = [
@@ -281,10 +309,17 @@ class TestOpenAPIExamples:
         assert pet_schema.all_of is not None
         assert len(pet_schema.all_of) == 2
 
-        # Verify allOf elements
+        # Verify allOf elements are properly parsed as Schema objects
         first_element = pet_schema.all_of[0]
         assert first_element.model_extra is not None
         assert "$ref" in first_element.model_extra
+
+        # Verify second element has properties
+        second_element = pet_schema.all_of[1]
+        assert second_element.type == "object"
+        assert "id" in second_element.properties
+        assert second_element.properties["id"].type == "integer"
+        assert second_element.required == ["id"]
 
     def test_all_schema_elements_captured(self, examples_dir: Path) -> None:
         """Verify all schema elements are captured including format, example, etc."""

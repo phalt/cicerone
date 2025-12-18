@@ -18,7 +18,8 @@
   - Link
   - Callback
   - OAuthFlows
-- Added support for OpenAPI 3.1 webhooks feature and models for top-level OpenAPI objects:
+- Added support for OpenAPI 3.1 webhooks feature
+- Added models for top-level OpenAPI objects:
   - Info (with Contact and License)
   - Server (with ServerVariable for URL templating)
   - Tag (with ExternalDocumentation)

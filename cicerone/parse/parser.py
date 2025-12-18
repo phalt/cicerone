@@ -9,7 +9,7 @@ import yaml
 
 from cicerone.spec.components import Components
 from cicerone.spec.info import Info
-from cicerone.spec.model_utils import parse_nested_object
+from cicerone.spec.model_utils import parse_list, parse_nested_object
 from cicerone.spec.openapi_spec import OpenAPISpec
 from cicerone.spec.paths import Paths
 from cicerone.spec.server import Server
@@ -46,25 +46,19 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     paths = Paths.from_dict(paths_data)
 
     # Parse webhooks (OpenAPI 3.1+)
-    webhooks = Webhooks(items={})
-    if "webhooks" in data:
-        webhooks = Webhooks.from_dict(data["webhooks"])
+    webhooks = parse_nested_object(data, "webhooks", Webhooks.from_dict) or Webhooks(items={})
 
     # Parse components
     components = Components.from_spec(data)
 
     # Parse servers
-    servers = []
-    if "servers" in data and isinstance(data["servers"], list):
-        servers = [Server.from_dict(server_data) for server_data in data["servers"]]
+    servers = parse_list(data, "servers", Server.from_dict)
 
     # Parse security (top-level security requirements)
     security = data.get("security", [])
 
     # Parse tags
-    tags = []
-    if "tags" in data and isinstance(data["tags"], list):
-        tags = [Tag.from_dict(tag_data) for tag_data in data["tags"]]
+    tags = parse_list(data, "tags", Tag.from_dict)
 
     # Parse externalDocs
     external_docs = parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict)
