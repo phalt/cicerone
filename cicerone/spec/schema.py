@@ -3,7 +3,6 @@
 References:
 - OpenAPI 3.x Schema Object: https://spec.openapis.org/oas/v3.1.0#schema-object
 - JSON Schema: https://json-schema.org/specification
-- Swagger 2.0 Schema Object: https://swagger.io/specification/v2/#schema-object
 """
 
 from typing import Any, Mapping

@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Paths Object: https://spec.openapis.org/oas/v3.1.0#paths-object
-- Swagger 2.0 Paths Object: https://swagger.io/specification/v2/#paths-object
 """
 
 from typing import Any, Generator, Mapping

@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Response Object: https://spec.openapis.org/oas/v3.1.0#response-object
-- Swagger 2.0 Response Object: https://swagger.io/specification/v2/#response-object
 """
 
 from __future__ import annotations
@@ -29,7 +28,6 @@ class Response(BaseModel):
     content: dict[str, MediaType] = Field(default_factory=dict)
     headers: dict[str, Header] = Field(default_factory=dict)
     links: dict[str, Link] = Field(default_factory=dict)
-    # Swagger 2.0 fields
     schema_: Schema | None = Field(None, alias="schema")
     examples: dict[str, Example] = Field(default_factory=dict)
 

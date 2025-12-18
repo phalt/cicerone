@@ -21,10 +21,3 @@ class TestVersion:
         assert version.major == 3
         assert version.minor == 1
         assert version.patch == 0
-
-    def test_version_parsing_swagger2(self):
-        """Test parsing Swagger 2.0 version strings."""
-        version = Version("2.0")
-        assert version.major == 2
-        assert version.minor == 0
-        assert version.patch == 0

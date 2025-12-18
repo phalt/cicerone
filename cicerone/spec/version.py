@@ -1,13 +1,12 @@
-"""Version representation for OpenAPI/Swagger specs.
+"""Version representation for OpenAPI specs.
 
 References:
 - OpenAPI 3.x Info Object (version field): https://spec.openapis.org/oas/v3.1.0#info-object
-- Swagger 2.0 Info Object (version field): https://swagger.io/specification/v2/#info-object
 """
 
 
 class Version:
-    """Simple version representation for OpenAPI/Swagger specs."""
+    """Simple version representation for OpenAPI specs."""
 
     def __init__(self, version_string: str):
         self.raw = version_string

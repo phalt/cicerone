@@ -17,7 +17,7 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     """Create an OpenAPISpec from a dictionary.
 
     Args:
-        data: The OpenAPI/Swagger specification as a dictionary
+        data: The OpenAPI specification as a dictionary
 
     Returns:
         OpenAPISpec instance
@@ -27,7 +27,7 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
         >>> spec = parse_spec_from_dict(spec_data)
     """
     # Detect version
-    version_str = data.get("openapi") or data.get("swagger", "3.0.0")
+    version_str = data.get("openapi", "3.0.0")
     version = Version(version_str)
 
     # Parse paths
@@ -49,7 +49,7 @@ def parse_spec_from_json(text: str) -> OpenAPISpec:
     """Create an OpenAPISpec from a JSON string.
 
     Args:
-        text: JSON string containing the OpenAPI/Swagger specification
+        text: JSON string containing the OpenAPI specification
 
     Returns:
         OpenAPISpec instance
@@ -66,7 +66,7 @@ def parse_spec_from_yaml(text: str) -> OpenAPISpec:
     """Create an OpenAPISpec from a YAML string.
 
     Args:
-        text: YAML string containing the OpenAPI/Swagger specification
+        text: YAML string containing the OpenAPI specification
 
     Returns:
         OpenAPISpec instance
@@ -90,7 +90,7 @@ def parse_spec_from_file(path: str | Path) -> OpenAPISpec:
     Auto-detects format from file extension (.yaml/.yml for YAML, otherwise tries JSON).
 
     Args:
-        path: Path to the OpenAPI/Swagger specification file
+        path: Path to the OpenAPI specification file
 
     Returns:
         OpenAPISpec instance
@@ -118,7 +118,7 @@ def parse_spec_from_url(url: str) -> OpenAPISpec:
     Detects format from Content-Type header, defaulting to JSON with YAML fallback.
 
     Args:
-        url: URL to fetch the OpenAPI/Swagger specification from
+        url: URL to fetch the OpenAPI specification from
 
     Returns:
         OpenAPISpec instance

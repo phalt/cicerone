@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Components Object: https://spec.openapis.org/oas/v3.1.0#components-object
-- Swagger 2.0 Definitions Object: https://swagger.io/specification/v2/#definitions-object
 """
 
 from typing import Any, Mapping
@@ -87,9 +86,9 @@ class Components(BaseModel):
 
     @classmethod
     def from_spec(cls, raw: Mapping[str, Any], version: Version) -> "Components":
-        """Create Components from spec data, handling both OpenAPI 3.x and Swagger 2.0."""
+        """Create Components from spec data."""
         # OpenAPI 3.x: components object
-        if version.major >= 3 and "components" in raw:
+        if "components" in raw:
             components = raw["components"]
             return cls(
                 schemas=parse_collection(components, "schemas", Schema.from_dict),
@@ -101,15 +100,6 @@ class Components(BaseModel):
                 securitySchemes=parse_collection(components, "securitySchemes", SecurityScheme.from_dict),
                 links=parse_collection(components, "links", Link.from_dict),
                 callbacks=parse_collection(components, "callbacks", Callback.from_dict),
-            )
-
-        # Swagger 2.0: definitions
-        elif version.major == 2:
-            return cls(
-                schemas=parse_collection(raw, "definitions", Schema.from_dict),
-                parameters=parse_collection(raw, "parameters", Parameter.from_dict),
-                responses=parse_collection(raw, "responses", Response.from_dict),
-                securitySchemes=parse_collection(raw, "securityDefinitions", SecurityScheme.from_dict),
             )
 
         return cls()

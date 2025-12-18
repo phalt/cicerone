@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Parameter Object: https://spec.openapis.org/oas/v3.1.0#parameter-object
-- Swagger 2.0 Parameter Object: https://swagger.io/specification/v2/#parameter-object
 """
 
 from __future__ import annotations
@@ -27,7 +26,6 @@ class Parameter(BaseModel):
     description: str | None = None
     required: bool = False
     schema_: Schema | None = Field(None, alias="schema")
-    # Swagger 2.0 fields
     type: str | None = None
     # OpenAPI 3.x fields
     style: str | None = None

@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Operation Object: https://spec.openapis.org/oas/v3.1.0#operation-object
-- Swagger 2.0 Operation Object: https://swagger.io/specification/v2/#operation-object
 """
 
 from typing import Any, ClassVar, Mapping
