@@ -6,12 +6,16 @@ References:
 
 from typing import Any, Generator
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from cicerone.spec.components import Components
+from cicerone.spec.info import Info
 from cicerone.spec.operation import Operation
 from cicerone.spec.paths import Paths
+from cicerone.spec.server import Server
+from cicerone.spec.tag import Tag
 from cicerone.spec.version import Version
+from cicerone.spec.webhooks import Webhooks
 
 
 class OpenAPISpec(BaseModel):
@@ -24,8 +28,12 @@ class OpenAPISpec(BaseModel):
 
     raw: dict[str, Any]
     version: Version
+    info: Info | None = None
     paths: Paths
+    webhooks: Webhooks = Field(default_factory=lambda: Webhooks(items={}))
     components: Components
+    servers: list[Server] = Field(default_factory=list)
+    tags: list[Tag] = Field(default_factory=list)
 
     def __str__(self) -> str:
         """Return a readable string representation of the OpenAPI spec."""
@@ -54,7 +62,7 @@ class OpenAPISpec(BaseModel):
         return None
 
     def all_operations(self) -> Generator[Operation, None, None]:
-        """Yield all operations in the spec.
+        """Yield all operations in the spec (from paths and webhooks).
 
         Yields:
             Operation objects
@@ -66,3 +74,4 @@ class OpenAPISpec(BaseModel):
             ...     print(op.method, op.path, op.operation_id)
         """
         yield from self.paths.all_operations()
+        yield from self.webhooks.all_operations()

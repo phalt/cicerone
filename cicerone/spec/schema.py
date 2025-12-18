@@ -24,6 +24,11 @@ class Schema(BaseModel):
     properties: dict[str, "Schema"] = Field(default_factory=dict)
     required: list[str] = Field(default_factory=list)
     items: "Schema | None" = None
+    # Composition keywords
+    all_of: list["Schema"] | None = Field(None, alias="allOf")
+    one_of: list["Schema"] | None = Field(None, alias="oneOf")
+    any_of: list["Schema"] | None = Field(None, alias="anyOf")
+    not_: "Schema | None" = Field(None, alias="not")
 
     def __str__(self) -> str:
         """Return a readable string representation of the schema."""
@@ -45,7 +50,36 @@ class Schema(BaseModel):
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "Schema":
         """Create a Schema from a dictionary, handling nested schemas."""
-        excluded = {"title", "type", "description", "required", "properties", "items"}
+        excluded = {
+            "title",
+            "type",
+            "description",
+            "required",
+            "properties",
+            "items",
+            "allOf",
+            "oneOf",
+            "anyOf",
+            "not",
+        }
+
+        # Parse composition keywords
+        all_of = None
+        if "allOf" in data and isinstance(data["allOf"], list):
+            all_of = [cls.from_dict(item) for item in data["allOf"] if isinstance(item, dict)]
+
+        one_of = None
+        if "oneOf" in data and isinstance(data["oneOf"], list):
+            one_of = [cls.from_dict(item) for item in data["oneOf"] if isinstance(item, dict)]
+
+        any_of = None
+        if "anyOf" in data and isinstance(data["anyOf"], list):
+            any_of = [cls.from_dict(item) for item in data["anyOf"] if isinstance(item, dict)]
+
+        not_ = None
+        if "not" in data and isinstance(data["not"], dict):
+            not_ = cls.from_dict(data["not"])
+
         return cls(
             title=data.get("title"),
             type=data.get("type"),
@@ -53,5 +87,9 @@ class Schema(BaseModel):
             required=data.get("required", []),
             properties=parse_collection(data, "properties", cls.from_dict),
             items=parse_nested_object(data, "items", cls.from_dict) if isinstance(data.get("items"), dict) else None,
+            allOf=all_of,
+            oneOf=one_of,
+            anyOf=any_of,
+            **{"not": not_} if not_ else {},
             **{k: v for k, v in data.items() if k not in excluded},
         )

@@ -8,9 +8,13 @@ from urllib.request import Request, urlopen
 import yaml
 
 from cicerone.spec.components import Components
+from cicerone.spec.info import Info
 from cicerone.spec.openapi_spec import OpenAPISpec
 from cicerone.spec.paths import Paths
+from cicerone.spec.server import Server
+from cicerone.spec.tag import Tag
 from cicerone.spec.version import Version
+from cicerone.spec.webhooks import Webhooks
 
 
 def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
@@ -30,19 +34,48 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     version_str = data.get("openapi", "3.0.0")
     version = Version(version_str)
 
+    # Parse info
+    info = None
+    if "info" in data:
+        info = Info.from_dict(data["info"])
+
     # Parse paths
     paths_data = data.get("paths", {})
     paths = Paths.from_dict(paths_data)
 
+    # Parse webhooks (OpenAPI 3.1+)
+    webhooks = Webhooks(items={})
+    if "webhooks" in data:
+        webhooks = Webhooks.from_dict(data["webhooks"])
+
     # Parse components
     components = Components.from_spec(data)
+
+    # Parse servers
+    servers = []
+    if "servers" in data and isinstance(data["servers"], list):
+        servers = [Server.from_dict(server_data) for server_data in data["servers"]]
+
+    # Parse tags
+    tags = []
+    if "tags" in data and isinstance(data["tags"], list):
+        tags = [Tag.from_dict(tag_data) for tag_data in data["tags"]]
 
     # Convert Mapping to dict for storage
     # This ensures we have a real dict (not just a Mapping) for the raw field
     # If data is already a dict, this is a no-op
     raw_dict = dict(data)
 
-    return OpenAPISpec(raw=raw_dict, version=version, paths=paths, components=components)
+    return OpenAPISpec(
+        raw=raw_dict,
+        version=version,
+        info=info,
+        paths=paths,
+        webhooks=webhooks,
+        components=components,
+        servers=servers,
+        tags=tags,
+    )
 
 
 def parse_spec_from_json(text: str) -> OpenAPISpec:
