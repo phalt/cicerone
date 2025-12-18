@@ -13,7 +13,7 @@ from cicerone.spec.info import Info
 from cicerone.spec.operation import Operation
 from cicerone.spec.paths import Paths
 from cicerone.spec.server import Server
-from cicerone.spec.tag import Tag
+from cicerone.spec.tag import ExternalDocumentation, Tag
 from cicerone.spec.version import Version
 from cicerone.spec.webhooks import Webhooks
 
@@ -29,11 +29,14 @@ class OpenAPISpec(BaseModel):
     raw: dict[str, Any]
     version: Version
     info: Info | None = None
+    json_schema_dialect: str | None = Field(None, alias="jsonSchemaDialect")
+    servers: list[Server] = Field(default_factory=list)
     paths: Paths
     webhooks: Webhooks = Field(default_factory=lambda: Webhooks(items={}))
     components: Components
-    servers: list[Server] = Field(default_factory=list)
+    security: list[dict[str, list[str]]] = Field(default_factory=list)
     tags: list[Tag] = Field(default_factory=list)
+    external_docs: "ExternalDocumentation | None" = Field(None, alias="externalDocs")
 
     def __str__(self) -> str:
         """Return a readable string representation of the OpenAPI spec."""

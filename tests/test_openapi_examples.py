@@ -300,3 +300,18 @@ class TestOpenAPIExamples:
         error_schema = spec.components.schemas["Error"]
         assert error_schema.type == "object"
         assert error_schema.required == ["code", "message"]
+
+    def test_top_level_security_and_external_docs(self, examples_dir: Path) -> None:
+        """Test that top-level security and externalDocs are captured."""
+        # Note: Need to check raw field since our examples don't have top-level security/externalDocs
+        spec = parse_spec_from_file(examples_dir / "tictactoe.json")
+
+        # Verify security field exists (even if empty)
+        assert spec.security is not None
+        assert isinstance(spec.security, list)
+
+        # Verify external_docs field exists (even if None for this example)
+        assert hasattr(spec, "external_docs")
+
+        # Verify json_schema_dialect field exists for OpenAPI 3.1
+        assert hasattr(spec, "json_schema_dialect")

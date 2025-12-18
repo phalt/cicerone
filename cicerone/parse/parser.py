@@ -39,6 +39,9 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     if "info" in data:
         info = Info.from_dict(data["info"])
 
+    # Parse jsonSchemaDialect (OpenAPI 3.1+)
+    json_schema_dialect = data.get("jsonSchemaDialect")
+
     # Parse paths
     paths_data = data.get("paths", {})
     paths = Paths.from_dict(paths_data)
@@ -56,10 +59,20 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     if "servers" in data and isinstance(data["servers"], list):
         servers = [Server.from_dict(server_data) for server_data in data["servers"]]
 
+    # Parse security (top-level security requirements)
+    security = data.get("security", [])
+
     # Parse tags
     tags = []
     if "tags" in data and isinstance(data["tags"], list):
         tags = [Tag.from_dict(tag_data) for tag_data in data["tags"]]
+
+    # Parse externalDocs
+    external_docs = None
+    if "externalDocs" in data:
+        from cicerone.spec.tag import ExternalDocumentation
+
+        external_docs = ExternalDocumentation.from_dict(data["externalDocs"])
 
     # Convert Mapping to dict for storage
     # This ensures we have a real dict (not just a Mapping) for the raw field
@@ -70,11 +83,14 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
         raw=raw_dict,
         version=version,
         info=info,
+        jsonSchemaDialect=json_schema_dialect,
+        servers=servers,
         paths=paths,
         webhooks=webhooks,
         components=components,
-        servers=servers,
+        security=security,
         tags=tags,
+        externalDocs=external_docs,
     )
 
 
