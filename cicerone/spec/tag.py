@@ -10,7 +10,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from cicerone.spec.model_utils import parse_nested_object
+from cicerone.spec import model_utils
 
 
 class ExternalDocumentation(BaseModel):
@@ -58,6 +58,6 @@ class Tag(BaseModel):
         return cls(
             name=data["name"],
             description=data.get("description"),
-            external_docs=parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict),
+            external_docs=model_utils.parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

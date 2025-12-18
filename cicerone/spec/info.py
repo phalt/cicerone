@@ -10,9 +10,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.model_utils import parse_nested_object
+from cicerone.spec import model_utils
 
 
 class Contact(BaseModel):
@@ -91,7 +92,7 @@ class Info(BaseModel):
             summary=data.get("summary"),
             description=data.get("description"),
             termsOfService=data.get("termsOfService"),
-            contact=parse_nested_object(data, "contact", Contact.from_dict),
-            license=parse_nested_object(data, "license", License.from_dict),
+            contact=model_utils.parse_nested_object(data, "contact", Contact.from_dict),
+            license=model_utils.parse_nested_object(data, "license", License.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

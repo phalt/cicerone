@@ -4,12 +4,15 @@ References:
 - OpenAPI 3.x Paths Object: https://spec.openapis.org/oas/v3.1.0#paths-object
 """
 
-from typing import Any, Generator, Mapping
+from typing import Any
+from typing import Generator
+from typing import Mapping
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.operation import Operation
-from cicerone.spec.path_item import PathItem
+from cicerone.spec import operation
+from cicerone.spec import path_item
 
 
 class Paths(BaseModel):
@@ -18,7 +21,7 @@ class Paths(BaseModel):
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
-    items: dict[str, PathItem] = Field(default_factory=dict)
+    items: dict[str, path_item.PathItem] = Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the paths container."""
@@ -29,7 +32,7 @@ class Paths(BaseModel):
             paths_preview += f", ... (+{num_paths - 3} more)"
         return f"<Paths: {num_paths} paths, {num_ops} operations [{paths_preview}]>"
 
-    def __getitem__(self, path: str) -> PathItem:
+    def __getitem__(self, path: str) -> path_item.PathItem:
         """Get a path item by path string."""
         return self.items[path]
 
@@ -37,10 +40,10 @@ class Paths(BaseModel):
         """Check if a path exists."""
         return path in self.items
 
-    def all_operations(self) -> Generator[Operation, None, None]:
+    def all_operations(self) -> Generator[operation.Operation, None, None]:
         """Yield all operations across all paths."""
-        for path_item in self.items.values():
-            yield from path_item.operations.values()
+        for path_item_obj in self.items.values():
+            yield from path_item_obj.operations.values()
 
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "Paths":
@@ -48,5 +51,5 @@ class Paths(BaseModel):
         items = {}
         for path, path_data in data.items():
             if isinstance(path_data, dict):
-                items[path] = PathItem.from_dict(path, path_data)
+                items[path] = path_item.PathItem.from_dict(path, path_data)
         return cls(items=items)

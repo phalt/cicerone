@@ -4,9 +4,12 @@ References:
 - OpenAPI 3.x Operation Object: https://spec.openapis.org/oas/v3.1.0#operation-object
 """
 
-from typing import Any, ClassVar, Mapping
+from typing import Any
+from typing import ClassVar
+from typing import Mapping
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
 
 class Operation(BaseModel):

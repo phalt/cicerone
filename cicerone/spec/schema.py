@@ -9,9 +9,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.model_utils import parse_collection, parse_nested_object
+from cicerone.spec import model_utils
 
 
 class Schema(BaseModel):
@@ -76,12 +77,12 @@ class Schema(BaseModel):
             type=data.get("type"),
             description=data.get("description"),
             required=data.get("required", []),
-            properties=parse_collection(data, "properties", cls.from_dict),
-            items=parse_nested_object(data, "items", cls.from_dict),
+            properties=model_utils.parse_collection(data, "properties", cls.from_dict),
+            items=model_utils.parse_nested_object(data, "items", cls.from_dict),
             allOf=parse_schema_list("allOf"),
             oneOf=parse_schema_list("oneOf"),
             anyOf=parse_schema_list("anyOf"),
             # Use dict unpacking for 'not' since it's a Python keyword
-            **{"not": parse_nested_object(data, "not", cls.from_dict)} if "not" in data else {},
+            **{"not": model_utils.parse_nested_object(data, "not", cls.from_dict)} if "not" in data else {},
             **{k: v for k, v in data.items() if k not in excluded},
         )

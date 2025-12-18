@@ -9,9 +9,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.model_utils import parse_collection
+from cicerone.spec import model_utils
 
 
 class ServerVariable(BaseModel):
@@ -62,6 +63,6 @@ class Server(BaseModel):
         return cls(
             url=data["url"],
             description=data.get("description"),
-            variables=parse_collection(data, "variables", ServerVariable.from_dict),
+            variables=model_utils.parse_collection(data, "variables", ServerVariable.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

@@ -4,11 +4,13 @@ References:
 - OpenAPI 3.x Path Item Object: https://spec.openapis.org/oas/v3.1.0#path-item-object
 """
 
-from typing import Any, Mapping
+from typing import Any
+from typing import Mapping
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
-from cicerone.spec.operation import Operation
+from cicerone.spec import operation
 
 
 class PathItem(BaseModel):
@@ -18,7 +20,7 @@ class PathItem(BaseModel):
     model_config = {"extra": "allow"}
 
     path: str
-    operations: dict[str, Operation] = Field(default_factory=dict)
+    operations: dict[str, operation.Operation] = Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the path item."""
@@ -33,6 +35,6 @@ class PathItem(BaseModel):
 
         for method in http_methods:
             if method in data:
-                operations[method] = Operation.from_dict(method.upper(), path, data[method])
+                operations[method] = operation.Operation.from_dict(method.upper(), path, data[method])
 
         return cls(path=path, operations=operations)
