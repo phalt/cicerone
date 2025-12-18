@@ -10,7 +10,10 @@ from typing import Mapping
 from pydantic import BaseModel
 from pydantic import Field
 
-from cicerone.spec import operation
+from cicerone.spec import operation as operation_module
+
+# Extract classes for type annotations
+Operation = operation_module.Operation
 
 
 class PathItem(BaseModel):
@@ -20,7 +23,7 @@ class PathItem(BaseModel):
     model_config = {"extra": "allow"}
 
     path: str
-    operations: dict[str, operation.Operation] = Field(default_factory=dict)
+    operations: dict[str, Operation] = Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the path item."""
@@ -35,6 +38,6 @@ class PathItem(BaseModel):
 
         for method in http_methods:
             if method in data:
-                operations[method] = operation.Operation.from_dict(method.upper(), path, data[method])
+                operations[method] = operation_module.Operation.from_dict(method.upper(), path, data[method])
 
         return cls(path=path, operations=operations)

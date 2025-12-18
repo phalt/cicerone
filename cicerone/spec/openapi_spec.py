@@ -13,14 +13,25 @@ from typing import Generator
 from pydantic import BaseModel
 from pydantic import Field
 
-from cicerone.spec import components
-from cicerone.spec import info
-from cicerone.spec import operation
-from cicerone.spec import paths
-from cicerone.spec import server
-from cicerone.spec import tag
-from cicerone.spec import version
-from cicerone.spec import webhooks
+from cicerone.spec import components as components_module
+from cicerone.spec import info as info_module
+from cicerone.spec import operation as operation_module
+from cicerone.spec import paths as paths_module
+from cicerone.spec import server as server_module
+from cicerone.spec import tag as tag_module
+from cicerone.spec import version as version_module
+from cicerone.spec import webhooks as webhooks_module
+
+# Extract classes for type annotations
+Components = components_module.Components
+Info = info_module.Info
+Operation = operation_module.Operation
+Paths = paths_module.Paths
+Server = server_module.Server
+Tag = tag_module.Tag
+ExternalDocumentation = tag_module.ExternalDocumentation
+Version = version_module.Version
+Webhooks = webhooks_module.Webhooks
 
 
 class OpenAPISpec(BaseModel):
@@ -32,16 +43,16 @@ class OpenAPISpec(BaseModel):
     model_config = {"extra": "allow", "arbitrary_types_allowed": True}
 
     raw: dict[str, Any]
-    version: version.Version
-    info: info.Info | None = None
+    version: Version
+    info: Info | None = None
     json_schema_dialect: str | None = Field(None, alias="jsonSchemaDialect")
-    servers: list[server.Server] = Field(default_factory=list)
-    paths: paths.Paths
-    webhooks: webhooks.Webhooks = Field(default_factory=lambda: webhooks.Webhooks(items={}))
-    components: components.Components
+    servers: list[Server] = Field(default_factory=list)
+    paths: Paths
+    webhooks: Webhooks = Field(default_factory=lambda: webhooks_module.Webhooks(items={}))
+    components: Components
     security: list[dict[str, list[str]]] = Field(default_factory=list)
-    tags: list[tag.Tag] = Field(default_factory=list)
-    external_docs: tag.ExternalDocumentation | None = Field(None, alias="externalDocs")
+    tags: list[Tag] = Field(default_factory=list)
+    external_docs: ExternalDocumentation | None = Field(None, alias="externalDocs")
 
     def __str__(self) -> str:
         """Return a readable string representation of the OpenAPI spec."""
@@ -50,7 +61,7 @@ class OpenAPISpec(BaseModel):
         num_schemas = len(self.components.schemas)
         return f"<OpenAPISpec: '{title}' v{self.version}, {num_paths} paths, {num_schemas} schemas>"
 
-    def operation_by_operation_id(self, operation_id: str) -> operation.Operation | None:
+    def operation_by_operation_id(self, operation_id: str) -> Operation | None:
         """Find an operation by its operationId.
 
         Args:
@@ -69,7 +80,7 @@ class OpenAPISpec(BaseModel):
                 return operation_obj
         return None
 
-    def all_operations(self) -> Generator[operation.Operation, None, None]:
+    def all_operations(self) -> Generator[Operation, None, None]:
         """Yield all operations in the spec (from paths and webhooks).
 
         Yields:
