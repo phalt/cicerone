@@ -82,7 +82,7 @@ class TestSchema:
 
     def test_schema_str_empty(self):
         """Test __str__ method for empty schema."""
-        data = {}
+        data: dict[str, str] = {}
         schema = Schema.from_dict(data)
         str_repr = str(schema)
         assert "empty schema" in str_repr

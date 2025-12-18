@@ -43,7 +43,7 @@ class TestOperation:
 
     def test_operation_str_without_optional_fields(self):
         """Test __str__ method without optional fields."""
-        data = {}
+        data: dict[str, str] = {}
         operation = Operation.from_dict("POST", "/posts", data)
         str_repr = str(operation)
         assert "<Operation:" in str_repr

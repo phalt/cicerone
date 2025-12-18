@@ -1,5 +1,7 @@
 """Tests for Webhooks model."""
 
+from typing import Any
+
 from cicerone.spec.webhooks import Webhooks
 
 
@@ -27,7 +29,7 @@ class TestWebhooks:
 
     def test_webhooks_all_operations(self):
         """Test getting all operations from webhooks."""
-        data = {
+        data: dict[str, Any] = {
             "webhook1": {
                 "post": {"responses": {"200": {}}},
             },
@@ -51,7 +53,7 @@ class TestWebhooks:
 
     def test_webhooks_str_representation_single(self):
         """Test __str__ method with single webhook."""
-        data = {
+        data: dict[str, Any] = {
             "newPet": {
                 "post": {"responses": {"200": {}}},
             }
@@ -64,7 +66,7 @@ class TestWebhooks:
 
     def test_webhooks_str_representation_multiple(self):
         """Test __str__ method with multiple webhooks."""
-        data = {
+        data: dict[str, Any] = {
             "webhook1": {"post": {"responses": {"200": {}}}},
             "webhook2": {"post": {"responses": {"200": {}}}},
             "webhook3": {"post": {"responses": {"200": {}}}},

@@ -1,5 +1,7 @@
 """Tests for Paths container."""
 
+from typing import Any
+
 from cicerone.spec.paths import Paths
 
 
@@ -61,7 +63,7 @@ class TestPaths:
 
     def test_paths_str_many_paths(self):
         """Test __str__ method with many paths (should truncate)."""
-        data = {f"/path{i}": {"get": {}} for i in range(10)}
+        data: dict[str, Any] = {f"/path{i}": {"get": {}} for i in range(10)}
         paths = Paths.from_dict(data)
         str_repr = str(paths)
         assert "10 paths" in str_repr

@@ -28,7 +28,7 @@ class TestContact:
 
     def test_contact_empty_dict(self):
         """Test creating Contact from empty dict."""
-        data = {}
+        data: dict[str, str] = {}
         contact = Contact.from_dict(data)
         assert contact.name is None
         assert contact.url is None
