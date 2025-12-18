@@ -1,6 +1,6 @@
 """Tests for additional component models."""
 
-from cicerone import spec
+from cicerone.spec import Encoding, Example, Link, MediaType, OAuthFlow, OAuthFlows
 
 
 class TestMediaType:

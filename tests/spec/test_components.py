@@ -1,6 +1,6 @@
 """Tests for spec.components.Components container."""
 
-from cicerone import spec
+from cicerone.spec import Components
 
 
 class TestComponents:

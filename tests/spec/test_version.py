@@ -1,6 +1,6 @@
 """Tests for spec.version.Version class."""
 
-from cicerone import spec
+from cicerone.spec import Version
 
 
 class TestVersion:

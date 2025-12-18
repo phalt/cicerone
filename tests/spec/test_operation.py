@@ -1,6 +1,6 @@
 """Tests for spec.operation.Operation model."""
 
-from cicerone import spec
+from cicerone.spec import Operation
 
 
 class TestOperation:
