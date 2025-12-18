@@ -4,6 +4,8 @@ References:
 - OpenAPI 3.x Header Object: https://spec.openapis.org/oas/v3.1.0#header-object
 """
 
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
@@ -20,14 +22,14 @@ class Header(BaseModel):
 
     description: str | None = None
     required: bool = False
-    schema_: "Schema | None" = Field(None, alias="schema")
+    schema_: Schema | None = Field(None, alias="schema")
     style: str | None = None
     explode: bool | None = None
     example: Any | None = None
     examples: dict[str, Any] = Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Header":
+    def from_dict(cls, data: dict[str, Any]) -> Header:
         """Create a Header from a dictionary."""
         from cicerone.spec.schema import Schema
 

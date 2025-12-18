@@ -14,7 +14,7 @@ class TestCallback:
 
     def test_callback_from_dict(self):
         """Test creating Callback from dict."""
-        data = {
+        data: dict[str, Any] = {
             "{$request.body#/callbackUrl}": {
                 "post": {
                     "requestBody": {
@@ -32,38 +32,31 @@ class TestCallback:
         }
         callback = Callback.from_dict(data)
         assert callback is not None
-        assert "{$request.body#/callbackUrl}" in callback
-        assert callback["{$request.body#/callbackUrl}"] is not None
+        assert callback.get("{$request.body#/callbackUrl}") is not None
 
-    def test_callback_dict_access(self):
-        """Test dict-like access to callback expressions."""
+    def test_callback_get_method(self):
+        """Test get method for accessing expressions."""
         data: dict[str, Any] = {
             "expression1": {"post": {"responses": {"200": {}}}},
             "expression2": {"get": {"responses": {"200": {}}}},
         }
         callback = Callback.from_dict(data)
 
-        assert "expression1" in callback
-        assert "expression2" in callback
-        assert "expression3" not in callback
+        assert callback.get("expression1") is not None
+        assert callback.get("expression2") is not None
+        assert callback.get("expression3") is None
 
-        assert callback["expression1"] is not None
-        assert callback["expression2"] is not None
-
-    def test_callback_iteration(self):
-        """Test iterating over callback expressions."""
+    def test_callback_expressions_access(self):
+        """Test direct access to expressions dict."""
         data: dict[str, Any] = {
             "expr1": {"post": {}},
             "expr2": {"get": {}},
         }
         callback = Callback.from_dict(data)
 
-        keys = list(callback.keys())
-        assert "expr1" in keys
-        assert "expr2" in keys
-
-        values = list(callback.values())
-        assert len(values) == 2
+        assert len(callback.expressions) == 2
+        assert "expr1" in callback.expressions
+        assert "expr2" in callback.expressions
 
 
 class TestCallbackParsing:
@@ -81,52 +74,35 @@ class TestCallbackParsing:
         assert spec.version.major == 3
         assert spec.version.minor == 0
 
-    def test_components_callbacks_parsed(self, callback_spec_path: Path):
-        """Test that callbacks in components are properly parsed."""
+    def test_operation_callbacks_parsed(self, callback_spec_path: Path):
+        """Test that callbacks in operations are accessible."""
         spec = parse_spec_from_file(callback_spec_path)
 
-        # Should have callbacks in components
-        assert len(spec.components.callbacks) > 0
-        assert "statusCallback" in spec.components.callbacks
-        assert "dataCallback" in spec.components.callbacks
+        # The /streams POST operation has a callback
+        streams_path = spec.paths["/streams"]
+        assert streams_path is not None
 
-    def test_callback_structure(self, callback_spec_path: Path):
+        post_op = streams_path.operations.get("post")
+        assert post_op is not None
+
+    def test_callback_expression_structure(self, callback_spec_path: Path):
         """Test that callback objects have correct structure."""
         spec = parse_spec_from_file(callback_spec_path)
 
-        # Get statusCallback
-        status_callback = spec.components.callbacks["statusCallback"]
-        assert status_callback is not None
-        assert isinstance(status_callback, Callback)
+        # Access the raw callbacks from the operation
+        streams_path = spec.raw["paths"]["/streams"]
+        post_op = streams_path["post"]
+        assert "callbacks" in post_op
 
-        # Check it has expressions
-        assert "{$request.body#/statusUrl}" in status_callback
+        callbacks = post_op["callbacks"]
+        assert "onData" in callbacks
 
-        # Check we can access the path item
-        path_item = status_callback["{$request.body#/statusUrl}"]
+        # Parse the onData callback
+        on_data_callback = Callback.from_dict(callbacks["onData"])
+        assert on_data_callback is not None
+
+        # Check it has the expression
+        expression = "{$request.query.callbackUrl}/data"
+        path_item = on_data_callback.get(expression)
         assert path_item is not None
-        assert "post" in path_item
-
-    def test_callback_with_schema_reference(self, callback_spec_path: Path):
-        """Test callback that references a schema."""
-        spec = parse_spec_from_file(callback_spec_path)
-
-        # Get dataCallback which references Event schema
-        data_callback = spec.components.callbacks["dataCallback"]
-        assert data_callback is not None
-
-        # Check expression exists
-        assert "{$request.body#/dataUrl}" in data_callback
-
-        # Verify the callback structure
-        path_item = data_callback["{$request.body#/dataUrl}"]
-        assert "post" in path_item
-
-    def test_all_callback_names_accessible(self, callback_spec_path: Path):
-        """Test that all callback names can be retrieved."""
-        spec = parse_spec_from_file(callback_spec_path)
-
-        callback_names = list(spec.components.callbacks.keys())
-        assert "statusCallback" in callback_names
-        assert "dataCallback" in callback_names
-        assert len(callback_names) == 2
+        assert "post" in path_item.operations

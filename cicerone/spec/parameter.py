@@ -5,6 +5,8 @@ References:
 - Swagger 2.0 Parameter Object: https://swagger.io/specification/v2/#parameter-object
 """
 
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
@@ -23,7 +25,7 @@ class Parameter(BaseModel):
     in_: str | None = Field(None, alias="in")
     description: str | None = None
     required: bool = False
-    schema_: "Schema | None" = Field(None, alias="schema")
+    schema_: Schema | None = Field(None, alias="schema")
     # Swagger 2.0 fields
     type: str | None = None
     # OpenAPI 3.x fields
@@ -33,7 +35,7 @@ class Parameter(BaseModel):
     examples: dict[str, Any] = Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Parameter":
+    def from_dict(cls, data: dict[str, Any]) -> Parameter:
         """Create a Parameter from a dictionary."""
         from cicerone.spec.schema import Schema
 

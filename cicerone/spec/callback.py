@@ -9,9 +9,14 @@ The key is a runtime expression that identifies a URL to use for the callback op
 The value is a Path Item Object or a reference to one.
 """
 
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
+
+if TYPE_CHECKING:
+    from cicerone.spec.path_item import PathItem
 
 
 class Callback(BaseModel):
@@ -24,39 +29,35 @@ class Callback(BaseModel):
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
-    # Callbacks are essentially a dict of expression -> PathItem
-    # We store them as dict[str, Any] for now since PathItem can be complex
-    expressions: dict[str, Any] = Field(default_factory=dict)
+    # Callbacks are a dict of expression -> PathItem
+    expressions: dict[str, PathItem] = Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Callback":
+    def from_dict(cls, data: dict[str, Any]) -> Callback:
         """Create a Callback from a dictionary.
 
         Args:
             data: Dictionary containing callback expressions mapping to Path Items
 
         Returns:
-            Callback object with expressions stored
+            Callback object with expressions parsed as PathItem objects
         """
-        # The entire data dict represents the callback expressions
-        return cls(expressions=data)
+        from cicerone.spec.path_item import PathItem
 
-    def __getitem__(self, key: str) -> Any:
-        """Allow dict-like access to expressions."""
-        return self.expressions.get(key)
+        # Parse each expression as a PathItem
+        expressions: dict[str, PathItem] = {}
+        for expression, path_item_data in data.items():
+            expressions[expression] = PathItem.from_dict(expression, path_item_data)
 
-    def __contains__(self, key: str) -> bool:
-        """Check if expression exists."""
-        return key in self.expressions
+        return cls(expressions=expressions)
 
-    def items(self):
-        """Return items for iteration."""
-        return self.expressions.items()
+    def get(self, expression: str) -> PathItem | None:
+        """Get a PathItem for a given expression.
 
-    def keys(self):
-        """Return keys for iteration."""
-        return self.expressions.keys()
+        Args:
+            expression: The runtime expression (e.g., '{$request.body#/callbackUrl}')
 
-    def values(self):
-        """Return values for iteration."""
-        return self.expressions.values()
+        Returns:
+            PathItem if found, None otherwise
+        """
+        return self.expressions.get(expression)

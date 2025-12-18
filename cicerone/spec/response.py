@@ -5,6 +5,8 @@ References:
 - Swagger 2.0 Response Object: https://swagger.io/specification/v2/#response-object
 """
 
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Any
 
 from pydantic import BaseModel, Field
@@ -28,11 +30,11 @@ class Response(BaseModel):
     headers: dict[str, Header] = Field(default_factory=dict)
     links: dict[str, Link] = Field(default_factory=dict)
     # Swagger 2.0 fields
-    schema_: "Schema | None" = Field(None, alias="schema")
+    schema_: Schema | None = Field(None, alias="schema")
     examples: dict[str, Any] = Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Response":
+    def from_dict(cls, data: dict[str, Any]) -> Response:
         """Create a Response from a dictionary."""
         from cicerone.spec.schema import Schema
 
