@@ -44,24 +44,15 @@ class Schema(BaseModel):
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "Schema":
         """Create a Schema from a dictionary, handling nested schemas."""
-        schema_data: dict[str, Any] = {
-            "title": data.get("title"),
-            "type": data.get("type"),
-            "description": data.get("description"),
-            "required": data.get("required", []),
-        }
+        from cicerone.spec.model_utils import parse_collection, parse_nested_object
 
-        # Handle nested properties
-        if "properties" in data:
-            schema_data["properties"] = {name: cls.from_dict(prop) for name, prop in data["properties"].items()}
-
-        # Handle array items
-        if "items" in data and isinstance(data["items"], dict):
-            schema_data["items"] = cls.from_dict(data["items"])
-
-        # Store any additional fields
-        for key, value in data.items():
-            if key not in schema_data:
-                schema_data[key] = value
-
-        return cls(**schema_data)
+        excluded = {"title", "type", "description", "required", "properties", "items"}
+        return cls(
+            title=data.get("title"),
+            type=data.get("type"),
+            description=data.get("description"),
+            required=data.get("required", []),
+            properties=parse_collection(data, "properties", cls.from_dict),
+            items=parse_nested_object(data, "items", cls.from_dict) if isinstance(data.get("items"), dict) else None,
+            **{k: v for k, v in data.items() if k not in excluded},
+        )

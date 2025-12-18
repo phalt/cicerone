@@ -4,7 +4,7 @@ This module provides common patterns used across model from_dict() methods,
 centralizing field extraction, nested object parsing, and collection handling.
 """
 
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, Mapping, TypeVar
 
 T = TypeVar("T")
 
@@ -32,7 +32,7 @@ def extract_fields(data: dict[str, Any], *field_names: str, **field_defaults: An
 
 
 def parse_nested_object(
-    data: dict[str, Any],
+    data: Mapping[str, Any],
     field_name: str,
     parser: Callable[[dict[str, Any]], T],
 ) -> T | None:
@@ -55,7 +55,7 @@ def parse_nested_object(
 
 
 def parse_collection(
-    data: dict[str, Any],
+    data: Mapping[str, Any],
     field_name: str,
     parser: Callable[[dict[str, Any]], T],
 ) -> dict[str, T]:
@@ -75,6 +75,30 @@ def parse_collection(
     if field_name in data:
         return {name: parser(item_data) for name, item_data in data[field_name].items()}
     return {}
+
+
+def parse_collection_from_source(
+    source: Mapping[str, Any],
+    field_name: str,
+    parser: Callable[[dict[str, Any]], T],
+) -> dict[str, T]:
+    """Parse a collection directly from source (alternative to parse_collection).
+
+    This is a convenience wrapper that allows parsing directly from a nested source
+    instead of checking if the field exists first.
+
+    Args:
+        source: Source dictionary (e.g., raw["components"])
+        field_name: Name of field containing the collection
+        parser: Function to parse each item (usually Class.from_dict)
+
+    Returns:
+        Dictionary mapping names to parsed objects, empty dict if field doesn't exist
+
+    Example:
+        parse_collection_from_source(components, "schemas", Schema.from_dict)
+    """
+    return parse_collection(source, field_name, parser)
 
 
 def add_extra_fields(
