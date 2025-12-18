@@ -1,6 +1,6 @@
 """Tests for Info model."""
 
-from cicerone.spec.info import Contact, Info, License
+from cicerone.spec import Contact, Info, License
 
 
 class TestContact:

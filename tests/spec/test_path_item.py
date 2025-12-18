@@ -1,6 +1,6 @@
 """Tests for PathItem model."""
 
-from cicerone.spec.path_item import PathItem
+from cicerone.spec import PathItem
 
 
 class TestPathItem:

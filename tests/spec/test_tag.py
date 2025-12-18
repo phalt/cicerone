@@ -1,6 +1,6 @@
 """Tests for Tag and ExternalDocumentation models."""
 
-from cicerone.spec.tag import ExternalDocumentation, Tag
+from cicerone.spec import ExternalDocumentation, Tag
 
 
 class TestExternalDocumentation:

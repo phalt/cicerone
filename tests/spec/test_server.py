@@ -1,6 +1,6 @@
 """Tests for Server model."""
 
-from cicerone.spec.server import Server, ServerVariable
+from cicerone.spec import Server, ServerVariable
 
 
 class TestServerVariable:

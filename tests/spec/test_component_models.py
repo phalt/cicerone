@@ -1,11 +1,6 @@
 """Tests for component models."""
 
-from cicerone.spec.example import Example
-from cicerone.spec.header import Header
-from cicerone.spec.parameter import Parameter
-from cicerone.spec.request_body import RequestBody
-from cicerone.spec.response import Response
-from cicerone.spec.security_scheme import SecurityScheme
+from cicerone.spec import Example, Header, Parameter, RequestBody, Response, SecurityScheme
 
 
 class TestParameter:

@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from cicerone.spec.webhooks import Webhooks
+from cicerone.spec import Webhooks
 
 
 class TestWebhooks:

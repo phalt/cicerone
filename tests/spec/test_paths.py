@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from cicerone.spec.paths import Paths
+from cicerone.spec import Paths
 
 
 class TestPaths:

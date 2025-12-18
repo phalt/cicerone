@@ -1,6 +1,6 @@
 """Tests for Schema model."""
 
-from cicerone.spec.schema import Schema
+from cicerone.spec import Schema
 
 
 class TestSchema:
