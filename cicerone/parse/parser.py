@@ -1,8 +1,8 @@
 """Parser module for creating OpenAPISpec from various sources."""
 
 import json
-from pathlib import Path
-from typing import Any, Mapping
+import pathlib
+import typing
 from urllib import request as urllib_request
 
 import yaml
@@ -10,7 +10,7 @@ import yaml
 from cicerone.spec import components, info, model_utils, openapi_spec, paths, server, tag, version, webhooks
 
 
-def parse_spec_from_dict(data: Mapping[str, Any]) -> openapi_spec.OpenAPISpec:
+def parse_spec_from_dict(data: typing.Mapping[str, typing.Any]) -> openapi_spec.OpenAPISpec:
     """Create an OpenAPISpec from a dictionary.
 
     Args:
@@ -116,7 +116,7 @@ def parse_spec_from_yaml(text: str) -> openapi_spec.OpenAPISpec:
     return parse_spec_from_dict(data)
 
 
-def parse_spec_from_file(path: str | Path) -> openapi_spec.OpenAPISpec:
+def parse_spec_from_file(path: str | pathlib.Path) -> openapi_spec.OpenAPISpec:
     """Create an OpenAPISpec from a file.
 
     Auto-detects format from file extension (.yaml/.yml for YAML, otherwise tries JSON).
@@ -130,7 +130,7 @@ def parse_spec_from_file(path: str | Path) -> openapi_spec.OpenAPISpec:
     Example:
         >>> spec = parse_spec_from_file("openapi.yaml")
     """
-    path_obj = Path(path) if isinstance(path, str) else path
+    path_obj = pathlib.Path(path) if isinstance(path, str) else path
     content = path_obj.read_text()
 
     # Detect format from extension

@@ -1,6 +1,6 @@
 """Tests for model_utils parsing utilities."""
 
-from cicerone.spec import model_utils
+from cicerone import spec
 
 
 def dummy_parser(data: dict) -> dict:

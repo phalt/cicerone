@@ -1,13 +1,13 @@
-"""Tests for Server model."""
+"""Tests for spec.server.Server model."""
 
-from cicerone.spec import Server, ServerVariable
+from cicerone import spec
 
 
 class TestServerVariable:
-    """Tests for ServerVariable model."""
+    """Tests for spec.servervariable.ServerVariable model."""
 
     def test_server_variable_from_dict(self):
-        """Test creating ServerVariable from dict."""
+        """Test creating spec.servervariable.ServerVariable from dict."""
         data = {
             "default": "https",
             "enum": ["https", "http"],
@@ -19,7 +19,7 @@ class TestServerVariable:
         assert var.description == "The protocol to use"
 
     def test_server_variable_minimal(self):
-        """Test creating ServerVariable with only required fields."""
+        """Test creating spec.servervariable.ServerVariable with only required fields."""
         data = {"default": "v1"}
         var = ServerVariable.from_dict(data)
         assert var.default == "v1"
@@ -28,7 +28,7 @@ class TestServerVariable:
 
 
 class TestServer:
-    """Tests for Server model."""
+    """Tests for spec.server.Server model."""
 
     def test_server_minimal(self):
         """Test creating minimal Server."""
@@ -39,7 +39,7 @@ class TestServer:
         assert len(server.variables) == 0
 
     def test_server_with_description(self):
-        """Test creating Server with description."""
+        """Test creating spec.server.Server with description."""
         data = {
             "url": "https://api.example.com",
             "description": "Production server",
@@ -49,7 +49,7 @@ class TestServer:
         assert server.description == "Production server"
 
     def test_server_with_variables(self):
-        """Test creating Server with variables."""
+        """Test creating spec.server.Server with variables."""
         data = {
             "url": "https://{environment}.example.com",
             "variables": {
@@ -70,7 +70,7 @@ class TestServer:
         data = {"url": "https://api.example.com"}
         server = Server.from_dict(data)
         str_repr = str(server)
-        assert "<Server:" in str_repr
+        assert "<spec.server.Server:" in str_repr
         assert "url=https://api.example.com" in str_repr
 
     def test_server_str_with_description(self):

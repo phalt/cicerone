@@ -1,21 +1,21 @@
-"""Info model for OpenAPI info object.
+"""info.Info model for OpenAPI info object.
 
 References:
-- OpenAPI 3.x Info Object: https://spec.openapis.org/oas/v3.1.0#info-object
-- OpenAPI 3.x Contact Object: https://spec.openapis.org/oas/v3.1.0#contact-object
-- OpenAPI 3.x License Object: https://spec.openapis.org/oas/v3.1.0#license-object
+- OpenAPI 3.x info.Info Object: https://spec.openapis.org/oas/v3.1.0#info-object
+- OpenAPI 3.x info.Contact Object: https://spec.openapis.org/oas/v3.1.0#contact-object
+- OpenAPI 3.x info.License Object: https://spec.openapis.org/oas/v3.1.0#license-object
 """
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel, Field
+import pydantic
 
 from cicerone.spec import model_utils
 
 
-class Contact(BaseModel):
+class info.Contact(pydantic.BaseModel):
     """Represents contact information for the API."""
 
     # Allow extra fields to support vendor extensions
@@ -26,8 +26,8 @@ class Contact(BaseModel):
     email: str | None = None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Contact:
-        """Create a Contact from a dictionary."""
+    def from_dict(cls, data: dict[str, typing.Any]) -> info.Contact:
+        """Create a info.Contact from a dictionary."""
         excluded = {"name", "url", "email"}
         return cls(
             name=data.get("name"),
@@ -37,7 +37,7 @@ class Contact(BaseModel):
         )
 
 
-class License(BaseModel):
+class info.License(pydantic.BaseModel):
     """Represents license information for the API."""
 
     # Allow extra fields to support vendor extensions
@@ -48,8 +48,8 @@ class License(BaseModel):
     identifier: str | None = None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> License:
-        """Create a License from a dictionary."""
+    def from_dict(cls, data: dict[str, typing.Any]) -> info.License:
+        """Create a info.License from a dictionary."""
         excluded = {"name", "url", "identifier"}
         return cls(
             name=data["name"],
@@ -59,8 +59,8 @@ class License(BaseModel):
         )
 
 
-class Info(BaseModel):
-    """Represents the Info object of an OpenAPI specification."""
+class info.Info(pydantic.BaseModel):
+    """Represents the info.Info object of an OpenAPI specification."""
 
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
@@ -69,9 +69,9 @@ class Info(BaseModel):
     version: str
     summary: str | None = None
     description: str | None = None
-    terms_of_service: str | None = Field(None, alias="termsOfService")
-    contact: Contact | None = None
-    license: License | None = None
+    terms_of_service: "str | None" = pydantic.Field(None, alias="termsOfService")
+    contact: info.Contact | None = None
+    license: info.License | None = None
 
     def __str__(self) -> str:
         """Return a readable string representation of the info object."""
@@ -79,11 +79,11 @@ class Info(BaseModel):
         if self.description:
             desc_preview = self.description[:50] + "..." if len(self.description) > 50 else self.description
             parts.append(f"desc='{desc_preview}'")
-        return f"<Info: {', '.join(parts)}>"
+        return f"<info.Info: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Info:
-        """Create an Info object from a dictionary."""
+    def from_dict(cls, data: dict[str, typing.Any]) -> info.Info:
+        """Create an info.Info object from a dictionary."""
         excluded = {"title", "version", "summary", "description", "termsOfService", "contact", "license"}
         return cls(
             title=data["title"],

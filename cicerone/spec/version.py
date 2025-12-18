@@ -4,6 +4,9 @@ References:
 - OpenAPI 3.x Info Object (version field): https://spec.openapis.org/oas/v3.1.0#info-object
 """
 
+from __future__ import annotations
+
+
 
 class Version:
     """Simple version representation for OpenAPI specs."""

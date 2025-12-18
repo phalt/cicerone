@@ -1,13 +1,13 @@
 """Tests for component models."""
 
-from cicerone.spec import Example, Header, Parameter, RequestBody, Response, SecurityScheme
+from cicerone import spec
 
 
 class TestParameter:
-    """Tests for Parameter model."""
+    """Tests for spec.parameter.Parameter model."""
 
     def test_parameter_from_dict(self):
-        """Test creating Parameter from dict."""
+        """Test creating spec.parameter.Parameter from dict."""
         data = {
             "name": "page",
             "in": "query",
@@ -25,10 +25,10 @@ class TestParameter:
 
 
 class TestResponse:
-    """Tests for Response model."""
+    """Tests for spec.response.Response model."""
 
     def test_response_from_dict(self):
-        """Test creating Response from dict."""
+        """Test creating spec.response.Response from dict."""
         data = {
             "description": "Success response",
             "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
@@ -39,10 +39,10 @@ class TestResponse:
 
 
 class TestRequestBody:
-    """Tests for RequestBody model."""
+    """Tests for spec.requestbody.RequestBody model."""
 
     def test_request_body_from_dict(self):
-        """Test creating RequestBody from dict."""
+        """Test creating spec.requestbody.RequestBody from dict."""
         data = {
             "description": "User request body",
             "required": True,
@@ -55,10 +55,10 @@ class TestRequestBody:
 
 
 class TestSecurityScheme:
-    """Tests for SecurityScheme model."""
+    """Tests for spec.securityscheme.SecurityScheme model."""
 
     def test_security_scheme_http(self):
-        """Test creating HTTP SecurityScheme from dict."""
+        """Test creating HTTP spec.securityscheme.SecurityScheme from dict."""
         data = {
             "type": "http",
             "scheme": "bearer",
@@ -71,7 +71,7 @@ class TestSecurityScheme:
         assert scheme.bearerFormat == "JWT"
 
     def test_security_scheme_apikey(self):
-        """Test creating API key SecurityScheme from dict."""
+        """Test creating API key spec.securityscheme.SecurityScheme from dict."""
         data = {
             "type": "apiKey",
             "name": "X-API-Key",
@@ -84,24 +84,24 @@ class TestSecurityScheme:
 
 
 class TestExample:
-    """Tests for Example model."""
+    """Tests for spec.example.Example model."""
 
     def test_example_from_dict(self):
-        """Test creating Example from dict."""
+        """Test creating spec.example.Example from dict."""
         data = {
-            "summary": "Example user",
+            "summary": "spec.example.Example user",
             "value": {"id": "123", "name": "John"},
         }
         example = Example.from_dict(data)
-        assert example.summary == "Example user"
+        assert example.summary == "spec.example.Example user"
         assert example.value == {"id": "123", "name": "John"}
 
 
 class TestHeader:
-    """Tests for Header model."""
+    """Tests for spec.header.Header model."""
 
     def test_header_from_dict(self):
-        """Test creating Header from dict."""
+        """Test creating spec.header.Header from dict."""
         data = {
             "description": "Rate limit header",
             "schema": {"type": "integer"},

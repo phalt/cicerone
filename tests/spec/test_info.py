@@ -1,13 +1,13 @@
-"""Tests for Info model."""
+"""Tests for spec.info.Info model."""
 
-from cicerone.spec import Contact, Info, License
+from cicerone import spec
 
 
 class TestContact:
-    """Tests for Contact model."""
+    """Tests for spec.contact.Contact model."""
 
     def test_contact_from_dict(self):
-        """Test creating Contact from dict."""
+        """Test creating spec.contact.Contact from dict."""
         data = {
             "name": "API Team",
             "url": "https://example.com",
@@ -19,7 +19,7 @@ class TestContact:
         assert contact.email == "api@example.com"
 
     def test_contact_partial_data(self):
-        """Test creating Contact with partial data."""
+        """Test creating spec.contact.Contact with partial data."""
         data = {"name": "API Team"}
         contact = Contact.from_dict(data)
         assert contact.name == "API Team"
@@ -27,7 +27,7 @@ class TestContact:
         assert contact.email is None
 
     def test_contact_empty_dict(self):
-        """Test creating Contact from empty dict."""
+        """Test creating spec.contact.Contact from empty dict."""
         data: dict[str, str] = {}
         contact = Contact.from_dict(data)
         assert contact.name is None
@@ -36,10 +36,10 @@ class TestContact:
 
 
 class TestLicense:
-    """Tests for License model."""
+    """Tests for spec.license.License model."""
 
     def test_license_from_dict(self):
-        """Test creating License from dict."""
+        """Test creating spec.license.License from dict."""
         data = {
             "name": "Apache 2.0",
             "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
@@ -49,7 +49,7 @@ class TestLicense:
         assert license.url == "https://www.apache.org/licenses/LICENSE-2.0.html"
 
     def test_license_with_identifier(self):
-        """Test creating License with identifier (OpenAPI 3.1)."""
+        """Test creating spec.license.License with identifier (OpenAPI 3.1)."""
         data = {
             "name": "MIT",
             "identifier": "MIT",
@@ -60,10 +60,10 @@ class TestLicense:
 
 
 class TestInfo:
-    """Tests for Info model."""
+    """Tests for spec.info.Info model."""
 
     def test_info_minimal(self):
-        """Test creating minimal Info object."""
+        """Test creating minimal spec.info.Info object."""
         data = {
             "title": "Test API",
             "version": "1.0.0",
@@ -75,7 +75,7 @@ class TestInfo:
         assert info.description is None
 
     def test_info_complete(self):
-        """Test creating complete Info object."""
+        """Test creating complete spec.info.Info object."""
         data = {
             "title": "Test API",
             "version": "1.0.0",
@@ -110,7 +110,7 @@ class TestInfo:
         }
         info = Info.from_dict(data)
         str_repr = str(info)
-        assert "<Info:" in str_repr
+        assert "<spec.info.Info:" in str_repr
         assert "Test API" in str_repr
         assert "v1.0.0" in str_repr
 
@@ -123,7 +123,7 @@ class TestInfo:
         }
         info = Info.from_dict(data)
         str_repr = str(info)
-        assert "<Info:" in str_repr
+        assert "<spec.info.Info:" in str_repr
         assert "desc=" in str_repr
 
     def test_info_str_with_long_description(self):

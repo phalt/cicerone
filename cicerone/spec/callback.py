@@ -6,17 +6,14 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel, Field
+import pydantic
 
-from cicerone.spec import path_item as path_item_module
-
-# Extract classes for type annotations
-PathItem = path_item_module.PathItem
+from cicerone.spec import path_item
 
 
-class Callback(BaseModel):
+class Callback(pydantic.BaseModel):
     """Represents an OpenAPI Callback Object.
 
     A callback is a map of runtime expressions to Path Item Objects.
@@ -26,33 +23,33 @@ class Callback(BaseModel):
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
-    # Callbacks are a dict of expression -> PathItem
-    expressions: dict[str, PathItem] = Field(default_factory=dict)
+    # Callbacks are a dict of expression -> path_item.PathItem
+    expressions: "dict[str, path_item.PathItem]" = pydantic.Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Callback:
+    def from_dict(cls, data: dict[str, typing.Any]) -> Callback:
         """Create a Callback from a dictionary.
 
         Args:
             data: Dictionary containing callback expressions mapping to Path Items
 
         Returns:
-            Callback object with expressions parsed as PathItem objects
+            Callback object with expressions parsed as path_item.PathItem objects
         """
-        # Parse each expression as a PathItem
-        expressions: dict[str, PathItem] = {}
+        # Parse each expression as a path_item.PathItem
+        expressions: dict[str, path_item.PathItem] = {}
         for expression, path_item_data in data.items():
-            expressions[expression] = path_item_module.PathItem.from_dict(expression, path_item_data)
+            expressions[expression] = path_item.PathItem.from_dict(expression, path_item_data)
 
         return cls(expressions=expressions)
 
-    def get(self, expression: str) -> PathItem | None:
-        """Get a PathItem for a given expression.
+    def get(self, expression: str) -> path_item.PathItem | None:
+        """Get a path_item.PathItem for a given expression.
 
         Args:
             expression: The runtime expression (e.g., '{$request.body#/callbackUrl}')
 
         Returns:
-            PathItem if found, None otherwise
+            path_item.PathItem if found, None otherwise
         """
         return self.expressions.get(expression)

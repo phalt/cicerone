@@ -1,32 +1,32 @@
-"""Server model for OpenAPI server definitions.
+"""server.Server model for OpenAPI server definitions.
 
 References:
-- OpenAPI 3.x Server Object: https://spec.openapis.org/oas/v3.1.0#server-object
-- OpenAPI 3.x Server Variable Object: https://spec.openapis.org/oas/v3.1.0#server-variable-object
+- OpenAPI 3.x server.Server Object: https://spec.openapis.org/oas/v3.1.0#server-object
+- OpenAPI 3.x server.Server Variable Object: https://spec.openapis.org/oas/v3.1.0#server-variable-object
 """
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel, Field
+import pydantic
 
 from cicerone.spec import model_utils
 
 
-class ServerVariable(BaseModel):
+class server.ServerVariable(pydantic.BaseModel):
     """Represents a server variable for use in server URL template substitution."""
 
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
-    enum: list[str] = Field(default_factory=list)
+    enum: list[str] = pydantic.Field(default_factory=list)
     default: str
     description: str | None = None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> ServerVariable:
-        """Create a ServerVariable from a dictionary."""
+    def from_dict(cls, data: dict[str, typing.Any]) -> server.ServerVariable:
+        """Create a server.ServerVariable from a dictionary."""
         excluded = {"enum", "default", "description"}
         return cls(
             enum=data.get("enum", []),
@@ -36,15 +36,15 @@ class ServerVariable(BaseModel):
         )
 
 
-class Server(BaseModel):
-    """Represents an OpenAPI Server object."""
+class server.Server(pydantic.BaseModel):
+    """Represents an OpenAPI server.Server object."""
 
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
     url: str
     description: str | None = None
-    variables: dict[str, ServerVariable] = Field(default_factory=dict)
+    variables: "dict[str, server.ServerVariable]" = pydantic.Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the server."""
@@ -53,11 +53,11 @@ class Server(BaseModel):
             parts.append(f"'{self.description}'")
         if self.variables:
             parts.append(f"{len(self.variables)} variables")
-        return f"<Server: {', '.join(parts)}>"
+        return f"<server.Server: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Server:
-        """Create a Server from a dictionary."""
+    def from_dict(cls, data: dict[str, typing.Any]) -> server.Server:
+        """Create a server.Server from a dictionary."""
         excluded = {"url", "description", "variables"}
         return cls(
             url=data["url"],

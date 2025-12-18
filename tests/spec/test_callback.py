@@ -1,26 +1,26 @@
-"""Tests for Callback model and callback parsing."""
+"""Tests for spec.callback.Callback model and callback parsing."""
 
 from pathlib import Path
 from typing import Any
 
 import pytest
 
-from cicerone.parse import parse_spec_from_file
-from cicerone.spec import (
-    Callback,
+from cicerone import parse
+from cicerone import spec
+    spec.callback.Callback,
 )
 
 
 class TestCallback:
-    """Tests for Callback model."""
+    """Tests for spec.callback.Callback model."""
 
     def test_callback_from_dict(self):
-        """Test creating Callback from dict."""
+        """Test creating spec.callback.Callback from dict."""
         data: dict[str, Any] = {
             "{$request.body#/callbackUrl}": {
                 "post": {
                     "requestBody": {"content": {"application/json": {"schema": {"type": "object"}}}},
-                    "responses": {"200": {"description": "Callback received"}},
+                    "responses": {"200": {"description": "spec.callback.Callback received"}},
                 }
             }
         }
@@ -63,14 +63,14 @@ class TestCallbackParsing:
 
     def test_parse_spec_with_callbacks(self, callback_spec_path: Path):
         """Test parsing a spec that contains callbacks."""
-        spec = parse_spec_from_file(callback_spec_path)
+        spec = parse.parser.parse_spec_from_file(callback_spec_path)
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
 
     def test_operation_callbacks_parsed(self, callback_spec_path: Path):
         """Test that callbacks in operations are accessible."""
-        spec = parse_spec_from_file(callback_spec_path)
+        spec = parse.parser.parse_spec_from_file(callback_spec_path)
 
         # The /streams POST operation has a callback
         streams_path = spec.paths["/streams"]
@@ -81,7 +81,7 @@ class TestCallbackParsing:
 
     def test_callback_expression_structure(self, callback_spec_path: Path):
         """Test that callback objects have correct structure."""
-        spec = parse_spec_from_file(callback_spec_path)
+        spec = parse.parser.parse_spec_from_file(callback_spec_path)
 
         # Access the raw callbacks from the operation
         streams_path = spec.raw["paths"]["/streams"]

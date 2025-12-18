@@ -1,10 +1,10 @@
-"""Tests for Schema model."""
+"""Tests for spec.schema.Schema model."""
 
-from cicerone.spec import Schema
+from cicerone import spec
 
 
 class TestSchema:
-    """Tests for Schema model."""
+    """Tests for spec.schema.Schema model."""
 
     def test_basic_schema(self):
         """Test creating a basic schema."""
@@ -66,7 +66,7 @@ class TestSchema:
         }
         schema = Schema.from_dict(data)
         str_repr = str(schema)
-        assert "<Schema:" in str_repr
+        assert "<spec.schema.Schema:" in str_repr
         assert "'User'" in str_repr
         assert "type=object" in str_repr
         assert "2 properties" in str_repr

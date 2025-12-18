@@ -1,13 +1,13 @@
-"""Tests for Tag and ExternalDocumentation models."""
+"""Tests for spec.tag.Tag and spec.externaldocumentation.ExternalDocumentation models."""
 
-from cicerone.spec import ExternalDocumentation, Tag
+from cicerone import spec
 
 
 class TestExternalDocumentation:
-    """Tests for ExternalDocumentation model."""
+    """Tests for spec.externaldocumentation.ExternalDocumentation model."""
 
     def test_external_docs_from_dict(self):
-        """Test creating ExternalDocumentation from dict."""
+        """Test creating spec.externaldocumentation.ExternalDocumentation from dict."""
         data = {
             "url": "https://docs.example.com",
             "description": "External documentation",
@@ -17,7 +17,7 @@ class TestExternalDocumentation:
         assert ext_docs.description == "External documentation"
 
     def test_external_docs_minimal(self):
-        """Test creating ExternalDocumentation with only URL."""
+        """Test creating spec.externaldocumentation.ExternalDocumentation with only URL."""
         data = {"url": "https://docs.example.com"}
         ext_docs = ExternalDocumentation.from_dict(data)
         assert ext_docs.url == "https://docs.example.com"
@@ -25,7 +25,7 @@ class TestExternalDocumentation:
 
 
 class TestTag:
-    """Tests for Tag model."""
+    """Tests for spec.tag.Tag model."""
 
     def test_tag_minimal(self):
         """Test creating minimal Tag."""
@@ -36,7 +36,7 @@ class TestTag:
         assert tag.external_docs is None
 
     def test_tag_with_description(self):
-        """Test creating Tag with description."""
+        """Test creating spec.tag.Tag with description."""
         data = {
             "name": "users",
             "description": "User management endpoints",
@@ -46,7 +46,7 @@ class TestTag:
         assert tag.description == "User management endpoints"
 
     def test_tag_with_external_docs(self):
-        """Test creating Tag with external documentation."""
+        """Test creating spec.tag.Tag with external documentation."""
         data = {
             "name": "users",
             "externalDocs": {
@@ -65,7 +65,7 @@ class TestTag:
         data = {"name": "users"}
         tag = Tag.from_dict(data)
         str_repr = str(tag)
-        assert "<Tag:" in str_repr
+        assert "<spec.tag.Tag:" in str_repr
         assert "name='users'" in str_repr
 
     def test_tag_str_with_description(self):

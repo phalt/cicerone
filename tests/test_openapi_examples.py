@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from cicerone.parse import parse_spec_from_file
+from cicerone import parse
 
 
 class TestOpenAPIExamples:
@@ -21,7 +21,7 @@ class TestOpenAPIExamples:
 
     def test_parse_api_with_examples(self, examples_dir: Path) -> None:
         """Test parsing api-with-examples.json (focuses on example objects)."""
-        spec = parse_spec_from_file(examples_dir / "api-with-examples.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "api-with-examples.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -50,7 +50,7 @@ class TestOpenAPIExamples:
 
     def test_parse_callback_example(self, examples_dir: Path) -> None:
         """Test parsing callback-example.json (focuses on callbacks)."""
-        spec = parse_spec_from_file(examples_dir / "callback-example.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "callback-example.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -77,7 +77,7 @@ class TestOpenAPIExamples:
 
     def test_parse_non_oauth_scopes(self, examples_dir: Path) -> None:
         """Test parsing non-oauth-scopes.json (security without OAuth)."""
-        spec = parse_spec_from_file(examples_dir / "non-oauth-scopes.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "non-oauth-scopes.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 1
@@ -102,7 +102,7 @@ class TestOpenAPIExamples:
 
     def test_parse_petstore(self, examples_dir: Path) -> None:
         """Test parsing petstore.json (basic petstore example)."""
-        spec = parse_spec_from_file(examples_dir / "petstore.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "petstore.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -145,7 +145,7 @@ class TestOpenAPIExamples:
 
     def test_parse_petstore_expanded(self, examples_dir: Path) -> None:
         """Test parsing petstore-expanded.json (extended petstore with more features)."""
-        spec = parse_spec_from_file(examples_dir / "petstore-expanded.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "petstore-expanded.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -181,7 +181,7 @@ class TestOpenAPIExamples:
 
     def test_parse_tictactoe(self, examples_dir: Path) -> None:
         """Test parsing tictactoe.json (includes tags and security)."""
-        spec = parse_spec_from_file(examples_dir / "tictactoe.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "tictactoe.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 1
@@ -207,7 +207,7 @@ class TestOpenAPIExamples:
 
     def test_parse_uspto(self, examples_dir: Path) -> None:
         """Test parsing uspto.json (includes server variables and tags)."""
-        spec = parse_spec_from_file(examples_dir / "uspto.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "uspto.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -245,7 +245,7 @@ class TestOpenAPIExamples:
 
     def test_parse_webhook_example(self, examples_dir: Path) -> None:
         """Test parsing webhook-example.json (OpenAPI 3.1 webhooks feature)."""
-        spec = parse_spec_from_file(examples_dir / "webhook-example.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "webhook-example.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 1
@@ -295,14 +295,14 @@ class TestOpenAPIExamples:
         ]
 
         for filename in example_files:
-            spec = parse_spec_from_file(examples_dir / filename)
+            spec = parse.parser.parse_spec_from_file(examples_dir / filename)
             assert spec is not None, f"Failed to parse {filename}"
             assert spec.version is not None, f"No version in {filename}"
             assert spec.info is not None, f"No info in {filename}"
 
     def test_schema_composition_keywords(self, examples_dir: Path) -> None:
         """Test that schema composition keywords (allOf, oneOf, anyOf) are captured."""
-        spec = parse_spec_from_file(examples_dir / "petstore-expanded.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "petstore-expanded.json")
 
         # Pet schema uses allOf
         pet_schema = spec.components.schemas["Pet"]
@@ -323,7 +323,7 @@ class TestOpenAPIExamples:
 
     def test_all_schema_elements_captured(self, examples_dir: Path) -> None:
         """Verify all schema elements are captured including format, example, etc."""
-        spec = parse_spec_from_file(examples_dir / "petstore.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "petstore.json")
 
         # Check that schemas preserve all fields
         pets_schema = spec.components.schemas["Pets"]
@@ -339,7 +339,7 @@ class TestOpenAPIExamples:
     def test_top_level_security_and_external_docs(self, examples_dir: Path) -> None:
         """Test that top-level security and externalDocs are captured."""
         # Note: Need to check raw field since our examples don't have top-level security/externalDocs
-        spec = parse_spec_from_file(examples_dir / "tictactoe.json")
+        spec = parse.parser.parse_spec_from_file(examples_dir / "tictactoe.json")
 
         # Verify security field exists (even if empty)
         assert spec.security is not None

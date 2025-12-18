@@ -1,93 +1,41 @@
 """OpenAPI specification models and utilities."""
 
-from cicerone.spec import (
-    callback,
-    components,
-    encoding,
-    example,
-    header,
-    info,
-    link,
-    media_type,
-    model_utils,
-    oauth_flows,
-    openapi_spec,
-    operation,
-    parameter,
-    path_item,
-    paths,
-    request_body,
-    response,
-    schema,
-    security_scheme,
-    server,
-    tag,
-    version,
-    webhooks,
-)
+from cicerone.spec.components import Components
+from cicerone.spec.info import Contact, Info, License
+from cicerone.spec.openapi_spec import OpenAPISpec
+from cicerone.spec.operation import Operation
+from cicerone.spec.path_item import PathItem
+from cicerone.spec.paths import Paths
+from cicerone.spec.schema import Schema
+from cicerone.spec.server import Server, ServerVariable
+from cicerone.spec.tag import ExternalDocumentation, Tag
+from cicerone.spec.version import Version
+from cicerone.spec.webhooks import Webhooks
 
 __all__ = [
-    "Callback",
     "Components",
     "Contact",
-    "Encoding",
-    "Example",
     "ExternalDocumentation",
-    "Header",
     "Info",
     "License",
-    "Link",
-    "MediaType",
-    "OAuthFlow",
-    "OAuthFlows",
     "OpenAPISpec",
     "Operation",
-    "Parameter",
     "PathItem",
     "Paths",
-    "RequestBody",
-    "Response",
     "Schema",
-    "SecurityScheme",
     "Server",
     "ServerVariable",
     "Tag",
     "Version",
     "Webhooks",
-    "model_utils",
 ]
 
-# Re-export for backward compatibility
-Callback = callback.Callback
-Components = components.Components
-Contact = info.Contact
-Encoding = encoding.Encoding
-Example = example.Example
-ExternalDocumentation = tag.ExternalDocumentation
-Header = header.Header
-Info = info.Info
-License = info.License
-Link = link.Link
-MediaType = media_type.MediaType
-OAuthFlow = oauth_flows.OAuthFlow
-OAuthFlows = oauth_flows.OAuthFlows
-OpenAPISpec = openapi_spec.OpenAPISpec
-Operation = operation.Operation
-Parameter = parameter.Parameter
-PathItem = path_item.PathItem
-Paths = paths.Paths
-RequestBody = request_body.RequestBody
-Response = response.Response
-Schema = schema.Schema
-SecurityScheme = security_scheme.SecurityScheme
-Server = server.Server
-ServerVariable = server.ServerVariable
-Tag = tag.Tag
-Version = version.Version
-Webhooks = webhooks.Webhooks
-
 # Rebuild models with forward references after all imports are resolved
-header.Header.model_rebuild()
-parameter.Parameter.model_rebuild()
-response.Response.model_rebuild()
-components.Components.model_rebuild()
+from cicerone.spec.header import Header
+from cicerone.spec.parameter import Parameter
+from cicerone.spec.response import Response
+
+Header.model_rebuild()
+Parameter.model_rebuild()
+Response.model_rebuild()
+Components.model_rebuild()

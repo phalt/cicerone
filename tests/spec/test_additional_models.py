@@ -1,13 +1,13 @@
 """Tests for additional component models."""
 
-from cicerone.spec import Encoding, Example, Link, MediaType, OAuthFlow, OAuthFlows
+from cicerone import spec
 
 
 class TestMediaType:
-    """Tests for MediaType model."""
+    """Tests for spec.mediatype.MediaType model."""
 
     def test_media_type_from_dict(self):
-        """Test creating MediaType from dict."""
+        """Test creating spec.mediatype.MediaType from dict."""
         data = {
             "schema": {"type": "object", "properties": {"id": {"type": "string"}}},
             "example": {"id": "123"},
@@ -17,7 +17,7 @@ class TestMediaType:
         assert media_type.example == {"id": "123"}
 
     def test_media_type_with_examples(self):
-        """Test creating MediaType with examples as Example objects."""
+        """Test creating spec.mediatype.MediaType with examples as spec.example.Example objects."""
         data = {
             "schema": {"type": "string"},
             "examples": {
@@ -28,11 +28,11 @@ class TestMediaType:
         media_type = MediaType.from_dict(data)
         assert "user1" in media_type.examples
         assert "user2" in media_type.examples
-        assert isinstance(media_type.examples["user1"], Example)
+        assert isinstance(media_type.examples["user1"], spec.example.Example)
         assert media_type.examples["user1"].value == "John"
 
     def test_media_type_with_encoding(self):
-        """Test creating MediaType with encoding objects."""
+        """Test creating spec.mediatype.MediaType with encoding objects."""
         data = {
             "schema": {"type": "object"},
             "encoding": {
@@ -44,15 +44,15 @@ class TestMediaType:
         }
         media_type = MediaType.from_dict(data)
         assert "profileImage" in media_type.encoding
-        assert isinstance(media_type.encoding["profileImage"], Encoding)
+        assert isinstance(media_type.encoding["profileImage"], spec.encoding.Encoding)
         assert media_type.encoding["profileImage"].contentType == "image/png, image/jpeg"
 
 
 class TestEncoding:
-    """Tests for Encoding model."""
+    """Tests for spec.encoding.Encoding model."""
 
     def test_encoding_from_dict(self):
-        """Test creating Encoding from dict."""
+        """Test creating spec.encoding.Encoding from dict."""
         data = {
             "contentType": "application/xml; charset=utf-8",
             "style": "form",
@@ -66,38 +66,38 @@ class TestEncoding:
         assert encoding.allowReserved is False
 
     def test_encoding_with_headers(self):
-        """Test creating Encoding with headers."""
+        """Test creating spec.encoding.Encoding with headers."""
         data = {
             "contentType": "application/json",
             "headers": {
-                "X-Custom-Header": {"description": "Custom header", "schema": {"type": "string"}},
+                "X-Custom-spec.header.Header": {"description": "Custom header", "schema": {"type": "string"}},
             },
         }
         encoding = Encoding.from_dict(data)
-        assert "X-Custom-Header" in encoding.headers
+        assert "X-Custom-spec.header.Header" in encoding.headers
 
 
 class TestLink:
-    """Tests for Link model."""
+    """Tests for spec.link.Link model."""
 
     def test_link_from_dict(self):
-        """Test creating Link from dict."""
+        """Test creating spec.link.Link from dict."""
         data = {
             "operationId": "getUser",
             "parameters": {"userId": "$response.body#/id"},
-            "description": "Link to user",
+            "description": "spec.link.Link to user",
         }
         link = Link.from_dict(data)
         assert link.operationId == "getUser"
-        assert link.description == "Link to user"
+        assert link.description == "spec.link.Link to user"
         assert "userId" in link.parameters
 
 
 class TestOAuthFlow:
-    """Tests for OAuthFlow model."""
+    """Tests for spec.oauthflow.OAuthFlow model."""
 
     def test_oauth_flow_from_dict(self):
-        """Test creating OAuthFlow from dict."""
+        """Test creating spec.oauthflow.OAuthFlow from dict."""
         data = {
             "authorizationUrl": "https://example.com/oauth/authorize",
             "tokenUrl": "https://example.com/oauth/token",
@@ -113,10 +113,10 @@ class TestOAuthFlow:
 
 
 class TestOAuthFlows:
-    """Tests for OAuthFlows model."""
+    """Tests for spec.oauthflows.OAuthFlows model."""
 
     def test_oauth_flows_from_dict(self):
-        """Test creating OAuthFlows from dict."""
+        """Test creating spec.oauthflows.OAuthFlows from dict."""
         data = {
             "implicit": {
                 "authorizationUrl": "https://example.com/oauth/authorize",

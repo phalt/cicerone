@@ -1,10 +1,10 @@
-"""Tests for Operation model."""
+"""Tests for spec.operation.Operation model."""
 
-from cicerone.spec import Operation
+from cicerone import spec
 
 
 class TestOperation:
-    """Tests for Operation model."""
+    """Tests for spec.operation.Operation model."""
 
     def test_basic_operation(self):
         """Test creating a basic operation."""
@@ -35,7 +35,7 @@ class TestOperation:
         }
         operation = Operation.from_dict("GET", "/users", data)
         str_repr = str(operation)
-        assert "<Operation:" in str_repr
+        assert "<spec.operation.Operation:" in str_repr
         assert "GET /users" in str_repr
         assert "id=listUsers" in str_repr
         assert "'List users'" in str_repr
@@ -46,7 +46,7 @@ class TestOperation:
         data: dict[str, str] = {}
         operation = Operation.from_dict("POST", "/posts", data)
         str_repr = str(operation)
-        assert "<Operation:" in str_repr
+        assert "<spec.operation.Operation:" in str_repr
         assert "POST /posts" in str_repr
         # Should not include operationId, summary, or tags if not present
         assert "id=" not in str_repr or "id=None" not in str_repr

@@ -1,10 +1,10 @@
-"""Tests for PathItem model."""
+"""Tests for spec.pathitem.PathItem model."""
 
-from cicerone.spec import PathItem
+from cicerone import spec
 
 
 class TestPathItem:
-    """Tests for PathItem model."""
+    """Tests for spec.pathitem.PathItem model."""
 
     def test_path_item_with_operations(self):
         """Test creating a path item with multiple operations."""
@@ -34,7 +34,7 @@ class TestPathItem:
         }
         path_item = PathItem.from_dict("/users/{id}", data)
         str_repr = str(path_item)
-        assert "<PathItem:" in str_repr
+        assert "<spec.pathitem.PathItem:" in str_repr
         assert "/users/{id}" in str_repr
         assert "GET" in str_repr
         assert "POST" in str_repr

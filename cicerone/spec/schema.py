@@ -7,14 +7,14 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel, Field
+import pydantic
 
 from cicerone.spec import model_utils
 
 
-class Schema(BaseModel):
+class Schema(pydantic.BaseModel):
     """Represents a JSON Schema / OpenAPI Schema object."""
 
     # Allow extra fields to support full JSON Schema vocabulary and vendor extensions
@@ -23,14 +23,14 @@ class Schema(BaseModel):
     title: str | None = None
     type: str | None = None
     description: str | None = None
-    properties: dict[str, Schema] = Field(default_factory=dict)
-    required: list[str] = Field(default_factory=list)
+    properties: dict[str, Schema] = pydantic.Field(default_factory=dict)
+    required: list[str] = pydantic.Field(default_factory=list)
     items: Schema | None = None
     # Composition keywords
-    all_of: list[Schema] | None = Field(None, alias="allOf")
-    one_of: list[Schema] | None = Field(None, alias="oneOf")
-    any_of: list[Schema] | None = Field(None, alias="anyOf")
-    not_: Schema | None = Field(None, alias="not")
+    all_of: "list[Schema] | None" = pydantic.Field(None, alias="allOf")
+    one_of: "list[Schema] | None" = pydantic.Field(None, alias="oneOf")
+    any_of: "list[Schema] | None" = pydantic.Field(None, alias="anyOf")
+    not_: "Schema | None" = pydantic.Field(None, alias="not")
 
     def __str__(self) -> str:
         """Return a readable string representation of the schema."""
@@ -50,7 +50,7 @@ class Schema(BaseModel):
         return f"<Schema: {content}>"
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Schema:
+    def from_dict(cls, data: dict[str, typing.Any]) -> Schema:
         """Create a Schema from a dictionary, handling nested schemas."""
         excluded = {
             "title",
