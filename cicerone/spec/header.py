@@ -11,6 +11,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from cicerone.spec.example import Example
+from cicerone.spec.model_utils import parse_collection, parse_nested_object
 from cicerone.spec.schema import Schema
 
 
@@ -31,27 +32,14 @@ class Header(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Header:
         """Create a Header from a dictionary."""
-        header_data: dict[str, Any] = {
-            "description": data.get("description"),
-            "required": data.get("required", False),
-            "style": data.get("style"),
-            "explode": data.get("explode"),
-            "example": data.get("example"),
-        }
-
-        # Parse schema as Schema object
-        if "schema" in data:
-            header_data["schema"] = Schema.from_dict(data["schema"])
-
-        # Parse examples as Example objects
-        if "examples" in data:
-            header_data["examples"] = {
-                name: Example.from_dict(example_data) for name, example_data in data["examples"].items()
-            }
-
-        # Add any extra fields
-        for key, value in data.items():
-            if key not in header_data:
-                header_data[key] = value
-
-        return cls(**header_data)
+        excluded = {"description", "required", "schema", "style", "explode", "example", "examples"}
+        return cls(
+            description=data.get("description"),
+            required=data.get("required", False),
+            schema=parse_nested_object(data, "schema", Schema.from_dict),
+            style=data.get("style"),
+            explode=data.get("explode"),
+            example=data.get("example"),
+            examples=parse_collection(data, "examples", Example.from_dict),
+            **{k: v for k, v in data.items() if k not in excluded},
+        )

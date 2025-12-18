@@ -23,4 +23,5 @@ class Example(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Example":
         """Create an Example from a dictionary."""
+        # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)

@@ -13,6 +13,7 @@ from cicerone.spec.callback import Callback
 from cicerone.spec.example import Example
 from cicerone.spec.header import Header
 from cicerone.spec.link import Link
+from cicerone.spec.model_utils import parse_collection
 from cicerone.spec.parameter import Parameter
 from cicerone.spec.request_body import RequestBody
 from cicerone.spec.response import Response
@@ -87,86 +88,28 @@ class Components(BaseModel):
     @classmethod
     def from_spec(cls, raw: Mapping[str, Any], version: Version) -> "Components":
         """Create Components from spec data, handling both OpenAPI 3.x and Swagger 2.0."""
-        schemas: dict[str, Schema] = {}
-        responses: dict[str, Response] = {}
-        parameters: dict[str, Parameter] = {}
-        examples: dict[str, Example] = {}
-        request_bodies: dict[str, RequestBody] = {}
-        headers: dict[str, Header] = {}
-        security_schemes: dict[str, SecurityScheme] = {}
-        links: dict[str, Link] = {}
-        callbacks: dict[str, Callback] = {}
-
         # OpenAPI 3.x: components object
         if version.major >= 3 and "components" in raw:
             components = raw["components"]
-
-            # Parse schemas
-            if "schemas" in components:
-                for name, schema_data in components["schemas"].items():
-                    schemas[name] = Schema.from_dict(schema_data)
-
-            # Parse typed component types
-            if "responses" in components:
-                for name, response_data in components["responses"].items():
-                    responses[name] = Response.from_dict(response_data)
-
-            if "parameters" in components:
-                for name, param_data in components["parameters"].items():
-                    parameters[name] = Parameter.from_dict(param_data)
-
-            if "examples" in components:
-                for name, example_data in components["examples"].items():
-                    examples[name] = Example.from_dict(example_data)
-
-            if "requestBodies" in components:
-                for name, body_data in components["requestBodies"].items():
-                    request_bodies[name] = RequestBody.from_dict(body_data)
-
-            if "headers" in components:
-                for name, header_data in components["headers"].items():
-                    headers[name] = Header.from_dict(header_data)
-
-            if "securitySchemes" in components:
-                for name, scheme_data in components["securitySchemes"].items():
-                    security_schemes[name] = SecurityScheme.from_dict(scheme_data)
-
-            # Parse links as Link objects
-            if "links" in components:
-                for name, link_data in components["links"].items():
-                    links[name] = Link.from_dict(link_data)
-
-            # Parse callbacks as Callback objects
-            if "callbacks" in components:
-                for name, callback_data in components["callbacks"].items():
-                    callbacks[name] = Callback.from_dict(callback_data)
+            return cls(
+                schemas=parse_collection(components, "schemas", Schema.from_dict),
+                responses=parse_collection(components, "responses", Response.from_dict),
+                parameters=parse_collection(components, "parameters", Parameter.from_dict),
+                examples=parse_collection(components, "examples", Example.from_dict),
+                requestBodies=parse_collection(components, "requestBodies", RequestBody.from_dict),
+                headers=parse_collection(components, "headers", Header.from_dict),
+                securitySchemes=parse_collection(components, "securitySchemes", SecurityScheme.from_dict),
+                links=parse_collection(components, "links", Link.from_dict),
+                callbacks=parse_collection(components, "callbacks", Callback.from_dict),
+            )
 
         # Swagger 2.0: definitions
-        elif version.major == 2 and "definitions" in raw:
-            for name, schema_data in raw["definitions"].items():
-                schemas[name] = Schema.from_dict(schema_data)
+        elif version.major == 2:
+            return cls(
+                schemas=parse_collection(raw, "definitions", Schema.from_dict),
+                parameters=parse_collection(raw, "parameters", Parameter.from_dict),
+                responses=parse_collection(raw, "responses", Response.from_dict),
+                securitySchemes=parse_collection(raw, "securityDefinitions", SecurityScheme.from_dict),
+            )
 
-            # Swagger 2.0 also has top-level parameters, responses, and securityDefinitions
-            if "parameters" in raw:
-                for name, param_data in raw["parameters"].items():
-                    parameters[name] = Parameter.from_dict(param_data)
-
-            if "responses" in raw:
-                for name, response_data in raw["responses"].items():
-                    responses[name] = Response.from_dict(response_data)
-
-            if "securityDefinitions" in raw:
-                for name, scheme_data in raw["securityDefinitions"].items():
-                    security_schemes[name] = SecurityScheme.from_dict(scheme_data)
-
-        return cls(
-            schemas=schemas,
-            responses=responses,
-            parameters=parameters,
-            examples=examples,
-            requestBodies=request_bodies,
-            headers=headers,
-            securitySchemes=security_schemes,
-            links=links,
-            callbacks=callbacks,
-        )
+        return cls()

@@ -9,6 +9,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.model_utils import parse_nested_object
 from cicerone.spec.oauth_flows import OAuthFlows
 
 
@@ -30,23 +31,15 @@ class SecurityScheme(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "SecurityScheme":
         """Create a SecurityScheme from a dictionary."""
-        scheme_data: dict[str, Any] = {
-            "type": data.get("type"),
-            "description": data.get("description"),
-            "name": data.get("name"),
-            "in": data.get("in"),
-            "scheme": data.get("scheme"),
-            "bearerFormat": data.get("bearerFormat"),
-            "openIdConnectUrl": data.get("openIdConnectUrl"),
-        }
-
-        # Parse flows as OAuthFlows object
-        if "flows" in data:
-            scheme_data["flows"] = OAuthFlows.from_dict(data["flows"])
-
-        # Add any extra fields
-        for key, value in data.items():
-            if key not in scheme_data:
-                scheme_data[key] = value
-
-        return cls(**scheme_data)
+        excluded = {"type", "description", "name", "in", "scheme", "bearerFormat", "flows", "openIdConnectUrl"}
+        return cls(
+            type=data.get("type"),
+            description=data.get("description"),
+            name=data.get("name"),
+            **{"in": data.get("in")},
+            scheme=data.get("scheme"),
+            bearerFormat=data.get("bearerFormat"),
+            flows=parse_nested_object(data, "flows", OAuthFlows.from_dict),
+            openIdConnectUrl=data.get("openIdConnectUrl"),
+            **{k: v for k, v in data.items() if k not in excluded},
+        )
