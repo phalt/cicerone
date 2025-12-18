@@ -117,7 +117,7 @@ paths: {}
 """
         file_path = tmp_path / "spec.json"
         file_path.write_text(yaml_content)
-        
+
         spec = parse_spec_from_file(file_path)
         assert spec.version.major == 3
 

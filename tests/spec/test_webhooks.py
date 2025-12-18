@@ -11,13 +11,7 @@ class TestWebhooks:
         data = {
             "newPet": {
                 "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": {"$ref": "#/components/schemas/Pet"}
-                            }
-                        }
-                    },
+                    "requestBody": {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/Pet"}}}},
                     "responses": {"200": {"description": "OK"}},
                 }
             }
