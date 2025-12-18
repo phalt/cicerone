@@ -1,0 +1,26 @@
+"""Example model for OpenAPI examples.
+
+References:
+- OpenAPI 3.x Example Object: https://spec.openapis.org/oas/v3.1.0#example-object
+"""
+
+from typing import Any
+
+from pydantic import BaseModel
+
+
+class Example(BaseModel):
+    """Represents an OpenAPI example object."""
+
+    # Allow extra fields to support vendor extensions and future spec additions
+    model_config = {"extra": "allow"}
+
+    summary: str | None = None
+    description: str | None = None
+    value: Any | None = None
+    externalValue: str | None = None
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "Example":
+        """Create an Example from a dictionary."""
+        return cls(**data)

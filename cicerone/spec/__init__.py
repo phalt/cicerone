@@ -17,3 +17,13 @@ __all__ = [
     "Schema",
     "Version",
 ]
+
+# Rebuild models with forward references after all imports are resolved
+from cicerone.spec.header import Header
+from cicerone.spec.parameter import Parameter
+from cicerone.spec.response import Response
+
+Header.model_rebuild()
+Parameter.model_rebuild()
+Response.model_rebuild()
+Components.model_rebuild()
