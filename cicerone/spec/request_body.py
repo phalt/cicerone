@@ -32,8 +32,7 @@ class RequestBody(BaseModel):
         # Parse content as MediaType objects
         if "content" in data:
             body_data["content"] = {
-                media_type: MediaType.from_dict(media_data)
-                for media_type, media_data in data["content"].items()
+                media_type: MediaType.from_dict(media_data) for media_type, media_data in data["content"].items()
             }
 
         # Add any extra fields
@@ -42,4 +41,3 @@ class RequestBody(BaseModel):
                 body_data[key] = value
 
         return cls(**body_data)
-

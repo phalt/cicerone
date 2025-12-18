@@ -133,4 +133,3 @@ class TestComponents:
         assert "LimitParam" in components.parameters
         assert "ErrorResponse" in components.responses
         assert "BasicAuth" in components.security_schemes
-

@@ -50,4 +50,3 @@ class SecurityScheme(BaseModel):
                 scheme_data[key] = value
 
         return cls(**scheme_data)
-

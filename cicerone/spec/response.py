@@ -48,29 +48,25 @@ class Response(BaseModel):
         # Parse content as MediaType objects
         if "content" in data:
             response_data["content"] = {
-                media_type: MediaType.from_dict(media_data)
-                for media_type, media_data in data["content"].items()
+                media_type: MediaType.from_dict(media_data) for media_type, media_data in data["content"].items()
             }
 
         # Parse headers as Header objects
         if "headers" in data:
             response_data["headers"] = {
-                header_name: Header.from_dict(header_data)
-                for header_name, header_data in data["headers"].items()
+                header_name: Header.from_dict(header_data) for header_name, header_data in data["headers"].items()
             }
 
         # Parse links as Link objects
         if "links" in data:
             response_data["links"] = {
-                link_name: Link.from_dict(link_data)
-                for link_name, link_data in data["links"].items()
+                link_name: Link.from_dict(link_data) for link_name, link_data in data["links"].items()
             }
 
         # Parse examples as Example objects
         if "examples" in data:
             response_data["examples"] = {
-                name: Example.from_dict(example_data)
-                for name, example_data in data["examples"].items()
+                name: Example.from_dict(example_data) for name, example_data in data["examples"].items()
             }
 
         # Add any extra fields

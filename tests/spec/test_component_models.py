@@ -36,11 +36,7 @@ class TestResponse:
         """Test creating Response from dict."""
         data = {
             "description": "Success response",
-            "content": {
-                "application/json": {
-                    "schema": {"$ref": "#/components/schemas/User"}
-                }
-            },
+            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
         }
         response = Response.from_dict(data)
         assert response.description == "Success response"
@@ -55,11 +51,7 @@ class TestRequestBody:
         data = {
             "description": "User request body",
             "required": True,
-            "content": {
-                "application/json": {
-                    "schema": {"$ref": "#/components/schemas/User"}
-                }
-            },
+            "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
         }
         body = RequestBody.from_dict(data)
         assert body.description == "User request body"

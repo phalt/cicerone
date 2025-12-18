@@ -57,8 +57,7 @@ class Parameter(BaseModel):
         # Parse examples as Example objects
         if "examples" in data:
             param_data["examples"] = {
-                name: Example.from_dict(example_data)
-                for name, example_data in data["examples"].items()
+                name: Example.from_dict(example_data) for name, example_data in data["examples"].items()
             }
 
         # Add any extra fields

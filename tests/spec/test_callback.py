@@ -17,16 +17,8 @@ class TestCallback:
         data: dict[str, Any] = {
             "{$request.body#/callbackUrl}": {
                 "post": {
-                    "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": {"type": "object"}
-                            }
-                        }
-                    },
-                    "responses": {
-                        "200": {"description": "Callback received"}
-                    }
+                    "requestBody": {"content": {"application/json": {"schema": {"type": "object"}}}},
+                    "responses": {"200": {"description": "Callback received"}},
                 }
             }
         }

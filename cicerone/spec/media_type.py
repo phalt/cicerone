@@ -36,15 +36,13 @@ class MediaType(BaseModel):
         # Parse examples as Example objects
         if "examples" in data:
             media_type_data["examples"] = {
-                name: Example.from_dict(example_data)
-                for name, example_data in data["examples"].items()
+                name: Example.from_dict(example_data) for name, example_data in data["examples"].items()
             }
 
         # Parse encoding as Encoding objects
         if "encoding" in data:
             media_type_data["encoding"] = {
-                name: Encoding.from_dict(encoding_data)
-                for name, encoding_data in data["encoding"].items()
+                name: Encoding.from_dict(encoding_data) for name, encoding_data in data["encoding"].items()
             }
 
         # Add any extra fields
