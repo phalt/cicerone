@@ -18,7 +18,6 @@ from cicerone.spec.request_body import RequestBody
 from cicerone.spec.response import Response
 from cicerone.spec.schema import Schema
 from cicerone.spec.security_scheme import SecurityScheme
-from cicerone.spec.version import Version
 
 
 class Components(BaseModel):
@@ -85,7 +84,7 @@ class Components(BaseModel):
         return self.schemas.get(schema_name)
 
     @classmethod
-    def from_spec(cls, raw: Mapping[str, Any], version: Version) -> "Components":
+    def from_spec(cls, raw: Mapping[str, Any]) -> "Components":
         """Create Components from spec data."""
         # OpenAPI 3.x: components object
         if "components" in raw:

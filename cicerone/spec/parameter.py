@@ -26,7 +26,6 @@ class Parameter(BaseModel):
     description: str | None = None
     required: bool = False
     schema_: Schema | None = Field(None, alias="schema")
-    type: str | None = None
     # OpenAPI 3.x fields
     style: str | None = None
     explode: bool | None = None
@@ -42,7 +41,6 @@ class Parameter(BaseModel):
             "description",
             "required",
             "schema",
-            "type",
             "style",
             "explode",
             "example",
@@ -54,7 +52,6 @@ class Parameter(BaseModel):
             description=data.get("description"),
             required=data.get("required", False),
             schema=parse_nested_object(data, "schema", Schema.from_dict),
-            type=data.get("type"),
             style=data.get("style"),
             explode=data.get("explode"),
             example=data.get("example"),

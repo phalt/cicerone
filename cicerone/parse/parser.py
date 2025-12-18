@@ -35,7 +35,7 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     paths = Paths.from_dict(paths_data)
 
     # Parse components
-    components = Components.from_spec(data, version)
+    components = Components.from_spec(data)
 
     # Convert Mapping to dict for storage
     # This ensures we have a real dict (not just a Mapping) for the raw field

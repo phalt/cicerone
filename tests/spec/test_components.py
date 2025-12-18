@@ -1,7 +1,6 @@
 """Tests for Components container."""
 
 from cicerone.spec.components import Components
-from cicerone.spec.version import Version
 
 
 class TestComponents:
@@ -20,8 +19,7 @@ class TestComponents:
                 },
             },
         }
-        version = Version("3.0.0")
-        components = Components.from_spec(raw, version)
+        components = Components.from_spec(raw)
         assert "User" in components.schemas
         user_schema = components.get_schema("User")
         assert user_schema is not None
@@ -61,8 +59,7 @@ class TestComponents:
                 },
             },
         }
-        version = Version("3.0.0")
-        components = Components.from_spec(raw, version)
+        components = Components.from_spec(raw)
 
         # Verify all component types are parsed
         assert len(components.schemas) == 1
