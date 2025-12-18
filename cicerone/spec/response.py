@@ -7,16 +7,15 @@ References:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydantic import BaseModel, Field
 
+from cicerone.spec.example import Example
 from cicerone.spec.header import Header
 from cicerone.spec.link import Link
 from cicerone.spec.media_type import MediaType
-
-if TYPE_CHECKING:
-    from cicerone.spec.schema import Schema
+from cicerone.spec.schema import Schema
 
 
 class Response(BaseModel):
@@ -31,7 +30,7 @@ class Response(BaseModel):
     links: dict[str, Link] = Field(default_factory=dict)
     # Swagger 2.0 fields
     schema_: Schema | None = Field(None, alias="schema")
-    examples: dict[str, Any] = Field(default_factory=dict)
+    examples: dict[str, Example] = Field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Response:
@@ -40,7 +39,6 @@ class Response(BaseModel):
 
         response_data: dict[str, Any] = {
             "description": data.get("description"),
-            "examples": data.get("examples", {}),
         }
 
         # Parse schema as Schema object (Swagger 2.0)
@@ -68,11 +66,16 @@ class Response(BaseModel):
                 for link_name, link_data in data["links"].items()
             }
 
+        # Parse examples as Example objects
+        if "examples" in data:
+            response_data["examples"] = {
+                name: Example.from_dict(example_data)
+                for name, example_data in data["examples"].items()
+            }
+
         # Add any extra fields
         for key, value in data.items():
             if key not in response_data:
                 response_data[key] = value
 
         return cls(**response_data)
-
-

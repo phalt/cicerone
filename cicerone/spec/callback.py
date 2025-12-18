@@ -11,12 +11,11 @@ The value is a Path Item Object or a reference to one.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydantic import BaseModel, Field
 
-if TYPE_CHECKING:
-    from cicerone.spec.path_item import PathItem
+from cicerone.spec.path_item import PathItem
 
 
 class Callback(BaseModel):

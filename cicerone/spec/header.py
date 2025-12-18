@@ -6,12 +6,12 @@ References:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pydantic import BaseModel, Field
 
-if TYPE_CHECKING:
-    from cicerone.spec.schema import Schema
+from cicerone.spec.example import Example
+from cicerone.spec.schema import Schema
 
 
 class Header(BaseModel):
@@ -26,7 +26,7 @@ class Header(BaseModel):
     style: str | None = None
     explode: bool | None = None
     example: Any | None = None
-    examples: dict[str, Any] = Field(default_factory=dict)
+    examples: dict[str, Example] = Field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Header:
@@ -39,12 +39,18 @@ class Header(BaseModel):
             "style": data.get("style"),
             "explode": data.get("explode"),
             "example": data.get("example"),
-            "examples": data.get("examples", {}),
         }
 
         # Parse schema as Schema object
         if "schema" in data:
             header_data["schema"] = Schema.from_dict(data["schema"])
+
+        # Parse examples as Example objects
+        if "examples" in data:
+            header_data["examples"] = {
+                name: Example.from_dict(example_data)
+                for name, example_data in data["examples"].items()
+            }
 
         # Add any extra fields
         for key, value in data.items():
@@ -52,4 +58,3 @@ class Header(BaseModel):
                 header_data[key] = value
 
         return cls(**header_data)
-
