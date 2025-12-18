@@ -39,7 +39,16 @@ class Parameter(BaseModel):
     def from_dict(cls, data: dict[str, Any]) -> Parameter:
         """Create a Parameter from a dictionary."""
         excluded = {
-            "name", "in", "description", "required", "schema", "type", "style", "explode", "example", "examples"
+            "name",
+            "in",
+            "description",
+            "required",
+            "schema",
+            "type",
+            "style",
+            "explode",
+            "example",
+            "examples",
         }
         return cls(
             name=data.get("name"),
