@@ -53,3 +53,26 @@ def parse_collection(
     if field_name in data:
         return {name: parser(item_data) for name, item_data in data[field_name].items()}
     return {}
+
+
+def parse_list(
+    data: Mapping[str, Any],
+    field_name: str,
+    parser: Callable[[dict[str, Any]], T],
+) -> list[T]:
+    """Parse a list of objects.
+
+    Args:
+        data: Source dictionary
+        field_name: Name of field containing the list
+        parser: Function to parse each item (usually Class.from_dict)
+
+    Returns:
+        List of parsed objects, empty list if field doesn't exist
+
+    Example:
+        parse_list(data, "servers", Server.from_dict)
+    """
+    if field_name in data and isinstance(data[field_name], list):
+        return [parser(item_data) for item_data in data[field_name]]
+    return []

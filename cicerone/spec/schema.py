@@ -5,7 +5,9 @@ References:
 - JSON Schema: https://json-schema.org/specification
 """
 
-from typing import Any, Mapping
+from __future__ import annotations
+
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -21,9 +23,14 @@ class Schema(BaseModel):
     title: str | None = None
     type: str | None = None
     description: str | None = None
-    properties: dict[str, "Schema"] = Field(default_factory=dict)
+    properties: dict[str, Schema] = Field(default_factory=dict)
     required: list[str] = Field(default_factory=list)
-    items: "Schema | None" = None
+    items: Schema | None = None
+    # Composition keywords
+    all_of: list[Schema] | None = Field(None, alias="allOf")
+    one_of: list[Schema] | None = Field(None, alias="oneOf")
+    any_of: list[Schema] | None = Field(None, alias="anyOf")
+    not_: Schema | None = Field(None, alias="not")
 
     def __str__(self) -> str:
         """Return a readable string representation of the schema."""
@@ -43,15 +50,38 @@ class Schema(BaseModel):
         return f"<Schema: {content}>"
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any]) -> "Schema":
+    def from_dict(cls, data: dict[str, Any]) -> Schema:
         """Create a Schema from a dictionary, handling nested schemas."""
-        excluded = {"title", "type", "description", "required", "properties", "items"}
+        excluded = {
+            "title",
+            "type",
+            "description",
+            "required",
+            "properties",
+            "items",
+            "allOf",
+            "oneOf",
+            "anyOf",
+            "not",
+        }
+
+        # Helper to parse list of schemas
+        def parse_schema_list(field_name: str) -> list[Schema] | None:
+            if field_name in data and isinstance(data[field_name], list):
+                return [cls.from_dict(item) for item in data[field_name] if isinstance(item, dict)]
+            return None
+
         return cls(
             title=data.get("title"),
             type=data.get("type"),
             description=data.get("description"),
             required=data.get("required", []),
             properties=parse_collection(data, "properties", cls.from_dict),
-            items=parse_nested_object(data, "items", cls.from_dict) if isinstance(data.get("items"), dict) else None,
+            items=parse_nested_object(data, "items", cls.from_dict),
+            allOf=parse_schema_list("allOf"),
+            oneOf=parse_schema_list("oneOf"),
+            anyOf=parse_schema_list("anyOf"),
+            # Use dict unpacking for 'not' since it's a Python keyword
+            **{"not": parse_nested_object(data, "not", cls.from_dict)} if "not" in data else {},
             **{k: v for k, v in data.items() if k not in excluded},
         )

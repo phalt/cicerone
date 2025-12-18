@@ -8,9 +8,14 @@ from urllib.request import Request, urlopen
 import yaml
 
 from cicerone.spec.components import Components
+from cicerone.spec.info import Info
+from cicerone.spec.model_utils import parse_list, parse_nested_object
 from cicerone.spec.openapi_spec import OpenAPISpec
 from cicerone.spec.paths import Paths
+from cicerone.spec.server import Server
+from cicerone.spec.tag import ExternalDocumentation, Tag
 from cicerone.spec.version import Version
+from cicerone.spec.webhooks import Webhooks
 
 
 def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
@@ -30,19 +35,52 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     version_str = data.get("openapi", "3.0.0")
     version = Version(version_str)
 
+    # Parse info
+    info = parse_nested_object(data, "info", Info.from_dict)
+
+    # Parse jsonSchemaDialect (OpenAPI 3.1+)
+    json_schema_dialect = data.get("jsonSchemaDialect")
+
     # Parse paths
     paths_data = data.get("paths", {})
     paths = Paths.from_dict(paths_data)
 
+    # Parse webhooks (OpenAPI 3.1+)
+    webhooks = parse_nested_object(data, "webhooks", Webhooks.from_dict) or Webhooks(items={})
+
     # Parse components
     components = Components.from_spec(data)
+
+    # Parse servers
+    servers = parse_list(data, "servers", Server.from_dict)
+
+    # Parse security (top-level security requirements)
+    security = data.get("security", [])
+
+    # Parse tags
+    tags = parse_list(data, "tags", Tag.from_dict)
+
+    # Parse externalDocs
+    external_docs = parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict)
 
     # Convert Mapping to dict for storage
     # This ensures we have a real dict (not just a Mapping) for the raw field
     # If data is already a dict, this is a no-op
     raw_dict = dict(data)
 
-    return OpenAPISpec(raw=raw_dict, version=version, paths=paths, components=components)
+    return OpenAPISpec(
+        raw=raw_dict,
+        version=version,
+        info=info,
+        jsonSchemaDialect=json_schema_dialect,
+        servers=servers,
+        paths=paths,
+        webhooks=webhooks,
+        components=components,
+        security=security,
+        tags=tags,
+        externalDocs=external_docs,
+    )
 
 
 def parse_spec_from_json(text: str) -> OpenAPISpec:
