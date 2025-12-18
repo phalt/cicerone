@@ -25,4 +25,5 @@ class Link(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Link":
         """Create a Link from a dictionary."""
+        # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)

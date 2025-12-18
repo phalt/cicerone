@@ -24,6 +24,7 @@ class OAuthFlow(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "OAuthFlow":
         """Create an OAuthFlow from a dictionary."""
+        # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)
 
 
@@ -41,20 +42,13 @@ class OAuthFlows(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "OAuthFlows":
         """Create an OAuthFlows from a dictionary."""
-        flows_data: dict[str, Any] = {}
+        from cicerone.spec.model_utils import parse_nested_object
 
-        if "implicit" in data:
-            flows_data["implicit"] = OAuthFlow.from_dict(data["implicit"])
-        if "password" in data:
-            flows_data["password"] = OAuthFlow.from_dict(data["password"])
-        if "clientCredentials" in data:
-            flows_data["clientCredentials"] = OAuthFlow.from_dict(data["clientCredentials"])
-        if "authorizationCode" in data:
-            flows_data["authorizationCode"] = OAuthFlow.from_dict(data["authorizationCode"])
-
-        # Add any extra fields
-        for key, value in data.items():
-            if key not in flows_data:
-                flows_data[key] = value
-
-        return cls(**flows_data)
+        excluded = {"implicit", "password", "clientCredentials", "authorizationCode"}
+        return cls(
+            implicit=parse_nested_object(data, "implicit", OAuthFlow.from_dict),
+            password=parse_nested_object(data, "password", OAuthFlow.from_dict),
+            clientCredentials=parse_nested_object(data, "clientCredentials", OAuthFlow.from_dict),
+            authorizationCode=parse_nested_object(data, "authorizationCode", OAuthFlow.from_dict),
+            **{k: v for k, v in data.items() if k not in excluded},
+        )

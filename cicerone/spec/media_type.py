@@ -28,26 +28,12 @@ class MediaType(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> MediaType:
         """Create a MediaType from a dictionary."""
-        media_type_data: dict[str, Any] = {
-            "schema": data.get("schema"),
-            "example": data.get("example"),
-        }
+        from cicerone.spec.model_utils import parse_collection
 
-        # Parse examples as Example objects
-        if "examples" in data:
-            media_type_data["examples"] = {
-                name: Example.from_dict(example_data) for name, example_data in data["examples"].items()
-            }
-
-        # Parse encoding as Encoding objects
-        if "encoding" in data:
-            media_type_data["encoding"] = {
-                name: Encoding.from_dict(encoding_data) for name, encoding_data in data["encoding"].items()
-            }
-
-        # Add any extra fields
-        for key, value in data.items():
-            if key not in media_type_data:
-                media_type_data[key] = value
-
-        return cls(**media_type_data)
+        return cls(
+            schema=data.get("schema"),
+            example=data.get("example"),
+            examples=parse_collection(data, "examples", Example.from_dict),
+            encoding=parse_collection(data, "encoding", Encoding.from_dict),
+            **{k: v for k, v in data.items() if k not in {"schema", "example", "examples", "encoding"}},
+        )

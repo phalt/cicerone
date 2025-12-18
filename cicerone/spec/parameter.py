@@ -37,30 +37,21 @@ class Parameter(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Parameter:
         """Create a Parameter from a dictionary."""
-        param_data: dict[str, Any] = {
-            "name": data.get("name"),
-            "in": data.get("in"),
-            "description": data.get("description"),
-            "required": data.get("required", False),
-            "type": data.get("type"),
-            "style": data.get("style"),
-            "explode": data.get("explode"),
-            "example": data.get("example"),
+        from cicerone.spec.model_utils import parse_collection, parse_nested_object
+
+        excluded = {
+            "name", "in", "description", "required", "schema", "type", "style", "explode", "example", "examples"
         }
-
-        # Parse schema as Schema object
-        if "schema" in data:
-            param_data["schema"] = Schema.from_dict(data["schema"])
-
-        # Parse examples as Example objects
-        if "examples" in data:
-            param_data["examples"] = {
-                name: Example.from_dict(example_data) for name, example_data in data["examples"].items()
-            }
-
-        # Add any extra fields
-        for key, value in data.items():
-            if key not in param_data:
-                param_data[key] = value
-
-        return cls(**param_data)
+        return cls(
+            name=data.get("name"),
+            **{"in": data.get("in")},  # Use dict expansion for alias
+            description=data.get("description"),
+            required=data.get("required", False),
+            schema=parse_nested_object(data, "schema", Schema.from_dict),
+            type=data.get("type"),
+            style=data.get("style"),
+            explode=data.get("explode"),
+            example=data.get("example"),
+            examples=parse_collection(data, "examples", Example.from_dict),
+            **{k: v for k, v in data.items() if k not in excluded},
+        )

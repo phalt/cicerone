@@ -29,6 +29,5 @@ class Encoding(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Encoding:
         """Create an Encoding from a dictionary."""
-        # Note: headers should be Header objects but we'll keep as Any for now
-        # to avoid circular dependencies
+        # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)

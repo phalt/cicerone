@@ -35,41 +35,15 @@ class Response(BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Response:
         """Create a Response from a dictionary."""
-        response_data: dict[str, Any] = {
-            "description": data.get("description"),
-        }
+        from cicerone.spec.model_utils import parse_collection, parse_nested_object
 
-        # Parse schema as Schema object (Swagger 2.0)
-        if "schema" in data:
-            response_data["schema"] = Schema.from_dict(data["schema"])
-
-        # Parse content as MediaType objects
-        if "content" in data:
-            response_data["content"] = {
-                media_type: MediaType.from_dict(media_data) for media_type, media_data in data["content"].items()
-            }
-
-        # Parse headers as Header objects
-        if "headers" in data:
-            response_data["headers"] = {
-                header_name: Header.from_dict(header_data) for header_name, header_data in data["headers"].items()
-            }
-
-        # Parse links as Link objects
-        if "links" in data:
-            response_data["links"] = {
-                link_name: Link.from_dict(link_data) for link_name, link_data in data["links"].items()
-            }
-
-        # Parse examples as Example objects
-        if "examples" in data:
-            response_data["examples"] = {
-                name: Example.from_dict(example_data) for name, example_data in data["examples"].items()
-            }
-
-        # Add any extra fields
-        for key, value in data.items():
-            if key not in response_data:
-                response_data[key] = value
-
-        return cls(**response_data)
+        excluded = {"description", "schema", "content", "headers", "links", "examples"}
+        return cls(
+            description=data.get("description"),
+            schema=parse_nested_object(data, "schema", Schema.from_dict),
+            content=parse_collection(data, "content", MediaType.from_dict),
+            headers=parse_collection(data, "headers", Header.from_dict),
+            links=parse_collection(data, "links", Link.from_dict),
+            examples=parse_collection(data, "examples", Example.from_dict),
+            **{k: v for k, v in data.items() if k not in excluded},
+        )
