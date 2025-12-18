@@ -10,8 +10,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from cicerone.spec import model_utils
 

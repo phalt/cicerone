@@ -4,11 +4,9 @@ References:
 - OpenAPI 3.x Path Item Object: https://spec.openapis.org/oas/v3.1.0#path-item-object
 """
 
-from typing import Any
-from typing import Mapping
+from typing import Any, Mapping
 
-from pydantic import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from cicerone.spec import operation as operation_module
 

@@ -6,11 +6,9 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
-from typing import Generator
+from typing import Any, Generator
 
-from pydantic import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from cicerone.spec import operation as operation_module
 from cicerone.spec import path_item as path_item_module

@@ -6,7 +6,9 @@ from typing import Any
 import pytest
 
 from cicerone.parse import parse_spec_from_file
-from cicerone.spec.callback import Callback
+from cicerone.spec import (
+    Callback,
+)
 
 
 class TestCallback:

@@ -1,6 +1,6 @@
 """Tests for Components container."""
 
-from cicerone.spec.components import Components
+from cicerone.spec import Components
 
 
 class TestComponents:

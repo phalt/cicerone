@@ -7,15 +7,7 @@ from urllib import request as urllib_request
 
 import yaml
 
-from cicerone.spec import components
-from cicerone.spec import info
-from cicerone.spec import model_utils
-from cicerone.spec import openapi_spec
-from cicerone.spec import paths
-from cicerone.spec import server
-from cicerone.spec import tag
-from cicerone.spec import version
-from cicerone.spec import webhooks
+from cicerone.spec import components, info, model_utils, openapi_spec, paths, server, tag, version, webhooks
 
 
 def parse_spec_from_dict(data: Mapping[str, Any]) -> openapi_spec.OpenAPISpec:
@@ -46,7 +38,10 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> openapi_spec.OpenAPISpec:
     paths_obj = paths.Paths.from_dict(paths_data)
 
     # Parse webhooks (OpenAPI 3.1+)
-    webhooks_obj = model_utils.parse_nested_object(data, "webhooks", webhooks.Webhooks.from_dict) or webhooks.Webhooks(items={})
+    webhooks_obj = (
+        model_utils.parse_nested_object(data, "webhooks", webhooks.Webhooks.from_dict)
+        or webhooks.Webhooks(items={})
+    )
 
     # Parse components
     components_obj = components.Components.from_spec(data)

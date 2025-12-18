@@ -6,8 +6,7 @@ References:
 
 from typing import Any
 
-from pydantic import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from cicerone.spec import media_type as media_type_module
 from cicerone.spec import model_utils

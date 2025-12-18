@@ -4,11 +4,9 @@ References:
 - OpenAPI 3.x Components Object: https://spec.openapis.org/oas/v3.1.0#components-object
 """
 
-from typing import Any
-from typing import Mapping
+from typing import Any, Mapping
 
-from pydantic import BaseModel
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from cicerone.spec import callback as callback_module
 from cicerone.spec import example as example_module
@@ -107,9 +105,13 @@ class Components(BaseModel):
                 responses=model_utils.parse_collection(components, "responses", response_module.Response.from_dict),
                 parameters=model_utils.parse_collection(components, "parameters", parameter_module.Parameter.from_dict),
                 examples=model_utils.parse_collection(components, "examples", example_module.Example.from_dict),
-                requestBodies=model_utils.parse_collection(components, "requestBodies", request_body_module.RequestBody.from_dict),
+                requestBodies=model_utils.parse_collection(
+                    components, "requestBodies", request_body_module.RequestBody.from_dict
+                ),
                 headers=model_utils.parse_collection(components, "headers", header_module.Header.from_dict),
-                securitySchemes=model_utils.parse_collection(components, "securitySchemes", security_scheme_module.SecurityScheme.from_dict),
+                securitySchemes=model_utils.parse_collection(
+                    components, "securitySchemes", security_scheme_module.SecurityScheme.from_dict
+                ),
                 links=model_utils.parse_collection(components, "links", link_module.Link.from_dict),
                 callbacks=model_utils.parse_collection(components, "callbacks", callback_module.Callback.from_dict),
             )
