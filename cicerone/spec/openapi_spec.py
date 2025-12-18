@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Specification: https://spec.openapis.org/oas/v3.1.0
-- Swagger 2.0 Specification: https://swagger.io/specification/v2/
 """
 
 from typing import Any, Generator

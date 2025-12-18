@@ -7,7 +7,7 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/cicerone)
 ![PyPI - License](https://img.shields.io/pypi/l/cicerone)
 
-Cicerone lets you parse OpenAPI/Swagger schemas into Python objects for inspection, traversal, and tooling.
+Cicerone lets you parse OpenAPI schemas into Python objects for inspection, traversal, and tooling.
 
 The goal of Cicerone is to be fast, minimal, fully typed, and designed for Python developers by Python developers.
 
@@ -29,7 +29,7 @@ uv add cicerone
 
 ### Parsing Specifications
 
-Load OpenAPI/Swagger specifications from various sources:
+Load OpenAPI specifications from various sources:
 
 ```python
 from cicerone.parse import (
@@ -102,6 +102,6 @@ print(f"Title: {spec.raw['info']['title']}")
 
 - **Pydantic-based models**: Type-safe, validated object models
 - **Multiple input formats**: Load from files, URLs, or in-memory data
-- **OpenAPI 3.x and Swagger 2.0 support**: Works with both modern and legacy specs
+- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
 - **Pythonic traversal**: Navigate specs using familiar Python patterns
 - **Simple API**: Intuitive methods for common operations

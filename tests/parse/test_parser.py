@@ -57,12 +57,6 @@ paths: {}
         assert spec.version.major == 3
         assert "/users" in spec.paths
 
-    def test_parse_from_file_swagger2(self):
-        """Test parsing Swagger 2.0 file."""
-        fixture_path = Path(__file__).parent.parent / "fixtures" / "swagger2.yaml"
-        spec = parse_spec_from_file(fixture_path)
-        assert spec.version.major == 2
-
     def test_parse_from_url_json(self):
         """Test loading spec from URL with JSON content."""
         json_spec = {

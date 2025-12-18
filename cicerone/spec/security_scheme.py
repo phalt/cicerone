@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Security Scheme Object: https://spec.openapis.org/oas/v3.1.0#security-scheme-object
-- Swagger 2.0 Security Scheme Object: https://swagger.io/specification/v2/#security-scheme-object
 """
 
 from typing import Any

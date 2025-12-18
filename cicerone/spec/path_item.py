@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Path Item Object: https://spec.openapis.org/oas/v3.1.0#path-item-object
-- Swagger 2.0 Path Item Object: https://swagger.io/specification/v2/#path-item-object
 """
 
 from typing import Any, Mapping

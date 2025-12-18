@@ -104,36 +104,6 @@ class TestOpenAPISpec:
         all_ops = list(spec.all_operations())
         assert len(all_ops) >= 3
 
-    def test_swagger2_from_file(self):
-        """Test loading Swagger 2.0 spec from file."""
-        fixture_path = Path(__file__).parent.parent / "fixtures" / "swagger2.yaml"
-        spec = parse_spec_from_file(fixture_path)
-
-        # Verify version
-        assert spec.version.major == 2
-        assert spec.version.minor == 0
-
-        # Verify paths
-        assert "/pets" in spec.paths
-
-        # Verify operations
-        list_pets_op = spec.operation_by_operation_id("listPets")
-        assert list_pets_op is not None
-        assert list_pets_op.method == "GET"
-
-        create_pet_op = spec.operation_by_operation_id("createPet")
-        assert create_pet_op is not None
-        assert create_pet_op.method == "POST"
-
-        # Verify schemas from definitions
-        pet_schema = spec.components.get_schema("Pet")
-        assert pet_schema is not None
-        assert pet_schema.type == "object"
-        assert "id" in pet_schema.required
-        assert "name" in pet_schema.required
-        assert "id" in pet_schema.properties
-        assert "name" in pet_schema.properties
-
     def test_from_json(self):
         """Test parsing from JSON string."""
         json_str = json.dumps(

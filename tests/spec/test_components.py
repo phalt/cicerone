@@ -1,7 +1,6 @@
 """Tests for Components container."""
 
 from cicerone.spec.components import Components
-from cicerone.spec.version import Version
 
 
 class TestComponents:
@@ -20,28 +19,11 @@ class TestComponents:
                 },
             },
         }
-        version = Version("3.0.0")
-        components = Components.from_spec(raw, version)
+        components = Components.from_spec(raw)
         assert "User" in components.schemas
         user_schema = components.get_schema("User")
         assert user_schema is not None
         assert user_schema.type == "object"
-
-    def test_components_swagger2(self):
-        """Test creating Components from Swagger 2.0 spec."""
-        raw = {
-            "swagger": "2.0",
-            "definitions": {
-                "Pet": {
-                    "type": "object",
-                    "properties": {"id": {"type": "integer"}},
-                },
-            },
-        }
-        version = Version("2.0")
-        components = Components.from_spec(raw, version)
-        assert "Pet" in components.schemas
-        assert components.get_schema("Pet") is not None
 
     def test_components_with_all_types_openapi3(self):
         """Test creating Components with all component types from OpenAPI 3.x spec."""
@@ -77,8 +59,7 @@ class TestComponents:
                 },
             },
         }
-        version = Version("3.0.0")
-        components = Components.from_spec(raw, version)
+        components = Components.from_spec(raw)
 
         # Verify all component types are parsed
         assert len(components.schemas) == 1
@@ -101,35 +82,3 @@ class TestComponents:
         assert "ApiKey" in components.security_schemes
         assert "UserLink" in components.links
         assert "WebhookCallback" in components.callbacks
-
-    def test_components_swagger2_with_definitions_and_parameters(self):
-        """Test creating Components from Swagger 2.0 spec with parameters and responses."""
-        raw = {
-            "swagger": "2.0",
-            "definitions": {
-                "Pet": {"type": "object"},
-            },
-            "parameters": {
-                "LimitParam": {"name": "limit", "in": "query", "type": "integer"},
-            },
-            "responses": {
-                "ErrorResponse": {"description": "Error response"},
-            },
-            "securityDefinitions": {
-                "BasicAuth": {"type": "basic"},
-            },
-        }
-        version = Version("2.0")
-        components = Components.from_spec(raw, version)
-
-        # Verify all component types are parsed
-        assert len(components.schemas) == 1
-        assert len(components.parameters) == 1
-        assert len(components.responses) == 1
-        assert len(components.security_schemes) == 1
-
-        # Verify content
-        assert "Pet" in components.schemas
-        assert "LimitParam" in components.parameters
-        assert "ErrorResponse" in components.responses
-        assert "BasicAuth" in components.security_schemes

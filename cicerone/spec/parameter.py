@@ -2,7 +2,6 @@
 
 References:
 - OpenAPI 3.x Parameter Object: https://spec.openapis.org/oas/v3.1.0#parameter-object
-- Swagger 2.0 Parameter Object: https://swagger.io/specification/v2/#parameter-object
 """
 
 from __future__ import annotations
@@ -27,8 +26,6 @@ class Parameter(BaseModel):
     description: str | None = None
     required: bool = False
     schema_: Schema | None = Field(None, alias="schema")
-    # Swagger 2.0 fields
-    type: str | None = None
     # OpenAPI 3.x fields
     style: str | None = None
     explode: bool | None = None
@@ -44,7 +41,6 @@ class Parameter(BaseModel):
             "description",
             "required",
             "schema",
-            "type",
             "style",
             "explode",
             "example",
@@ -56,7 +52,6 @@ class Parameter(BaseModel):
             description=data.get("description"),
             required=data.get("required", False),
             schema=parse_nested_object(data, "schema", Schema.from_dict),
-            type=data.get("type"),
             style=data.get("style"),
             explode=data.get("explode"),
             example=data.get("example"),
