@@ -44,7 +44,7 @@ class Parameter(BaseModel):
         }
         return cls(
             name=data.get("name"),
-            **{"in": data.get("in")},  # Use dict expansion for alias
+            **{"in": data.get("in")},
             description=data.get("description"),
             required=data.get("required", False),
             schema=parse_nested_object(data, "schema", Schema.from_dict),

@@ -37,7 +37,7 @@ class SecurityScheme(BaseModel):
             type=data.get("type"),
             description=data.get("description"),
             name=data.get("name"),
-            **{"in": data.get("in")},  # Use dict expansion for alias
+            **{"in": data.get("in")},
             scheme=data.get("scheme"),
             bearerFormat=data.get("bearerFormat"),
             flows=parse_nested_object(data, "flows", OAuthFlows.from_dict),
