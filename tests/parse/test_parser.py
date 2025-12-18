@@ -2,9 +2,15 @@
 
 import json
 from pathlib import Path
-from unittest import mock
+from unittest.mock import Mock, patch
 
-from cicerone import parse
+from cicerone.parse import (
+    parse_spec_from_dict,
+    parse_spec_from_file,
+    parse_spec_from_json,
+    parse_spec_from_url,
+    parse_spec_from_yaml,
+)
 
 
 class TestParser:
@@ -17,7 +23,7 @@ class TestParser:
             "info": {"title": "Test", "version": "1.0.0"},
             "paths": {},
         }
-        spec = parse.parse_spec_from_dict(data)
+        spec = parse_spec_from_dict(data)
         assert spec.version.major == 3
 
     def test_parse_from_json(self):
@@ -29,7 +35,7 @@ class TestParser:
                 "paths": {},
             }
         )
-        spec = parse.parse_spec_from_json(json_str)
+        spec = parse_spec_from_json(json_str)
         assert spec.version.major == 3
 
     def test_parse_from_yaml(self):
@@ -41,13 +47,13 @@ info:
   version: "1.0.0"
 paths: {}
 """
-        spec = parse.parse_spec_from_yaml(yaml_str)
+        spec = parse_spec_from_yaml(yaml_str)
         assert spec.version.major == 3
 
     def test_parse_from_file_yaml(self):
         """Test parsing YAML file."""
         fixture_path = Path(__file__).parent.parent / "fixtures" / "petstore_openapi3.yaml"
-        spec = parse.parse_spec_from_file(fixture_path)
+        spec = parse_spec_from_file(fixture_path)
         assert spec.version.major == 3
         assert "/users" in spec.paths
 
@@ -63,15 +69,15 @@ paths: {}
             },
         }
 
-        # mock.Mock the urlopen call
-        mock_response = mock.Mock()
+        # Mock the urlopen call
+        mock_response = Mock()
         mock_response.read.return_value = json.dumps(json_spec).encode("utf-8")
         mock_response.headers = {"Content-Type": "application/json"}
-        mock_response.__enter__ = mock.Mock(return_value=mock_response)
-        mock_response.__exit__ = mock.Mock(return_value=False)
+        mock_response.__enter__ = Mock(return_value=mock_response)
+        mock_response.__exit__ = Mock(return_value=False)
 
-        with mock.patch("cicerone.parse.parser.urllib_request.urlopen", return_value=mock_response):
-            spec = parse.parse_spec_from_url("https://example.com/openapi.json")
+        with patch("cicerone.parse.parser.urlopen", return_value=mock_response):
+            spec = parse_spec_from_url("https://example.com/openapi.json")
             assert spec.version.major == 3
             assert "/test" in spec.paths
 
@@ -88,15 +94,15 @@ paths:
       operationId: getTest
 """
 
-        # mock.Mock the urlopen call
-        mock_response = mock.Mock()
+        # Mock the urlopen call
+        mock_response = Mock()
         mock_response.read.return_value = yaml_spec.encode("utf-8")
         mock_response.headers = {"Content-Type": "application/yaml"}
-        mock_response.__enter__ = mock.Mock(return_value=mock_response)
-        mock_response.__exit__ = mock.Mock(return_value=False)
+        mock_response.__enter__ = Mock(return_value=mock_response)
+        mock_response.__exit__ = Mock(return_value=False)
 
-        with mock.patch("cicerone.parse.parser.urllib_request.urlopen", return_value=mock_response):
-            spec = parse.parse_spec_from_url("https://example.com/openapi.yaml")
+        with patch("cicerone.parse.parser.urlopen", return_value=mock_response):
+            spec = parse_spec_from_url("https://example.com/openapi.yaml")
             assert spec.version.major == 3
             assert "/test" in spec.paths
 
@@ -112,7 +118,7 @@ paths: {}
         file_path = tmp_path / "spec.json"
         file_path.write_text(yaml_content)
 
-        spec = parse.parse_spec_from_file(file_path)
+        spec = parse_spec_from_file(file_path)
         assert spec.version.major == 3
 
     def test_parse_from_url_json_fallback_to_yaml(self):
@@ -127,14 +133,14 @@ paths:
     get:
       operationId: getTest
 """
-        # mock.Mock with JSON content-type but YAML content
-        mock_response = mock.Mock()
+        # Mock with JSON content-type but YAML content
+        mock_response = Mock()
         mock_response.read.return_value = yaml_content.encode("utf-8")
         mock_response.headers = {"Content-Type": "application/json"}
-        mock_response.__enter__ = mock.Mock(return_value=mock_response)
-        mock_response.__exit__ = mock.Mock(return_value=False)
+        mock_response.__enter__ = Mock(return_value=mock_response)
+        mock_response.__exit__ = Mock(return_value=False)
 
-        with mock.patch("cicerone.parse.parser.urllib_request.urlopen", return_value=mock_response):
-            spec = parse.parse_spec_from_url("https://example.com/openapi.json")
+        with patch("cicerone.parse.parser.urlopen", return_value=mock_response):
+            spec = parse_spec_from_url("https://example.com/openapi.json")
             assert spec.version.major == 3
             assert "/test" in spec.paths

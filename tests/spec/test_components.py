@@ -1,13 +1,13 @@
-"""Tests for spec.components.Components container."""
+"""Tests for Components container."""
 
 from cicerone.spec import Components
 
 
 class TestComponents:
-    """Tests for spec.components.Components container."""
+    """Tests for Components container."""
 
     def test_components_openapi3(self):
-        """Test creating spec.components.Components from OpenAPI 3.x spec."""
+        """Test creating Components from OpenAPI 3.x spec."""
         raw = {
             "openapi": "3.0.0",
             "components": {
@@ -26,7 +26,7 @@ class TestComponents:
         assert user_schema.type == "object"
 
     def test_components_with_all_types_openapi3(self):
-        """Test creating spec.components.Components with all component types from OpenAPI 3.x spec."""
+        """Test creating Components with all component types from OpenAPI 3.x spec."""
         raw = {
             "openapi": "3.0.0",
             "components": {
@@ -85,9 +85,9 @@ class TestComponents:
 
     def test_components_str_representation_empty(self):
         """Test __str__ method for empty components."""
-        components = spec.components.Components()
+        components = Components()
         str_repr = str(components)
-        assert "<spec.components.Components: empty>" in str_repr
+        assert "<Components: empty>" in str_repr
 
     def test_components_str_representation_with_schemas(self):
         """Test __str__ method with schemas."""
@@ -102,7 +102,7 @@ class TestComponents:
         }
         components = Components.from_spec(raw)
         str_repr = str(components)
-        assert "<spec.components.Components:" in str_repr
+        assert "<Components:" in str_repr
         assert "2 schemas" in str_repr
 
     def test_components_str_representation_multiple_types(self):
@@ -119,7 +119,7 @@ class TestComponents:
         }
         components = Components.from_spec(raw)
         str_repr = str(components)
-        assert "<spec.components.Components:" in str_repr
+        assert "<Components:" in str_repr
         # Should show first 3 types and indicate more
         assert "(+2 more types)" in str_repr
 
@@ -135,7 +135,7 @@ class TestComponents:
         }
         components = Components.from_spec(raw)
         str_repr = str(components)
-        assert "<spec.components.Components:" in str_repr
+        assert "<Components:" in str_repr
         assert "1 headers" in str_repr or "1 links" in str_repr or "1 callbacks" in str_repr
 
     def test_components_str_with_security_schemes(self):
@@ -150,5 +150,5 @@ class TestComponents:
         }
         components = Components.from_spec(raw)
         str_repr = str(components)
-        assert "<spec.components.Components:" in str_repr
+        assert "<Components:" in str_repr
         assert "1 securitySchemes" in str_repr

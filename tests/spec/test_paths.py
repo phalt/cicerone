@@ -1,4 +1,4 @@
-"""Tests for spec.paths.Paths container."""
+"""Tests for Paths container."""
 
 from typing import Any
 
@@ -6,10 +6,10 @@ from cicerone.spec import Paths
 
 
 class TestPaths:
-    """Tests for spec.paths.Paths container."""
+    """Tests for Paths container."""
 
     def test_paths_from_dict(self):
-        """Test creating spec.paths.Paths from dictionary."""
+        """Test creating Paths from dictionary."""
         data = {
             "/users": {
                 "get": {"operationId": "listUsers"},
@@ -55,7 +55,7 @@ class TestPaths:
         }
         paths = Paths.from_dict(data)
         str_repr = str(paths)
-        assert "<spec.paths.Paths:" in str_repr
+        assert "<Paths:" in str_repr
         assert "2 paths" in str_repr
         assert "3 operations" in str_repr
         assert "/users" in str_repr

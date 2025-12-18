@@ -7,14 +7,14 @@ References:
 
 from __future__ import annotations
 
-import typing
+from typing import Any
 
-import pydantic
+from pydantic import BaseModel, Field
 
-from cicerone.spec import model_utils
+from cicerone.spec.model_utils import parse_collection, parse_nested_object
 
 
-class Schema(pydantic.BaseModel):
+class Schema(BaseModel):
     """Represents a JSON Schema / OpenAPI Schema object."""
 
     # Allow extra fields to support full JSON Schema vocabulary and vendor extensions
@@ -23,14 +23,14 @@ class Schema(pydantic.BaseModel):
     title: str | None = None
     type: str | None = None
     description: str | None = None
-    properties: dict[str, Schema] = pydantic.Field(default_factory=dict)
-    required: list[str] = pydantic.Field(default_factory=list)
+    properties: dict[str, Schema] = Field(default_factory=dict)
+    required: list[str] = Field(default_factory=list)
     items: Schema | None = None
     # Composition keywords
-    all_of: "list[Schema] | None" = pydantic.Field(None, alias="allOf")
-    one_of: "list[Schema] | None" = pydantic.Field(None, alias="oneOf")
-    any_of: "list[Schema] | None" = pydantic.Field(None, alias="anyOf")
-    not_: "Schema | None" = pydantic.Field(None, alias="not")
+    all_of: list[Schema] | None = Field(None, alias="allOf")
+    one_of: list[Schema] | None = Field(None, alias="oneOf")
+    any_of: list[Schema] | None = Field(None, alias="anyOf")
+    not_: Schema | None = Field(None, alias="not")
 
     def __str__(self) -> str:
         """Return a readable string representation of the schema."""
@@ -50,7 +50,7 @@ class Schema(pydantic.BaseModel):
         return f"<Schema: {content}>"
 
     @classmethod
-    def from_dict(cls, data: dict[str, typing.Any]) -> Schema:
+    def from_dict(cls, data: dict[str, Any]) -> Schema:
         """Create a Schema from a dictionary, handling nested schemas."""
         excluded = {
             "title",
@@ -76,12 +76,12 @@ class Schema(pydantic.BaseModel):
             type=data.get("type"),
             description=data.get("description"),
             required=data.get("required", []),
-            properties=model_utils.parse_collection(data, "properties", cls.from_dict),
-            items=model_utils.parse_nested_object(data, "items", cls.from_dict),
+            properties=parse_collection(data, "properties", cls.from_dict),
+            items=parse_nested_object(data, "items", cls.from_dict),
             allOf=parse_schema_list("allOf"),
             oneOf=parse_schema_list("oneOf"),
             anyOf=parse_schema_list("anyOf"),
             # Use dict unpacking for 'not' since it's a Python keyword
-            **{"not": model_utils.parse_nested_object(data, "not", cls.from_dict)} if "not" in data else {},
+            **{"not": parse_nested_object(data, "not", cls.from_dict)} if "not" in data else {},
             **{k: v for k, v in data.items() if k not in excluded},
         )

@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from cicerone import parse
+from cicerone.parse import parse_spec_from_dict, parse_spec_from_file, parse_spec_from_json, parse_spec_from_yaml
 
 
 class TestOpenAPISpec:
@@ -37,7 +37,7 @@ class TestOpenAPISpec:
             },
         }
 
-        spec = parse.parser.parse_spec_from_dict(data)
+        spec = parse_spec_from_dict(data)
 
         # Verify version
         assert spec.version.major == 3
@@ -60,7 +60,7 @@ class TestOpenAPISpec:
     def test_openapi3_from_file(self):
         """Test loading OpenAPI 3.0 spec from file."""
         fixture_path = Path(__file__).parent.parent / "fixtures" / "petstore_openapi3.yaml"
-        spec = parse.parser.parse_spec_from_file(fixture_path)
+        spec = parse_spec_from_file(fixture_path)
 
         # Verify basic structure
         assert spec.version.major == 3
@@ -117,7 +117,7 @@ class TestOpenAPISpec:
                 },
             }
         )
-        spec = parse.parser.parse_spec_from_json(json_str)
+        spec = parse_spec_from_json(json_str)
         assert spec.version.major == 3
         assert "/test" in spec.paths
 
@@ -133,7 +133,7 @@ paths:
     get:
       operationId: getTest
 """
-        spec = parse.parser.parse_spec_from_yaml(yaml_str)
+        spec = parse_spec_from_yaml(yaml_str)
         assert spec.version.major == 3
         assert "/test" in spec.paths
 
@@ -152,7 +152,7 @@ paths:
                 },
             },
         }
-        spec = parse.parser.parse_spec_from_dict(data)
+        spec = parse_spec_from_dict(data)
 
         # Find existing operation
         op = spec.operation_by_operation_id("listUsers")
@@ -179,7 +179,7 @@ paths:
                 },
             },
         }
-        spec = parse.parser.parse_spec_from_dict(data)
+        spec = parse_spec_from_dict(data)
 
         operations = list(spec.all_operations())
         assert len(operations) == 3
@@ -195,7 +195,7 @@ paths:
             "info": {"title": "Test API", "version": "1.0.0"},
             "paths": {},
         }
-        spec = parse.parser.parse_spec_from_dict(data)
+        spec = parse_spec_from_dict(data)
         assert spec.raw["openapi"] == "3.0.0"
         assert spec.raw["info"]["title"] == "Test API"
 
@@ -215,7 +215,7 @@ paths:
                 }
             },
         }
-        spec = parse.parser.parse_spec_from_dict(data)
+        spec = parse_spec_from_dict(data)
         str_repr = str(spec)
         assert "<OpenAPISpec:" in str_repr
         assert "Test API" in str_repr

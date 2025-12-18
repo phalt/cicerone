@@ -6,17 +6,16 @@ References:
 
 from __future__ import annotations
 
-import typing
+from typing import Any
 
-import pydantic
+from pydantic import BaseModel, Field
 
-from cicerone.spec import model_utils
+from cicerone.spec.example import Example
+from cicerone.spec.model_utils import parse_collection, parse_nested_object
+from cicerone.spec.schema import Schema
 
-if typing.TYPE_CHECKING:
-    from cicerone.spec import example, schema
 
-
-class Header(pydantic.BaseModel):
+class Header(BaseModel):
     """Represents an OpenAPI header object."""
 
     # Allow extra fields to support vendor extensions and future spec additions
@@ -24,23 +23,23 @@ class Header(pydantic.BaseModel):
 
     description: str | None = None
     required: bool = False
-    schema_: "schema.Schema | None" = pydantic.Field(None, alias="schema")
+    schema_: Schema | None = Field(None, alias="schema")
     style: str | None = None
     explode: bool | None = None
-    example: typing.Any | None = None
-    examples: "dict[str, example.Example]" = pydantic.Field(default_factory=dict)
+    example: Any | None = None
+    examples: dict[str, Example] = Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, typing.Any]) -> Header:
+    def from_dict(cls, data: dict[str, Any]) -> Header:
         """Create a Header from a dictionary."""
         excluded = {"description", "required", "schema", "style", "explode", "example", "examples"}
         return cls(
             description=data.get("description"),
             required=data.get("required", False),
-            schema=model_utils.parse_nested_object(data, "schema", schema.Schema.from_dict),
+            schema=parse_nested_object(data, "schema", Schema.from_dict),
             style=data.get("style"),
             explode=data.get("explode"),
             example=data.get("example"),
-            examples=model_utils.parse_collection(data, "examples", example.Example.from_dict),
+            examples=parse_collection(data, "examples", Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

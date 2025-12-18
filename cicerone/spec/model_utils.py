@@ -4,9 +4,6 @@ This module provides reusable helpers for parsing OpenAPI specification data
 into model objects, including nested object parsing and collection handling.
 """
 
-from __future__ import annotations
-
-
 from typing import Any, Callable, Mapping, TypeVar
 
 T = TypeVar("T")

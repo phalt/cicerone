@@ -4,28 +4,23 @@ References:
 - OpenAPI 3.x Components Object: https://spec.openapis.org/oas/v3.1.0#components-object
 """
 
-from __future__ import annotations
+from typing import Any, Mapping
+
+from pydantic import BaseModel, Field
+
+from cicerone.spec.callback import Callback
+from cicerone.spec.example import Example
+from cicerone.spec.header import Header
+from cicerone.spec.link import Link
+from cicerone.spec.model_utils import parse_collection
+from cicerone.spec.parameter import Parameter
+from cicerone.spec.request_body import RequestBody
+from cicerone.spec.response import Response
+from cicerone.spec.schema import Schema
+from cicerone.spec.security_scheme import SecurityScheme
 
 
-import typing
-
-import pydantic
-
-from cicerone.spec import (
-    callback,
-    example,
-    header,
-    link,
-    model_utils,
-    parameter,
-    request_body,
-    response,
-    schema,
-    security_scheme,
-)
-
-
-class Components(pydantic.BaseModel):
+class Components(BaseModel):
     """Container for reusable component definitions."""
 
     # Allow extra fields to support:
@@ -35,17 +30,15 @@ class Components(pydantic.BaseModel):
     # populate_by_name: Allow using either field name or alias
     model_config = {"extra": "allow", "populate_by_name": True}
 
-    schemas: "dict[str, schema.Schema]" = pydantic.Field(default_factory=dict)
-    responses: "dict[str, response.Response]" = pydantic.Field(default_factory=dict)
-    parameters: "dict[str, parameter.Parameter]" = pydantic.Field(default_factory=dict)
-    examples: "dict[str, example.Example]" = pydantic.Field(default_factory=dict)
-    request_bodies: "dict[str, request_body.RequestBody]" = pydantic.Field(default_factory=dict, alias="requestBodies")
-    headers: "dict[str, header.Header]" = pydantic.Field(default_factory=dict)
-    security_schemes: "dict[str, security_scheme.SecurityScheme]" = pydantic.Field(
-        default_factory=dict, alias="securitySchemes"
-    )
-    links: "dict[str, link.Link]" = pydantic.Field(default_factory=dict)
-    callbacks: "dict[str, callback.Callback]" = pydantic.Field(default_factory=dict)
+    schemas: dict[str, Schema] = Field(default_factory=dict)
+    responses: dict[str, Response] = Field(default_factory=dict)
+    parameters: dict[str, Parameter] = Field(default_factory=dict)
+    examples: dict[str, Example] = Field(default_factory=dict)
+    request_bodies: dict[str, RequestBody] = Field(default_factory=dict, alias="requestBodies")
+    headers: dict[str, Header] = Field(default_factory=dict)
+    security_schemes: dict[str, SecurityScheme] = Field(default_factory=dict, alias="securitySchemes")
+    links: dict[str, Link] = Field(default_factory=dict)
+    callbacks: dict[str, Callback] = Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the components container."""
@@ -79,7 +72,7 @@ class Components(pydantic.BaseModel):
 
         return f"<Components: {summary}>"
 
-    def get_schema(self, schema_name: str) -> schema.Schema | None:
+    def get_schema(self, schema_name: str) -> Schema | None:
         """Get a schema by name.
 
         Args:
@@ -91,25 +84,21 @@ class Components(pydantic.BaseModel):
         return self.schemas.get(schema_name)
 
     @classmethod
-    def from_spec(cls, raw: typing.Mapping[str, typing.Any]) -> "Components":
+    def from_spec(cls, raw: Mapping[str, Any]) -> "Components":
         """Create Components from spec data."""
         # OpenAPI 3.x: components object
         if "components" in raw:
             components = raw["components"]
             return cls(
-                schemas=model_utils.parse_collection(components, "schemas", schema.Schema.from_dict),
-                responses=model_utils.parse_collection(components, "responses", response.Response.from_dict),
-                parameters=model_utils.parse_collection(components, "parameters", parameter.Parameter.from_dict),
-                examples=model_utils.parse_collection(components, "examples", example.Example.from_dict),
-                requestBodies=model_utils.parse_collection(
-                    components, "requestBodies", request_body.RequestBody.from_dict
-                ),
-                headers=model_utils.parse_collection(components, "headers", header.Header.from_dict),
-                securitySchemes=model_utils.parse_collection(
-                    components, "securitySchemes", security_scheme.SecurityScheme.from_dict
-                ),
-                links=model_utils.parse_collection(components, "links", link.Link.from_dict),
-                callbacks=model_utils.parse_collection(components, "callbacks", callback.Callback.from_dict),
+                schemas=parse_collection(components, "schemas", Schema.from_dict),
+                responses=parse_collection(components, "responses", Response.from_dict),
+                parameters=parse_collection(components, "parameters", Parameter.from_dict),
+                examples=parse_collection(components, "examples", Example.from_dict),
+                requestBodies=parse_collection(components, "requestBodies", RequestBody.from_dict),
+                headers=parse_collection(components, "headers", Header.from_dict),
+                securitySchemes=parse_collection(components, "securitySchemes", SecurityScheme.from_dict),
+                links=parse_collection(components, "links", Link.from_dict),
+                callbacks=parse_collection(components, "callbacks", Callback.from_dict),
             )
 
         return cls()

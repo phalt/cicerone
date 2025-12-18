@@ -1,4 +1,4 @@
-"""Tests for spec.webhooks.Webhooks model."""
+"""Tests for Webhooks model."""
 
 from typing import Any
 
@@ -6,10 +6,10 @@ from cicerone.spec import Webhooks
 
 
 class TestWebhooks:
-    """Tests for spec.webhooks.Webhooks model."""
+    """Tests for Webhooks model."""
 
     def test_webhooks_from_dict(self):
-        """Test creating spec.webhooks.Webhooks from dict."""
+        """Test creating Webhooks from dict."""
         data = {
             "newPet": {
                 "post": {
@@ -49,7 +49,7 @@ class TestWebhooks:
         """Test __str__ method for empty webhooks."""
         webhooks = Webhooks.from_dict({})
         str_repr = str(webhooks)
-        assert "<spec.webhooks.Webhooks: empty>" in str_repr
+        assert "<Webhooks: empty>" in str_repr
 
     def test_webhooks_str_representation_single(self):
         """Test __str__ method with single webhook."""
@@ -60,7 +60,7 @@ class TestWebhooks:
         }
         webhooks = Webhooks.from_dict(data)
         str_repr = str(webhooks)
-        assert "<spec.webhooks.Webhooks:" in str_repr
+        assert "<Webhooks:" in str_repr
         assert "1 webhooks" in str_repr
         assert "newPet" in str_repr
 

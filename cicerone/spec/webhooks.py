@@ -6,21 +6,21 @@ References:
 
 from __future__ import annotations
 
-import typing
+from typing import Any, Generator
 
-import pydantic
+from pydantic import BaseModel, Field
 
-from cicerone.spec import operation
-from cicerone.spec import path_item
+from cicerone.spec.operation import Operation
+from cicerone.spec.path_item import PathItem
 
 
-class Webhooks(pydantic.BaseModel):
+class Webhooks(BaseModel):
     """Container for webhook definitions (OpenAPI 3.1+)."""
 
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
-    items: "dict[str, path_item.PathItem]" = pydantic.Field(default_factory=dict)
+    items: dict[str, PathItem] = Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of webhooks."""
@@ -31,23 +31,23 @@ class Webhooks(pydantic.BaseModel):
             webhook_list += f" (+{len(self.items) - 3} more)"
         return f"<Webhooks: {len(self.items)} webhooks [{webhook_list}]>"
 
-    def all_operations(self) -> typing.Generator[operation.Operation, None, None]:
+    def all_operations(self) -> Generator[Operation, None, None]:
         """Yield all operations across all webhooks.
 
         Yields:
-            operation.Operation objects
+            Operation objects
         """
-        for webhook_name, path_item_obj in self.items.items():
-            for operation_obj in path_item_obj.operations.values():
-                yield operation_obj
+        for webhook_name, path_item in self.items.items():
+            for operation in path_item.operations.values():
+                yield operation
 
     @classmethod
-    def from_dict(cls, data: dict[str, typing.Any]) -> Webhooks:
+    def from_dict(cls, data: dict[str, Any]) -> Webhooks:
         """Create Webhooks from a dictionary of webhook definitions."""
         items = {}
         for webhook_name, webhook_data in data.items():
-            # Each webhook is like a path_item.PathItem but without a path
+            # Each webhook is like a PathItem but without a path
             # We use a webhook: prefix to distinguish these from real API paths
             # This is internal to cicerone and not part of the OpenAPI spec
-            items[webhook_name] = path_item.PathItem.from_dict(f"webhook:{webhook_name}", webhook_data)
+            items[webhook_name] = PathItem.from_dict(f"webhook:{webhook_name}", webhook_data)
         return cls(items=items)

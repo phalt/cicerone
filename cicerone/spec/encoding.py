@@ -6,12 +6,12 @@ References:
 
 from __future__ import annotations
 
-import typing
+from typing import Any
 
-import pydantic
+from pydantic import BaseModel, Field
 
 
-class Encoding(pydantic.BaseModel):
+class Encoding(BaseModel):
     """Represents an OpenAPI Encoding Object.
 
     An encoding definition applied to a single schema property.
@@ -21,13 +21,13 @@ class Encoding(pydantic.BaseModel):
     model_config = {"extra": "allow"}
 
     contentType: str | None = None
-    headers: "dict[str, typing.Any]" = pydantic.Field(default_factory=dict)  # Header objects
+    headers: dict[str, Any] = Field(default_factory=dict)  # Header objects
     style: str | None = None
     explode: bool = False
     allowReserved: bool = False
 
     @classmethod
-    def from_dict(cls, data: dict[str, typing.Any]) -> Encoding:
+    def from_dict(cls, data: dict[str, Any]) -> Encoding:
         """Create an Encoding from a dictionary."""
         # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)
