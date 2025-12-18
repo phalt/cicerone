@@ -198,3 +198,27 @@ paths:
         spec = parse_spec_from_dict(data)
         assert spec.raw["openapi"] == "3.0.0"
         assert spec.raw["info"]["title"] == "Test API"
+
+    def test_openapi_spec_str_representation(self):
+        """Test __str__ method of OpenAPISpec."""
+        data = {
+            "openapi": "3.0.0",
+            "info": {"title": "Test API", "version": "1.0.0"},
+            "paths": {
+                "/users": {"get": {"operationId": "listUsers"}},
+                "/posts": {"get": {"operationId": "listPosts"}},
+            },
+            "components": {
+                "schemas": {
+                    "User": {"type": "object"},
+                    "Post": {"type": "object"},
+                }
+            },
+        }
+        spec = parse_spec_from_dict(data)
+        str_repr = str(spec)
+        assert "<OpenAPISpec:" in str_repr
+        assert "Test API" in str_repr
+        assert "v3.0.0" in str_repr
+        assert "2 paths" in str_repr
+        assert "2 schemas" in str_repr

@@ -8,5 +8,8 @@ __pycache__
 .DS_Store
 test_output/
 dist/
+htmlcov/
+.coverage
+coverage.xml
 site/
 .python-version

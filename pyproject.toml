@@ -31,6 +31,7 @@ dev = [
     "mkdocs-material>=9.1.19",
     "pytest>=7.4.0",
     "pytest-benchmark>=5.0.0",
+    "pytest-cov>=7.0.0",
 ]
 
 [build-system]

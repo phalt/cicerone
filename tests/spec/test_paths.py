@@ -39,3 +39,30 @@ class TestPaths:
         assert "listUsers" in op_ids
         assert "createUser" in op_ids
         assert "listPosts" in op_ids
+
+    def test_paths_str_representation(self):
+        """Test __str__ method of Paths."""
+        data = {
+            "/users": {
+                "get": {"operationId": "listUsers"},
+                "post": {"operationId": "createUser"},
+            },
+            "/posts": {
+                "get": {"operationId": "listPosts"},
+            },
+        }
+        paths = Paths.from_dict(data)
+        str_repr = str(paths)
+        assert "<Paths:" in str_repr
+        assert "2 paths" in str_repr
+        assert "3 operations" in str_repr
+        assert "/users" in str_repr
+        assert "/posts" in str_repr
+
+    def test_paths_str_many_paths(self):
+        """Test __str__ method with many paths (should truncate)."""
+        data = {f"/path{i}": {"get": {}} for i in range(10)}
+        paths = Paths.from_dict(data)
+        str_repr = str(paths)
+        assert "10 paths" in str_repr
+        assert "(+7 more)" in str_repr
