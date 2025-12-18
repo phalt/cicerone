@@ -21,3 +21,10 @@ class TestVersion:
         assert version.major == 3
         assert version.minor == 1
         assert version.patch == 0
+
+    def test_version_repr(self):
+        """Test __repr__ method of Version."""
+        version = Version("3.1.0")
+        repr_str = repr(version)
+        assert "Version" in repr_str
+        assert "3.1.0" in repr_str

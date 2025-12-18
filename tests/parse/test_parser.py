@@ -105,3 +105,42 @@ paths:
             spec = parse_spec_from_url("https://example.com/openapi.yaml")
             assert spec.version.major == 3
             assert "/test" in spec.paths
+
+    def test_parse_from_file_json_fallback_to_yaml(self, tmp_path):
+        """Test parsing a file with .json extension but YAML content (fallback)."""
+        yaml_content = """
+openapi: "3.0.0"
+info:
+  title: Test
+  version: "1.0.0"
+paths: {}
+"""
+        file_path = tmp_path / "spec.json"
+        file_path.write_text(yaml_content)
+
+        spec = parse_spec_from_file(file_path)
+        assert spec.version.major == 3
+
+    def test_parse_from_url_json_fallback_to_yaml(self):
+        """Test parsing URL with JSON content-type but YAML content (fallback)."""
+        yaml_content = """
+openapi: "3.0.0"
+info:
+  title: Test
+  version: "1.0.0"
+paths:
+  /test:
+    get:
+      operationId: getTest
+"""
+        # Mock with JSON content-type but YAML content
+        mock_response = Mock()
+        mock_response.read.return_value = yaml_content.encode("utf-8")
+        mock_response.headers = {"Content-Type": "application/json"}
+        mock_response.__enter__ = Mock(return_value=mock_response)
+        mock_response.__exit__ = Mock(return_value=False)
+
+        with patch("cicerone.parse.parser.urlopen", return_value=mock_response):
+            spec = parse_spec_from_url("https://example.com/openapi.json")
+            assert spec.version.major == 3
+            assert "/test" in spec.paths

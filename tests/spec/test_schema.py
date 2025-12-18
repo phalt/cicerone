@@ -52,3 +52,37 @@ class TestSchema:
         assert schema.type == "array"
         assert schema.items is not None
         assert schema.items.type == "string"
+
+    def test_schema_str_representation(self):
+        """Test __str__ method of Schema."""
+        data = {
+            "type": "object",
+            "title": "User",
+            "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+            },
+            "required": ["id", "name"],
+        }
+        schema = Schema.from_dict(data)
+        str_repr = str(schema)
+        assert "<Schema:" in str_repr
+        assert "'User'" in str_repr
+        assert "type=object" in str_repr
+        assert "2 properties" in str_repr
+        assert "required=['id', 'name']" in str_repr
+
+    def test_schema_str_array_type(self):
+        """Test __str__ method for array schema."""
+        data = {"type": "array", "items": {"type": "string"}}
+        schema = Schema.from_dict(data)
+        str_repr = str(schema)
+        assert "type=array" in str_repr
+        assert "items=string" in str_repr
+
+    def test_schema_str_empty(self):
+        """Test __str__ method for empty schema."""
+        data: dict[str, str] = {}
+        schema = Schema.from_dict(data)
+        str_repr = str(schema)
+        assert "empty schema" in str_repr

@@ -39,5 +39,8 @@ clean:  ## Clear any cache files and test files
 test:  ## Run tests
 	uv run pytest -vvv
 
+test-cov:  ## Run tests with coverage report
+	uv run pytest -vvv --cov=cicerone --cov-report=term-missing --cov-report=html
+
 shell:  ## Run an ipython shell
 	uv run ipython

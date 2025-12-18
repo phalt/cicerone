@@ -82,3 +82,73 @@ class TestComponents:
         assert "ApiKey" in components.security_schemes
         assert "UserLink" in components.links
         assert "WebhookCallback" in components.callbacks
+
+    def test_components_str_representation_empty(self):
+        """Test __str__ method for empty components."""
+        components = Components()
+        str_repr = str(components)
+        assert "<Components: empty>" in str_repr
+
+    def test_components_str_representation_with_schemas(self):
+        """Test __str__ method with schemas."""
+        raw = {
+            "openapi": "3.0.0",
+            "components": {
+                "schemas": {
+                    "User": {"type": "object"},
+                    "Post": {"type": "object"},
+                },
+            },
+        }
+        components = Components.from_spec(raw)
+        str_repr = str(components)
+        assert "<Components:" in str_repr
+        assert "2 schemas" in str_repr
+
+    def test_components_str_representation_multiple_types(self):
+        """Test __str__ method with multiple component types."""
+        raw = {
+            "openapi": "3.0.0",
+            "components": {
+                "schemas": {"User": {"type": "object"}},
+                "responses": {"NotFound": {"description": "Not found"}},
+                "parameters": {"PageParam": {"name": "page", "in": "query"}},
+                "examples": {"Ex1": {"value": "test"}},
+                "requestBodies": {"Body1": {"description": "test"}},
+            },
+        }
+        components = Components.from_spec(raw)
+        str_repr = str(components)
+        assert "<Components:" in str_repr
+        # Should show first 3 types and indicate more
+        assert "(+2 more types)" in str_repr
+
+    def test_components_str_with_headers_links_callbacks(self):
+        """Test __str__ method includes headers, links, and callbacks."""
+        raw = {
+            "openapi": "3.0.0",
+            "components": {
+                "headers": {"X-Rate-Limit": {"description": "Rate limit"}},
+                "links": {"UserLink": {"operationId": "getUser"}},
+                "callbacks": {"WebhookCallback": {"expression": "http://example.com"}},
+            },
+        }
+        components = Components.from_spec(raw)
+        str_repr = str(components)
+        assert "<Components:" in str_repr
+        assert "1 headers" in str_repr or "1 links" in str_repr or "1 callbacks" in str_repr
+
+    def test_components_str_with_security_schemes(self):
+        """Test __str__ method includes securitySchemes."""
+        raw = {
+            "openapi": "3.0.0",
+            "components": {
+                "securitySchemes": {
+                    "ApiKey": {"type": "apiKey", "in": "header", "name": "X-API-Key"},
+                },
+            },
+        }
+        components = Components.from_spec(raw)
+        str_repr = str(components)
+        assert "<Components:" in str_repr
+        assert "1 securitySchemes" in str_repr
