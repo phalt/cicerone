@@ -28,6 +28,19 @@ from cicerone.spec import response as spec_response
 from cicerone.spec import schema as spec_schema
 from cicerone.spec import security_scheme as spec_security_scheme
 
+# Map component types to their constructor methods
+COMPONENT_TYPE_MAP = {
+    "schemas": spec_schema.Schema.from_dict,
+    "responses": spec_response.Response.from_dict,
+    "parameters": spec_parameter.Parameter.from_dict,
+    "examples": spec_example.Example.from_dict,
+    "requestBodies": spec_request_body.RequestBody.from_dict,
+    "headers": spec_header.Header.from_dict,
+    "securitySchemes": spec_security_scheme.SecurityScheme.from_dict,
+    "links": spec_link.Link.from_dict,
+    "callbacks": spec_callback.Callback.from_dict,
+}
+
 
 class ReferenceResolver:
     """Resolves references in OpenAPI specifications.
@@ -126,21 +139,16 @@ class ReferenceResolver:
         # Navigate through the spec using the pointer path
         current = self.spec.raw
         for i, part in enumerate(parts):
-            if isinstance(current, dict):
-                if part not in current:
-                    path_so_far = "/" + "/".join(parts[: i + 1])
-                    raise ValueError(f"Reference path not found: {ref.ref} (failed at {path_so_far})")
-                current = current[part]
-            elif isinstance(current, list):
-                try:
-                    index = int(part)
-                    current = current[index]
-                except (ValueError, IndexError) as e:
-                    path_so_far = "/" + "/".join(parts[: i + 1])
-                    raise ValueError(f"Invalid array index in reference: {ref.ref} (failed at {path_so_far})") from e
-            else:
+            try:
+                current = current[int(part)] if isinstance(current, list) else current[part]
+            except (KeyError, IndexError, ValueError) as e:
                 path_so_far = "/" + "/".join(parts[: i + 1])
-                raise ValueError(f"Cannot navigate through non-dict/list object: {ref.ref} (failed at {path_so_far})")
+                raise ValueError(f"Reference path not found: {ref.ref} (failed at {path_so_far})") from e
+            except TypeError as e:
+                path_so_far = "/" + "/".join(parts[: i + 1])
+                raise ValueError(
+                    f"Cannot navigate through non-dict/list object: {ref.ref} (failed at {path_so_far})"
+                ) from e
 
         # Convert the raw dict to a typed object based on the reference path
         return self._convert_to_typed_object(ref, current)
@@ -165,26 +173,8 @@ class ReferenceResolver:
 
         # Map component types to their constructors
         if parts[0] == "components" and len(parts) >= 3:
-            component_type = parts[1]
-            match component_type:
-                case "schemas":
-                    return spec_schema.Schema.from_dict(data)
-                case "responses":
-                    return spec_response.Response.from_dict(data)
-                case "parameters":
-                    return spec_parameter.Parameter.from_dict(data)
-                case "examples":
-                    return spec_example.Example.from_dict(data)
-                case "requestBodies":
-                    return spec_request_body.RequestBody.from_dict(data)
-                case "headers":
-                    return spec_header.Header.from_dict(data)
-                case "securitySchemes":
-                    return spec_security_scheme.SecurityScheme.from_dict(data)
-                case "links":
-                    return spec_link.Link.from_dict(data)
-                case "callbacks":
-                    return spec_callback.Callback.from_dict(data)
+            if constructor := COMPONENT_TYPE_MAP.get(parts[1]):
+                return constructor(data)
 
         # Map paths to PathItem objects
         if parts[0] == "paths" and len(parts) >= 2:
@@ -206,20 +196,45 @@ class ReferenceResolver:
         if not isinstance(obj, pydantic.BaseModel):
             return obj
 
-        # Get the model's fields
+        # Iterate through model fields and resolve any references
         for field_name, field_value in obj:
             if field_value is None:
                 continue
 
-            # Check if this field contains a $ref
-            if isinstance(field_value, pydantic.BaseModel):
-                self._resolve_model_field(obj, field_name, field_value)
-            elif isinstance(field_value, dict):
-                self._resolve_dict_field(field_value)
-            elif isinstance(field_value, list):
-                self._resolve_list_field(field_value)
+            match field_value:
+                case pydantic.BaseModel():
+                    self._resolve_model_field(obj, field_name, field_value)
+                case dict():
+                    self._resolve_container(field_value)
+                case list():
+                    self._resolve_container(field_value)
 
         return obj
+
+    def _get_ref_from_model(self, model: pydantic.BaseModel) -> str | None:
+        """Extract $ref from a Pydantic model's extra fields if present.
+
+        Args:
+            model: Pydantic model to check
+
+        Returns:
+            The $ref string if found, None otherwise
+        """
+        return getattr(model, "__pydantic_extra__", {}).get("$ref")
+
+    def _try_resolve_ref(self, ref: str) -> typing.Any | None:
+        """Attempt to resolve a reference, returning None on failure.
+
+        Args:
+            ref: Reference string to resolve
+
+        Returns:
+            Resolved object or None if resolution fails
+        """
+        try:
+            return self.resolve_reference(ref, follow_nested=True)
+        except (ValueError, RecursionError):
+            return None
 
     def _resolve_model_field(
         self, parent_obj: pydantic.BaseModel, field_name: str, field_value: pydantic.BaseModel
@@ -231,56 +246,27 @@ class ReferenceResolver:
             field_name: Name of the field being resolved
             field_value: The Pydantic model value to check for $ref
         """
-        # Check if the model has a $ref in its extra fields
-        extra_fields = getattr(field_value, "__pydantic_extra__", {})
-        if "$ref" in extra_fields:
-            # Resolve the reference
-            try:
-                resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
-                # Update the field with the resolved object
+        if ref := self._get_ref_from_model(field_value):
+            if resolved := self._try_resolve_ref(ref):
                 setattr(parent_obj, field_name, resolved)
-            except (ValueError, RecursionError):
-                # If we can't resolve, keep the original
-                pass
         else:
-            # Recursively process nested objects
             setattr(parent_obj, field_name, self._resolve_nested_references(field_value))
 
-    def _resolve_dict_field(self, field_value: dict) -> None:
-        """Resolve dictionary values that may contain Pydantic models with $refs.
+    def _resolve_container(self, container: dict | list) -> None:
+        """Resolve references in dictionary or list containers.
 
         Args:
-            field_value: Dictionary to process
+            container: Dictionary or list to process
         """
-        for key, value in field_value.items():
+        items = container.items() if isinstance(container, dict) else enumerate(container)
+
+        for key, value in items:
             if isinstance(value, pydantic.BaseModel):
-                extra_fields = getattr(value, "__pydantic_extra__", {})
-                if "$ref" in extra_fields:
-                    try:
-                        resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
-                        field_value[key] = resolved
-                    except (ValueError, RecursionError):
-                        pass
+                if ref := self._get_ref_from_model(value):
+                    if resolved := self._try_resolve_ref(ref):
+                        container[key] = resolved
                 else:
-                    field_value[key] = self._resolve_nested_references(value)
-
-    def _resolve_list_field(self, field_value: list) -> None:
-        """Resolve list items that may contain Pydantic models with $refs.
-
-        Args:
-            field_value: List to process
-        """
-        for i, item in enumerate(field_value):
-            if isinstance(item, pydantic.BaseModel):
-                extra_fields = getattr(item, "__pydantic_extra__", {})
-                if "$ref" in extra_fields:
-                    try:
-                        resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
-                        field_value[i] = resolved
-                    except (ValueError, RecursionError):
-                        pass
-                else:
-                    field_value[i] = self._resolve_nested_references(item)
+                    container[key] = self._resolve_nested_references(value)
 
     def get_all_references(
         self,
@@ -306,30 +292,29 @@ class ReferenceResolver:
             >>> # Get all local references
             >>> local_refs = {k: v for k, v in all_refs.items() if v.is_local}
         """
-        if obj is None:
-            obj = self.spec.raw
-
-        if visited is None:
-            visited = set()
+        obj = obj or self.spec.raw
+        visited = visited or set()
 
         # Avoid infinite recursion on circular structures
-        obj_id = id(obj)
-        if obj_id in visited:
+        if (obj_id := id(obj)) in visited:
             return {}
         visited.add(obj_id)
 
-        references: dict[str, spec_reference.Reference] = {}
+        references = {}
 
+        # Check if this object is a reference
         if spec_reference.Reference.is_reference(obj):
             ref = spec_reference.Reference.from_dict(obj)
             references[ref.ref] = ref
 
-        if isinstance(obj, dict):
-            for value in obj.values():
-                references.update(self.get_all_references(value, visited))
-        elif isinstance(obj, list):
-            for item in obj:
-                references.update(self.get_all_references(item, visited))
+        # Recursively search through collections
+        match obj:
+            case dict():
+                for value in obj.values():
+                    references.update(self.get_all_references(value, visited))
+            case list():
+                for item in obj:
+                    references.update(self.get_all_references(item, visited))
 
         return references
 

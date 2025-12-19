@@ -386,11 +386,11 @@ class TestReferenceResolver:
         resolver = ReferenceResolver(spec)
 
         # Non-numeric index
-        with pytest.raises(ValueError, match="Invalid array index"):
+        with pytest.raises(ValueError, match="Reference path not found"):
             resolver.resolve_reference("#/tags/invalid")
 
         # Out of bounds index
-        with pytest.raises(ValueError, match="Invalid array index"):
+        with pytest.raises(ValueError, match="Reference path not found"):
             resolver.resolve_reference("#/tags/10")
 
     def test_resolve_reference_through_non_dict_list(self):

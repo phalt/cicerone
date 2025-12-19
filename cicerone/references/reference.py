@@ -58,9 +58,9 @@ class Reference(pydantic.BaseModel):
         """Return a readable string representation of the reference."""
         parts = [f"ref='{self.ref}'"]
         if self.summary:
-            parts.append(f"summary='{self.summary[:50]}...'")
+            parts.append(f"summary='{self.summary[:50]}{'...' if len(self.summary) > 50 else ''}'")
         if self.description:
-            parts.append(f"description='{self.description[:50]}...'")
+            parts.append(f"description='{self.description[:50]}{'...' if len(self.description) > 50 else ''}'")
         return f"<Reference: {', '.join(parts)}>"
 
     @property
@@ -81,9 +81,7 @@ class Reference(pydantic.BaseModel):
         For external references with fragments like 'file.yaml#/Pet', returns '/Pet'.
         For external references without fragments, returns ''.
         """
-        if "#" in self.ref:
-            return self.ref.split("#", 1)[1]
-        return ""
+        return self.ref.split("#", 1)[1] if "#" in self.ref else ""
 
     @property
     def document(self) -> str:
@@ -93,9 +91,7 @@ class Reference(pydantic.BaseModel):
         For local references, returns empty string.
         """
         if self.is_external:
-            if "#" in self.ref:
-                return self.ref.split("#", 1)[0]
-            return self.ref
+            return self.ref.split("#", 1)[0] if "#" in self.ref else self.ref
         return ""
 
     @property
@@ -107,10 +103,7 @@ class Reference(pydantic.BaseModel):
         pointer = self.pointer
         if not pointer or pointer == "/":
             return []
-        # Remove leading slash and split
-        parts = pointer.lstrip("/").split("/")
-        # Filter out empty strings
-        return [p for p in parts if p]
+        return [p for p in pointer.lstrip("/").split("/") if p]
 
     @classmethod
     def from_dict(cls, data: dict[str, typing.Any]) -> Reference:
