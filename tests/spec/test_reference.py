@@ -574,8 +574,8 @@ def test_reference_model_dump():
 
 def test_resolve_short_reference():
     """Test resolving a reference with < 2 parts."""
-    from cicerone.references import ReferenceResolver
     from cicerone.parse import parse_spec_from_dict
+    from cicerone.references import ReferenceResolver
 
     spec_data = {
         "openapi": "3.0.0",
@@ -592,8 +592,8 @@ def test_resolve_short_reference():
 
 def test_resolve_non_pydantic_object():
     """Test _resolve_nested_references with non-Pydantic object."""
-    from cicerone.references import ReferenceResolver
     from cicerone.parse import parse_spec_from_dict
+    from cicerone.references import ReferenceResolver
 
     spec_data = {
         "openapi": "3.0.0",
@@ -613,8 +613,8 @@ def test_resolve_non_pydantic_object():
 
 def test_resolve_root_reference():
     """Test resolving root # reference."""
-    from cicerone.references import ReferenceResolver
     from cicerone.parse import parse_spec_from_dict
+    from cicerone.references import ReferenceResolver
 
     spec_data = {
         "openapi": "3.0.0",
@@ -631,8 +631,8 @@ def test_resolve_root_reference():
 
 def test_circular_reference_creates_linked_structure():
     """Test that circular references create appropriate linked structures."""
-    from cicerone.references import ReferenceResolver
     from cicerone.parse import parse_spec_from_dict
+    from cicerone.references import ReferenceResolver
     from cicerone.spec import Schema
 
     spec_data = {
@@ -663,8 +663,8 @@ def test_circular_reference_creates_linked_structure():
 
 def test_resolve_path_item_with_proper_format():
     """Test resolving a path directly (not via reference)."""
-    from cicerone.references import Reference, ReferenceResolver
     from cicerone.parse import parse_spec_from_dict
+    from cicerone.references import Reference, ReferenceResolver
 
     spec_data = {
         "openapi": "3.0.0",
@@ -691,8 +691,8 @@ def test_resolve_path_item_with_proper_format():
 
 def test_resolve_single_part_reference():
     """Test resolving a reference with single part returns raw data."""
-    from cicerone.references import Reference, ReferenceResolver
     from cicerone.parse import parse_spec_from_dict
+    from cicerone.references import Reference, ReferenceResolver
 
     spec_data = {
         "openapi": "3.0.0",
