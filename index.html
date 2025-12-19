@@ -632,8 +632,8 @@
 <li><strong>Multiple input formats</strong>: Load from files, URLs, or in-memory data</li>
 <li><strong>OpenAPI 3.x support</strong>: Works with OpenAPI 3.0 and 3.1 specifications</li>
 <li><strong>Minimal dependencies</strong>: Only relies on Pydantic and yaml. The rest is core Python.</li>
-<li><strong>Simple API</strong>: Intuitive methods for common operations
-   <strong>Modern Python</strong>: Fully typed and 100% test coverage codebase.</li>
+<li><strong>Simple API</strong>: Intuitive methods for common operations</li>
+<li><strong>Modern Python</strong>: Fully typed and 100% test coverage codebase.</li>
 </ul>
 <h2 id="installation">Installation</h2>
 <h3 id="pip">pip</h3>
@@ -645,34 +645,28 @@
 <h2 id="quick-start">Quick Start</h2>
 <h3 id="parsing-specifications">Parsing Specifications</h3>
 <p>Load OpenAPI specifications from various sources:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.parse</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">parse_spec_from_file</span><span class="p">,</span>
-    <span class="n">parse_spec_from_url</span><span class="p">,</span>
-    <span class="n">parse_spec_from_dict</span><span class="p">,</span>
-    <span class="n">parse_spec_from_json</span><span class="p">,</span>
-    <span class="n">parse_spec_from_yaml</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">cicerone_parse</span>
 
 <span class="c1"># From a file (auto-detects YAML/JSON)</span>
-<span class="n">file_spec</span> <span class="o">=</span> <span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s2">&quot;openapi.yaml&quot;</span><span class="p">)</span>
+<span class="n">file_spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s2">&quot;openapi.yaml&quot;</span><span class="p">)</span>
 
 <span class="c1"># From a URL</span>
-<span class="n">url_spec</span> <span class="o">=</span> <span class="n">parse_spec_from_url</span><span class="p">(</span><span class="s2">&quot;https://api.example.com/openapi.json&quot;</span><span class="p">)</span>
+<span class="n">url_spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_url</span><span class="p">(</span><span class="s2">&quot;https://api.example.com/openapi.json&quot;</span><span class="p">)</span>
 
 <span class="c1"># From a dictionary</span>
-<span class="n">dict_spec</span> <span class="o">=</span> <span class="n">parse_spec_from_dict</span><span class="p">({</span><span class="s2">&quot;openapi&quot;</span><span class="p">:</span> <span class="s2">&quot;3.0.0&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">})</span>
+<span class="n">dict_spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_dict</span><span class="p">({</span><span class="s2">&quot;openapi&quot;</span><span class="p">:</span> <span class="s2">&quot;3.0.0&quot;</span><span class="p">,</span> <span class="o">...</span><span class="p">})</span>
 
 <span class="c1"># From JSON string</span>
-<span class="n">json_spec</span> <span class="o">=</span> <span class="n">parse_spec_from_json</span><span class="p">(</span><span class="s1">&#39;{&quot;openapi&quot;: &quot;3.0.0&quot;, ...}&#39;</span><span class="p">)</span>
+<span class="n">json_spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_json</span><span class="p">(</span><span class="s1">&#39;{&quot;openapi&quot;: &quot;3.0.0&quot;, ...}&#39;</span><span class="p">)</span>
 
 <span class="c1"># From YAML string</span>
-<span class="n">yaml_spec</span> <span class="o">=</span> <span class="n">parse_spec_from_yaml</span><span class="p">(</span><span class="s1">&#39;openapi: &quot;3.0.0&quot;</span><span class="se">\n</span><span class="s1">...&#39;</span><span class="p">)</span>
+<span class="n">yaml_spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_yaml</span><span class="p">(</span><span class="s1">&#39;openapi: &quot;3.0.0&quot;</span><span class="se">\n</span><span class="s1">...&#39;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="exploring-the-schema">Exploring the schema</h3>
 <p>Once parsed, traverse the schema:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_spec_from_file</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">cicerone_parse</span>
 
-<span class="n">spec</span> <span class="o">=</span> <span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s1">&#39;tests/fixtures/petstore_openapi3.yaml&#39;</span><span class="p">)</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s1">&#39;tests/fixtures/petstore_openapi3.yaml&#39;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenAPISpec:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Paths:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
