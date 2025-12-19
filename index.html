@@ -299,6 +299,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -384,17 +395,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Features
-      
-    </span>
-  </a>
   
 </li>
       
@@ -498,6 +498,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -586,17 +597,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Features
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -623,8 +623,17 @@
 <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/cicerone?label=python%20support" />
 <img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/cicerone" />
 <img alt="PyPI - License" src="https://img.shields.io/pypi/l/cicerone" /></p>
-<p>Cicerone lets you parse OpenAPI/Swagger schemas into Python objects for inspection, traversal, and tooling.</p>
+<p>Cicerone lets you parse OpenAPI schemas into Python objects for inspection, traversal, and tooling.</p>
 <p>The goal of Cicerone is to be fast, minimal, fully typed, and designed for Python developers by Python developers.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Full support</strong>: Tested against real-world and example specifications to be 100% compliant.</li>
+<li><strong>Pydantic-based models</strong>: Type-safe object models.</li>
+<li><strong>Multiple input formats</strong>: Load from files, URLs, or in-memory data</li>
+<li><strong>OpenAPI 3.x support</strong>: Works with OpenAPI 3.0 and 3.1 specifications</li>
+<li><strong>Minimal dependencies</strong>: Only relies on Pydantic and yaml. The rest is core Python.</li>
+<li><strong>Simple API</strong>: Intuitive methods for common operations</li>
+</ul>
 <h2 id="installation">Installation</h2>
 <h3 id="pip">pip</h3>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>cicerone
@@ -634,7 +643,7 @@
 </code></pre></div>
 <h2 id="quick-start">Quick Start</h2>
 <h3 id="parsing-specifications">Parsing Specifications</h3>
-<p>Load OpenAPI/Swagger specifications from various sources:</p>
+<p>Load OpenAPI specifications from various sources:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.parse</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">parse_spec_from_file</span><span class="p">,</span>
     <span class="n">parse_spec_from_url</span><span class="p">,</span>
@@ -690,14 +699,6 @@
 <span class="c1"># Raw spec data</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Title: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="features">Features</h2>
-<ul>
-<li><strong>Pydantic-based models</strong>: Type-safe, validated object models</li>
-<li><strong>Multiple input formats</strong>: Load from files, URLs, or in-memory data</li>
-<li><strong>OpenAPI 3.x and Swagger 2.0 support</strong>: Works with both modern and legacy specs</li>
-<li><strong>Pythonic traversal</strong>: Navigate specs using familiar Python patterns</li>
-<li><strong>Simple API</strong>: Intuitive methods for common operations</li>
-</ul>
 
 
 
