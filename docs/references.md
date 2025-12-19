@@ -180,7 +180,6 @@ person = spec.resolve_reference('#/components/schemas/User')
 
 # Or stop at the first level
 user_ref = spec.resolve_reference('#/components/schemas/User', follow_nested=False)
-# Returns: {'$ref': '#/components/schemas/Person'}
 ```
 
 ### Circular Reference Detection
@@ -211,16 +210,11 @@ resolver = ReferenceResolver(spec)
 is_circular = resolver.is_circular_reference('#/components/schemas/Node')
 print(f"Is circular: {is_circular}")
 
-# When resolving, circular references are detected
-try:
-    # This will work for the Node schema itself
-    node = spec.resolve_reference('#/components/schemas/Node')
-    print("Node schema resolved successfully")
-    
-    # But attempting to fully resolve a circular chain will raise an error
-    # (Only when follow_nested would cause infinite recursion)
-except RecursionError as e:
-    print(f"Circular reference detected: {e}")
+# When resolving with follow_nested=True, circular references are handled
+# by stopping recursion - the circular reference remains as a Reference object
+# pointing back to create a linked-list style structure
+node = spec.resolve_reference('#/components/schemas/Node', follow_nested=True)
+print("Node schema resolved successfully with circular handling")
 ```
 
 ### Array Index References

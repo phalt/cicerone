@@ -98,7 +98,8 @@ from cicerone import parse as cicerone_parse
 spec = cicerone_parse.parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
 
 # Resolve a reference to get a typed Schema object
-user_schema = spec.resolve_reference('#/components/schemas/User')
+# Note: pass follow_nested=True to recursively resolve all nested $refs
+user_schema = spec.resolve_reference('#/components/schemas/User', follow_nested=True)
 print(f"User schema type: {user_schema.type}")
 print(f"Required fields: {user_schema.required}")
 

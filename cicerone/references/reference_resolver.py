@@ -46,8 +46,8 @@ COMPONENT_TYPE_MAP = {
 class ReferenceResolver:
     """Resolves references in OpenAPI specifications.
 
-    This class provides methods to resolve both internal and external references,
-    navigate the reference graph, and detect circular references.
+    Currently supports internal/local references only (references starting with #).
+    External file and URL references are not yet implemented.
     """
 
     def __init__(self, spec: spec_openapi.OpenAPISpec) -> None:
@@ -132,21 +132,20 @@ class ReferenceResolver:
         if not ref.is_local:
             raise ValueError(f"Expected local reference, got: {ref.ref}")
 
-        parts = ref.pointer_parts
-        if not parts:
+        if not ref.pointer_parts:
             # Reference to the root document
             return self.spec.raw
 
         # Navigate through the spec using the pointer path
         current = self.spec.raw
-        for i, part in enumerate(parts):
+        for i, part in enumerate(ref.pointer_parts):
             try:
                 current = current[int(part)] if isinstance(current, list) else current[part]
             except (KeyError, IndexError, ValueError) as e:
-                path_so_far = "/" + "/".join(parts[: i + 1])
+                path_so_far = "/" + "/".join(ref.pointer_parts[: i + 1])
                 raise ValueError(f"Reference path not found: {ref.ref} (failed at {path_so_far})") from e
             except TypeError as e:
-                path_so_far = "/" + "/".join(parts[: i + 1])
+                path_so_far = "/" + "/".join(ref.pointer_parts[: i + 1])
                 raise ValueError(
                     f"Cannot navigate through non-dict/list object: {ref.ref} (failed at {path_so_far})"
                 ) from e
@@ -249,9 +248,11 @@ class ReferenceResolver:
         """
         if ref := self._get_ref_from_model(field_value):
             if resolved := self._try_resolve_ref(ref):
-                setattr(parent_obj, field_name, resolved)
+                # For circular references, we keep the reference object rather than raising
+                # This allows linked-list style structures
+                parent_obj.__dict__[field_name] = resolved
         else:
-            setattr(parent_obj, field_name, self._resolve_nested_references(field_value))
+            parent_obj.__dict__[field_name] = self._resolve_nested_references(field_value)
 
     def _resolve_container(self, container: dict | list) -> None:
         """Resolve references in dictionary or list containers.

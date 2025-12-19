@@ -37,6 +37,12 @@ class TestReference:
         assert ref.ref == "#/components/schemas/Pet"
         assert ref.summary == "Pet reference"
 
+    def test_reference_from_dict_missing_ref(self):
+        """Test that from_dict raises error when $ref is missing."""
+        data = {"summary": "Pet reference"}
+        with pytest.raises(ValueError, match="must contain a '\\$ref' key"):
+            Reference.from_dict(data)
+
     def test_is_local_reference(self):
         """Test detecting local references."""
         local_ref = Reference(ref="#/components/schemas/User")

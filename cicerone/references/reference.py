@@ -30,10 +30,9 @@ class Reference(pydantic.BaseModel):
 
     model_config = {"extra": "allow"}
 
-    # Use 'ref' as the primary field name for Python code
     ref: str
-    summary: str | None = None  # OAS 3.1+ only
-    description: str | None = None  # OAS 3.1+ only
+    summary: str | None = None
+    description: str | None = None
 
     @pydantic.model_validator(mode="before")
     @classmethod
@@ -114,12 +113,20 @@ class Reference(pydantic.BaseModel):
 
         Returns:
             Reference instance
+
+        Raises:
+            ValueError: If '$ref' key is not present in data
         """
+        if "$ref" not in data:
+            raise ValueError("Reference dictionary must contain a '$ref' key")
         return cls(**data)
 
     @classmethod
     def is_reference(cls, data: typing.Any) -> bool:
-        """Check if a data object is a reference (contains '$ref' key).
+        """Check if a data object is a reference.
+
+        According to OpenAPI spec, a Reference Object MUST contain a $ref field.
+        Any other fields are ignored (except summary/description in OAS 3.1+).
 
         Args:
             data: Any data object to check
