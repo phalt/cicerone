@@ -11,12 +11,12 @@ import typing
 
 import pydantic
 
+from cicerone.references import reference as spec_reference
+from cicerone.references import reference_resolver as spec_reference_resolver
 from cicerone.spec import components as spec_components
 from cicerone.spec import info as spec_info
 from cicerone.spec import operation as spec_operation
 from cicerone.spec import paths as spec_paths
-from cicerone.spec import reference as spec_reference
-from cicerone.spec import reference_resolver as spec_reference_resolver
 from cicerone.spec import server as spec_server
 from cicerone.spec import tag as spec_tag
 from cicerone.spec import version as spec_version
@@ -99,7 +99,8 @@ class OpenAPISpec(pydantic.BaseModel):
             follow_nested: If True, recursively resolves nested references
 
         Returns:
-            The target object that the reference points to
+            The target object as a typed Pydantic model (Schema, Response, Parameter, etc.)
+            when the reference points to a recognized component type. Otherwise returns raw data.
 
         Raises:
             ValueError: If the reference cannot be resolved
@@ -109,9 +110,8 @@ class OpenAPISpec(pydantic.BaseModel):
             >>> from cicerone.parse import parse_spec_from_file
             >>> spec = parse_spec_from_file("openapi.yaml")
             >>> user_schema = spec.resolve_reference('#/components/schemas/User')
-            >>> # Or use a Reference object
-            >>> ref = Reference(ref='#/components/schemas/User')
-            >>> user_schema = spec.resolve_reference(ref)
+            >>> # Returns a Schema object, not a dict
+            >>> print(type(user_schema))  # <class 'cicerone.spec.schema.Schema'>
         """
         resolver = spec_reference_resolver.ReferenceResolver(self)
         return resolver.resolve_reference(ref, follow_nested=follow_nested)

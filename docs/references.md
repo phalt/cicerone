@@ -34,18 +34,20 @@ References can appear in various places in an OpenAPI specification:
 
 ### Resolving a Reference
 
-The most common operation is resolving a reference to get its target object:
+The most common operation is resolving a reference to get its target object as a typed Pydantic model:
 
 ```python
 from cicerone import parse as cicerone_parse
+from cicerone.spec import Schema
 
 # Load your OpenAPI spec
 spec = cicerone_parse.parse_spec_from_file('openapi.yaml')
 
-# Resolve a reference to a schema
+# Resolve a reference to a schema - returns a Schema object, not a dict
 user_schema = spec.resolve_reference('#/components/schemas/User')
-print(f"User schema type: {user_schema['type']}")
-print(f"User properties: {list(user_schema['properties'].keys())}")
+print(f"Type: {type(user_schema)}")  # <class 'cicerone.spec.schema.Schema'>
+print(f"User schema type: {user_schema.type}")
+print(f"User properties: {list(user_schema.properties.keys())}")
 ```
 
 Example with a sample schema:
@@ -70,9 +72,13 @@ components:
 ```
 
 ```python
-# Resolves to the User schema object
+# Resolves to a typed Schema object
 user_schema = spec.resolve_reference('#/components/schemas/User')
-# Output: {'type': 'object', 'required': ['id', 'username', 'email'], 'properties': {...}}
+assert isinstance(user_schema, Schema)
+# Access properties directly as attributes
+print(user_schema.type)  # 'object'
+print(user_schema.required)  # ['id', 'username', 'email']
+print(user_schema.properties['email'].format)  # 'email'
 ```
 
 ### Finding All References
@@ -101,7 +107,8 @@ for ref in schema_refs:
 The `Reference` class provides properties to inspect and work with reference objects:
 
 ```python
-from cicerone.spec import Reference
+from cicerone.references import Reference
+from cicerone.spec import Schema
 
 # Create a reference object
 ref = Reference(ref='#/components/schemas/Pet')
@@ -115,6 +122,11 @@ print(f"Pointer: {ref.pointer}")  # /components/schemas/Pet
 
 # Get pointer components
 print(f"Parts: {ref.pointer_parts}")  # ['components', 'schemas', 'Pet']
+
+# Resolve the reference to get the actual Schema object
+pet_schema = spec.resolve_reference(ref)
+assert isinstance(pet_schema, Schema)
+print(f"Pet schema type: {pet_schema.type}")
 ```
 
 ### OAS 3.1 Summary and Description
@@ -122,6 +134,8 @@ print(f"Parts: {ref.pointer_parts}")  # ['components', 'schemas', 'Pet']
 In OpenAPI 3.1, Reference Objects can have `summary` and `description` fields:
 
 ```python
+from cicerone.references import Reference
+
 ref = Reference(
     ref='#/components/schemas/User',
     summary='User schema',
@@ -220,87 +234,6 @@ posts_tag = spec.resolve_reference('#/tags/1')
 print(f"Tag name: {posts_tag['name']}")  # 'posts'
 ```
 
-## Practical Examples
-
-### Example 1: Schema Validation
-
-Check if all referenced schemas exist:
-
-```python
-spec = cicerone_parse.parse_spec_from_file('openapi.yaml')
-
-# Find all schema references
-all_refs = spec.get_all_references()
-schema_refs = [r for r in all_refs if '/schemas/' in r.ref]
-
-# Validate each reference
-for ref in schema_refs:
-    try:
-        schema = spec.resolve_reference(ref)
-        print(f"✓ {ref.ref} - Valid")
-    except ValueError as e:
-        print(f"✗ {ref.ref} - Error: {e}")
-```
-
-### Example 2: Exploring Response Schemas
-
-Navigate from an operation to its response schema:
-
-```python
-# Parse the spec
-spec = cicerone_parse.parse_spec_from_file('openapi.yaml')
-
-# Get an operation
-operation = spec.operation_by_operation_id('listUsers')
-
-# Check if the operation exists
-if operation:
-    # Get the 200 response
-    if '200' in operation.responses:
-        response = operation.responses['200']
-        
-        # Get the response content
-        if 'application/json' in response.content:
-            media_type = response.content['application/json']
-            
-            # Check if the schema is a reference
-            from cicerone.spec import Reference
-            if Reference.is_reference(media_type.schema):
-                # Resolve the reference
-                ref_dict = media_type.schema
-                schema = spec.resolve_reference(ref_dict['$ref'])
-                print(f"Response schema: {schema}")
-```
-
-### Example 3: Building a Schema Registry
-
-Create a registry of all schemas with their dependencies:
-
-```python
-from cicerone.spec import Reference
-
-spec = cicerone_parse.parse_spec_from_file('openapi.yaml')
-
-# Build a dependency map
-schema_deps = {}
-for schema_name, schema_obj in spec.components.schemas.items():
-    # Find references in this schema
-    refs = spec.get_all_references(spec.raw['components']['schemas'][schema_name])
-    schema_refs = [r.ref for r in refs if '/schemas/' in r.ref]
-    
-    # Extract schema names
-    dep_names = [ref.split('/')[-1] for ref in schema_refs]
-    schema_deps[schema_name] = dep_names
-
-# Print the registry
-print("Schema Dependency Registry:")
-for schema, deps in schema_deps.items():
-    if deps:
-        print(f"  {schema} depends on: {', '.join(deps)}")
-    else:
-        print(f"  {schema} (no dependencies)")
-```
-
 ## Reference Resolution Rules
 
 ### OAS 3.0 vs 3.1 Differences
@@ -325,13 +258,13 @@ Cicerone handles both versions correctly, preserving the raw specification data.
 
 #### `resolve_reference(ref, follow_nested=True)`
 
-Resolve a reference to its target object.
+Resolve a reference to its target object as a typed Pydantic model.
 
 **Parameters:**
 - `ref` (str or Reference): Reference to resolve
 - `follow_nested` (bool): Whether to recursively resolve nested references
 
-**Returns:** The target object (dict or other type)
+**Returns:** Typed Pydantic model (Schema, Response, Parameter, etc.) when the reference points to a recognized component type. Otherwise returns raw data.
 
 **Raises:**
 - `ValueError`: If reference cannot be resolved

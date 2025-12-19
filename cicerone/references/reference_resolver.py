@@ -13,10 +13,18 @@ from __future__ import annotations
 
 import typing
 
-from cicerone.spec import reference as spec_reference
-
-if typing.TYPE_CHECKING:
-    from cicerone.spec import openapi_spec as spec_openapi
+from cicerone.references import reference as spec_reference
+from cicerone.spec import callback as spec_callback
+from cicerone.spec import example as spec_example
+from cicerone.spec import header as spec_header
+from cicerone.spec import link as spec_link
+from cicerone.spec import openapi_spec as spec_openapi
+from cicerone.spec import parameter as spec_parameter
+from cicerone.spec import path_item as spec_path_item
+from cicerone.spec import request_body as spec_request_body
+from cicerone.spec import response as spec_response
+from cicerone.spec import schema as spec_schema
+from cicerone.spec import security_scheme as spec_security_scheme
 
 
 class ReferenceResolver:
@@ -47,7 +55,8 @@ class ReferenceResolver:
             follow_nested: If True, recursively resolves nested references
 
         Returns:
-            The target object that the reference points to
+            The target object as a typed Pydantic model (Schema, Response, etc.) when
+            the reference points to a recognized component type. Otherwise returns raw data.
 
         Raises:
             ValueError: If the reference cannot be resolved
@@ -56,6 +65,8 @@ class ReferenceResolver:
         Example:
             >>> resolver = ReferenceResolver(spec)
             >>> user_schema = resolver.resolve_reference('#/components/schemas/User')
+            >>> # Returns a Schema object, not a dict
+            >>> print(type(user_schema))  # <class 'cicerone.spec.schema.Schema'>
         """
         # Convert string to Reference object if needed
         if isinstance(ref, str):
@@ -94,7 +105,7 @@ class ReferenceResolver:
             ref: Reference object with a local reference string
 
         Returns:
-            The target object
+            The target object as a typed Pydantic model when possible
 
         Raises:
             ValueError: If the reference path is invalid or not found
@@ -126,7 +137,59 @@ class ReferenceResolver:
                 path_so_far = "/" + "/".join(parts[: i + 1])
                 raise ValueError(f"Cannot navigate through non-dict/list object: {ref.ref} (failed at {path_so_far})")
 
-        return current
+        # Convert the raw dict to a typed object based on the reference path
+        return self._convert_to_typed_object(ref, current)
+
+    def _convert_to_typed_object(self, ref: spec_reference.Reference, data: typing.Any) -> typing.Any:
+        """Convert raw data to a typed Pydantic object based on the reference path.
+
+        Args:
+            ref: Reference object containing the path
+            data: Raw data to convert
+
+        Returns:
+            Typed Pydantic object if the path is recognized, otherwise raw data
+        """
+        # Don't convert if the data itself is a reference (has $ref key)
+        if isinstance(data, dict) and "$ref" in data:
+            return data
+
+        if not isinstance(data, dict):
+            return data
+
+        parts = ref.pointer_parts
+        if len(parts) < 2:
+            return data
+
+        # Map component types to their constructors
+        if parts[0] == "components" and len(parts) >= 3:
+            component_type = parts[1]
+            if component_type == "schemas":
+                return spec_schema.Schema.from_dict(data)
+            elif component_type == "responses":
+                return spec_response.Response.from_dict(data)
+            elif component_type == "parameters":
+                return spec_parameter.Parameter.from_dict(data)
+            elif component_type == "examples":
+                return spec_example.Example.from_dict(data)
+            elif component_type == "requestBodies":
+                return spec_request_body.RequestBody.from_dict(data)
+            elif component_type == "headers":
+                return spec_header.Header.from_dict(data)
+            elif component_type == "securitySchemes":
+                return spec_security_scheme.SecurityScheme.from_dict(data)
+            elif component_type == "links":
+                return spec_link.Link.from_dict(data)
+            elif component_type == "callbacks":
+                return spec_callback.Callback.from_dict(data)
+
+        # Map paths to PathItem objects
+        if parts[0] == "paths" and len(parts) >= 2:
+            path = "/" + "/".join(parts[1:])  # Reconstruct the path
+            return spec_path_item.PathItem.from_dict(path, data)
+
+        # If we can't determine the type, return raw data
+        return data
 
     def get_all_references(
         self,
