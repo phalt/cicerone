@@ -83,23 +83,28 @@ print(user_schema.properties['email'].format)  # 'email'
 
 ### Finding All References
 
-You can discover all references in your specification:
+You can discover all references in your specification as a dictionary:
 
 ```python
-# Get all references in the spec
+# Get all references as a dict mapping $ref strings to Reference objects
 all_refs = spec.get_all_references()
 
+# Access specific references by their $ref string
+user_ref = all_refs.get('#/components/schemas/User')
+if user_ref:
+    print(f"Found reference: {user_ref.ref}")
+
 # Filter by type
-local_refs = [r for r in all_refs if r.is_local]
-external_refs = [r for r in all_refs if r.is_external]
+local_refs = {k: v for k, v in all_refs.items() if v.is_local}
+external_refs = {k: v for k, v in all_refs.items() if v.is_external}
 
 print(f"Found {len(all_refs)} total references")
 print(f"Local: {len(local_refs)}, External: {len(external_refs)}")
 
 # List all schema references
-schema_refs = [r for r in all_refs if '/schemas/' in r.ref]
-for ref in schema_refs:
-    print(f"  - {ref.ref}")
+schema_refs = {k: v for k, v in all_refs.items() if '/schemas/' in k}
+for ref_str, ref_obj in schema_refs.items():
+    print(f"  - {ref_str}")
 ```
 
 ## Working with the Reference Model
@@ -111,7 +116,7 @@ from cicerone.references import Reference
 from cicerone.spec import Schema
 
 # Create a reference object
-ref = Reference(ref='#/components/schemas/Pet')
+ref = Reference(**{"$ref": '#/components/schemas/Pet'})
 
 # Check reference type
 print(f"Is local: {ref.is_local}")  # True
@@ -137,7 +142,7 @@ In OpenAPI 3.1, Reference Objects can have `summary` and `description` fields:
 from cicerone.references import Reference
 
 ref = Reference(
-    ref='#/components/schemas/User',
+    **{"$ref": '#/components/schemas/User'},
     summary='User schema',
     description='Represents a user in the system'
 )
@@ -274,7 +279,14 @@ Resolve a reference to its target object as a typed Pydantic model.
 
 Get all references in the specification.
 
-**Returns:** List of Reference objects
+**Returns:** Dictionary mapping $ref strings to Reference objects
+
+**Example:**
+```python
+all_refs = spec.get_all_references()
+user_ref = all_refs.get('#/components/schemas/User')
+local_refs = {k: v for k, v in all_refs.items() if v.is_local}
+```
 
 #### `is_circular_reference(ref)`
 

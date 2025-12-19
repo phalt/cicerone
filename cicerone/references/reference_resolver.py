@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import typing
 
+import pydantic
+
 from cicerone.references import reference as spec_reference
 from cicerone.spec import callback as spec_callback
 from cicerone.spec import example as spec_example
@@ -70,7 +72,7 @@ class ReferenceResolver:
         """
         # Convert string to Reference object if needed
         if isinstance(ref, str):
-            ref = spec_reference.Reference(ref=ref)
+            ref = spec_reference.Reference(**{"$ref": ref})
 
         # Check for circular references
         if ref.ref in self._resolution_stack:
@@ -168,24 +170,25 @@ class ReferenceResolver:
         # Map component types to their constructors
         if parts[0] == "components" and len(parts) >= 3:
             component_type = parts[1]
-            if component_type == "schemas":
-                return spec_schema.Schema.from_dict(data)
-            elif component_type == "responses":
-                return spec_response.Response.from_dict(data)
-            elif component_type == "parameters":
-                return spec_parameter.Parameter.from_dict(data)
-            elif component_type == "examples":
-                return spec_example.Example.from_dict(data)
-            elif component_type == "requestBodies":
-                return spec_request_body.RequestBody.from_dict(data)
-            elif component_type == "headers":
-                return spec_header.Header.from_dict(data)
-            elif component_type == "securitySchemes":
-                return spec_security_scheme.SecurityScheme.from_dict(data)
-            elif component_type == "links":
-                return spec_link.Link.from_dict(data)
-            elif component_type == "callbacks":
-                return spec_callback.Callback.from_dict(data)
+            match component_type:
+                case "schemas":
+                    return spec_schema.Schema.from_dict(data)
+                case "responses":
+                    return spec_response.Response.from_dict(data)
+                case "parameters":
+                    return spec_parameter.Parameter.from_dict(data)
+                case "examples":
+                    return spec_example.Example.from_dict(data)
+                case "requestBodies":
+                    return spec_request_body.RequestBody.from_dict(data)
+                case "headers":
+                    return spec_header.Header.from_dict(data)
+                case "securitySchemes":
+                    return spec_security_scheme.SecurityScheme.from_dict(data)
+                case "links":
+                    return spec_link.Link.from_dict(data)
+                case "callbacks":
+                    return spec_callback.Callback.from_dict(data)
 
         # Map paths to PathItem objects
         if parts[0] == "paths" and len(parts) >= 2:
@@ -204,9 +207,6 @@ class ReferenceResolver:
         Returns:
             The same object with nested $refs resolved to their target objects
         """
-        # Import pydantic to check if object is a BaseModel
-        import pydantic
-
         if not isinstance(obj, pydantic.BaseModel):
             return obj
 
@@ -266,7 +266,7 @@ class ReferenceResolver:
         self,
         obj: typing.Any | None = None,
         visited: set[int] | None = None,
-    ) -> list[spec_reference.Reference]:
+    ) -> dict[str, spec_reference.Reference]:
         """Find all references in an object or the entire spec.
 
         Recursively searches for all $ref keywords in the given object or the entire spec.
@@ -276,12 +276,15 @@ class ReferenceResolver:
             visited: Set of object ids already visited (for circular reference handling)
 
         Returns:
-            List of all Reference objects found
+            Dictionary mapping $ref strings to Reference objects
 
         Example:
             >>> resolver = ReferenceResolver(spec)
             >>> all_refs = resolver.get_all_references()
-            >>> local_refs = [r for r in all_refs if r.is_local]
+            >>> # Access by reference string
+            >>> user_ref = all_refs.get('#/components/schemas/User')
+            >>> # Get all local references
+            >>> local_refs = {k: v for k, v in all_refs.items() if v.is_local}
         """
         if obj is None:
             obj = self.spec.raw
@@ -292,20 +295,21 @@ class ReferenceResolver:
         # Avoid infinite recursion on circular structures
         obj_id = id(obj)
         if obj_id in visited:
-            return []
+            return {}
         visited.add(obj_id)
 
-        references: list[spec_reference.Reference] = []
+        references: dict[str, spec_reference.Reference] = {}
 
         if spec_reference.Reference.is_reference(obj):
-            references.append(spec_reference.Reference.from_dict(obj))
+            ref = spec_reference.Reference.from_dict(obj)
+            references[ref.ref] = ref
 
         if isinstance(obj, dict):
             for value in obj.values():
-                references.extend(self.get_all_references(value, visited))
+                references.update(self.get_all_references(value, visited))
         elif isinstance(obj, list):
             for item in obj:
-                references.extend(self.get_all_references(item, visited))
+                references.update(self.get_all_references(item, visited))
 
         return references
 
@@ -325,7 +329,7 @@ class ReferenceResolver:
         """
         # Convert string to Reference if needed
         if isinstance(ref, str):
-            ref = spec_reference.Reference(ref=ref)
+            ref = spec_reference.Reference(**{"$ref": ref})
 
         try:
             self.resolve_reference(ref, follow_nested=True)

@@ -116,21 +116,23 @@ class OpenAPISpec(pydantic.BaseModel):
         resolver = spec_reference_resolver.ReferenceResolver(self)
         return resolver.resolve_reference(ref, follow_nested=follow_nested)
 
-    def get_all_references(self) -> list[spec_reference.Reference]:
+    def get_all_references(self) -> dict[str, spec_reference.Reference]:
         """Get all references in the specification.
 
         Recursively searches the entire OpenAPI specification for all $ref keywords
-        and returns them as Reference objects.
+        and returns them as a dictionary mapping reference strings to Reference objects.
 
         Returns:
-            List of all Reference objects found in the spec
+            Dictionary mapping $ref strings to Reference objects
 
         Example:
             >>> from cicerone.parse import parse_spec_from_file
             >>> spec = parse_spec_from_file("openapi.yaml")
             >>> all_refs = spec.get_all_references()
-            >>> local_refs = [r for r in all_refs if r.is_local]
-            >>> external_refs = [r for r in all_refs if r.is_external]
+            >>> # Access by reference string
+            >>> user_ref = all_refs.get('#/components/schemas/User')
+            >>> # Get all local references
+            >>> local_refs = {k: v for k, v in all_refs.items() if v.is_local}
             >>> print(f"Found {len(all_refs)} references")
         """
         resolver = spec_reference_resolver.ReferenceResolver(self)
