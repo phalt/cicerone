@@ -88,6 +88,24 @@ print(f"User properties: {list(user.properties.keys())}")
 
 
 
+### Resolving References
+
+Resolve `$ref` references to their typed objects:
+
+```python
+from cicerone import parse as cicerone_parse
+
+spec = cicerone_parse.parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
+
+# Resolve a reference to get a typed Schema object
+user_schema = spec.resolve_reference('#/components/schemas/User')
+print(f"User schema type: {user_schema.type}")
+print(f"Required fields: {user_schema.required}")
+
+>>> User schema type: object
+>>> Required fields: ['id', 'username', 'email']
+```
+
 ### Accessing Raw Data
 
 Access the original specification dictionary when needed:
