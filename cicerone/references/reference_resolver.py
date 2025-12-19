@@ -39,7 +39,6 @@ COMPONENT_TYPE_MAP = {
     "securitySchemes": spec_security_scheme.SecurityScheme.from_dict,
     "links": spec_link.Link.from_dict,
     "callbacks": spec_callback.Callback.from_dict,
-    "pathItems": spec_path_item.PathItem.from_dict,
 }
 
 
