@@ -196,6 +196,53 @@ class TestReferenceResolver:
         user_ref = resolver.resolve_reference("#/components/schemas/User", follow_nested=False)
         assert "$ref" in user_ref
 
+    def test_resolve_deeply_nested_references(self):
+        """Test resolving deeply nested references in schema properties."""
+        from cicerone.spec import Schema
+
+        spec_data = {
+            "openapi": "3.0.0",
+            "info": {"title": "Test", "version": "1.0.0"},
+            "paths": {},
+            "components": {
+                "schemas": {
+                    "Address": {
+                        "type": "object",
+                        "properties": {
+                            "street": {"type": "string"},
+                            "city": {"type": "string"},
+                        },
+                    },
+                    "User": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string"},
+                            "address": {"$ref": "#/components/schemas/Address"},
+                        },
+                    },
+                }
+            },
+        }
+        spec = parse_spec_from_dict(spec_data)
+        resolver = ReferenceResolver(spec)
+
+        # With follow_nested=True, nested $refs in properties should be resolved
+        user_schema = resolver.resolve_reference("#/components/schemas/User", follow_nested=True)
+        assert isinstance(user_schema, Schema)
+        assert user_schema.type == "object"
+
+        # The address property should now be a fully resolved Schema, not a ref
+        address_prop = user_schema.properties["address"]
+        assert isinstance(address_prop, Schema)
+        assert address_prop.type == "object"
+        assert "street" in address_prop.properties
+        assert "city" in address_prop.properties
+
+        # Verify the nested properties are also Schema objects
+        street_prop = address_prop.properties["street"]
+        assert isinstance(street_prop, Schema)
+        assert street_prop.type == "string"
+
     def test_circular_reference_detection(self):
         """Test detecting circular references."""
         spec_data = {

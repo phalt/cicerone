@@ -92,6 +92,10 @@ class ReferenceResolver:
                 nested_ref = spec_reference.Reference.from_dict(target)
                 return self.resolve_reference(nested_ref, follow_nested=True)
 
+            # If follow_nested is True and target is a typed object, resolve nested $refs
+            if follow_nested and not isinstance(target, dict):
+                target = self._resolve_nested_references(target)
+
             return target
 
         finally:
@@ -190,6 +194,73 @@ class ReferenceResolver:
 
         # If we can't determine the type, return raw data
         return data
+
+    def _resolve_nested_references(self, obj: typing.Any) -> typing.Any:
+        """Recursively resolve any $ref fields within a typed object.
+
+        Args:
+            obj: A typed Pydantic object (Schema, Response, etc.)
+
+        Returns:
+            The same object with nested $refs resolved to their target objects
+        """
+        # Import pydantic to check if object is a BaseModel
+        import pydantic
+
+        if not isinstance(obj, pydantic.BaseModel):
+            return obj
+
+        # Get the model's fields
+        for field_name, field_value in obj:
+            if field_value is None:
+                continue
+
+            # Check if this field contains a $ref
+            if isinstance(field_value, pydantic.BaseModel):
+                # Check if the model has a $ref in its extra fields
+                extra_fields = getattr(field_value, "__pydantic_extra__", {})
+                if "$ref" in extra_fields:
+                    # Resolve the reference
+                    try:
+                        resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
+                        # Update the field with the resolved object
+                        setattr(obj, field_name, resolved)
+                    except (ValueError, RecursionError):
+                        # If we can't resolve, keep the original
+                        pass
+                else:
+                    # Recursively process nested objects
+                    setattr(obj, field_name, self._resolve_nested_references(field_value))
+
+            elif isinstance(field_value, dict):
+                # Process dictionary values
+                for key, value in field_value.items():
+                    if isinstance(value, pydantic.BaseModel):
+                        extra_fields = getattr(value, "__pydantic_extra__", {})
+                        if "$ref" in extra_fields:
+                            try:
+                                resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
+                                field_value[key] = resolved
+                            except (ValueError, RecursionError):
+                                pass
+                        else:
+                            field_value[key] = self._resolve_nested_references(value)
+
+            elif isinstance(field_value, list):
+                # Process list items
+                for i, item in enumerate(field_value):
+                    if isinstance(item, pydantic.BaseModel):
+                        extra_fields = getattr(item, "__pydantic_extra__", {})
+                        if "$ref" in extra_fields:
+                            try:
+                                resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
+                                field_value[i] = resolved
+                            except (ValueError, RecursionError):
+                                pass
+                        else:
+                            field_value[i] = self._resolve_nested_references(item)
+
+        return obj
 
     def get_all_references(
         self,
