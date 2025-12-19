@@ -67,12 +67,11 @@ class ReferenceResolver:
         Example:
             >>> resolver = ReferenceResolver(spec)
             >>> user_schema = resolver.resolve_reference('#/components/schemas/User')
-            >>> # Returns a Schema object, not a dict
             >>> print(type(user_schema))  # <class 'cicerone.spec.schema.Schema'>
         """
         # Convert string to Reference object if needed
         if isinstance(ref, str):
-            ref = spec_reference.Reference(**{"$ref": ref})
+            ref = spec_reference.Reference(ref=ref)
 
         # Check for circular references
         if ref.ref in self._resolution_stack:
@@ -160,9 +159,6 @@ class ReferenceResolver:
         if isinstance(data, dict) and "$ref" in data:
             return data
 
-        if not isinstance(data, dict):
-            return data
-
         parts = ref.pointer_parts
         if len(parts) < 2:
             return data
@@ -217,50 +213,74 @@ class ReferenceResolver:
 
             # Check if this field contains a $ref
             if isinstance(field_value, pydantic.BaseModel):
-                # Check if the model has a $ref in its extra fields
-                extra_fields = getattr(field_value, "__pydantic_extra__", {})
-                if "$ref" in extra_fields:
-                    # Resolve the reference
-                    try:
-                        resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
-                        # Update the field with the resolved object
-                        setattr(obj, field_name, resolved)
-                    except (ValueError, RecursionError):
-                        # If we can't resolve, keep the original
-                        pass
-                else:
-                    # Recursively process nested objects
-                    setattr(obj, field_name, self._resolve_nested_references(field_value))
-
+                self._resolve_model_field(obj, field_name, field_value)
             elif isinstance(field_value, dict):
-                # Process dictionary values
-                for key, value in field_value.items():
-                    if isinstance(value, pydantic.BaseModel):
-                        extra_fields = getattr(value, "__pydantic_extra__", {})
-                        if "$ref" in extra_fields:
-                            try:
-                                resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
-                                field_value[key] = resolved
-                            except (ValueError, RecursionError):
-                                pass
-                        else:
-                            field_value[key] = self._resolve_nested_references(value)
-
+                self._resolve_dict_field(field_value)
             elif isinstance(field_value, list):
-                # Process list items
-                for i, item in enumerate(field_value):
-                    if isinstance(item, pydantic.BaseModel):
-                        extra_fields = getattr(item, "__pydantic_extra__", {})
-                        if "$ref" in extra_fields:
-                            try:
-                                resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
-                                field_value[i] = resolved
-                            except (ValueError, RecursionError):
-                                pass
-                        else:
-                            field_value[i] = self._resolve_nested_references(item)
+                self._resolve_list_field(field_value)
 
         return obj
+
+    def _resolve_model_field(
+        self, parent_obj: pydantic.BaseModel, field_name: str, field_value: pydantic.BaseModel
+    ) -> None:
+        """Resolve a Pydantic model field that may contain a $ref.
+
+        Args:
+            parent_obj: The parent object containing this field
+            field_name: Name of the field being resolved
+            field_value: The Pydantic model value to check for $ref
+        """
+        # Check if the model has a $ref in its extra fields
+        extra_fields = getattr(field_value, "__pydantic_extra__", {})
+        if "$ref" in extra_fields:
+            # Resolve the reference
+            try:
+                resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
+                # Update the field with the resolved object
+                setattr(parent_obj, field_name, resolved)
+            except (ValueError, RecursionError):
+                # If we can't resolve, keep the original
+                pass
+        else:
+            # Recursively process nested objects
+            setattr(parent_obj, field_name, self._resolve_nested_references(field_value))
+
+    def _resolve_dict_field(self, field_value: dict) -> None:
+        """Resolve dictionary values that may contain Pydantic models with $refs.
+
+        Args:
+            field_value: Dictionary to process
+        """
+        for key, value in field_value.items():
+            if isinstance(value, pydantic.BaseModel):
+                extra_fields = getattr(value, "__pydantic_extra__", {})
+                if "$ref" in extra_fields:
+                    try:
+                        resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
+                        field_value[key] = resolved
+                    except (ValueError, RecursionError):
+                        pass
+                else:
+                    field_value[key] = self._resolve_nested_references(value)
+
+    def _resolve_list_field(self, field_value: list) -> None:
+        """Resolve list items that may contain Pydantic models with $refs.
+
+        Args:
+            field_value: List to process
+        """
+        for i, item in enumerate(field_value):
+            if isinstance(item, pydantic.BaseModel):
+                extra_fields = getattr(item, "__pydantic_extra__", {})
+                if "$ref" in extra_fields:
+                    try:
+                        resolved = self.resolve_reference(extra_fields["$ref"], follow_nested=True)
+                        field_value[i] = resolved
+                    except (ValueError, RecursionError):
+                        pass
+                else:
+                    field_value[i] = self._resolve_nested_references(item)
 
     def get_all_references(
         self,
@@ -329,7 +349,7 @@ class ReferenceResolver:
         """
         # Convert string to Reference if needed
         if isinstance(ref, str):
-            ref = spec_reference.Reference(**{"$ref": ref})
+            ref = spec_reference.Reference(ref=ref)
 
         try:
             self.resolve_reference(ref, follow_nested=True)

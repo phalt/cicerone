@@ -28,11 +28,31 @@ class Reference(pydantic.BaseModel):
     that override those in the referenced object.
     """
 
-    model_config = {"extra": "allow", "populate_by_name": True}
+    model_config = {"extra": "allow"}
 
-    ref: str = pydantic.Field(..., alias="$ref")
+    # Use 'ref' as the primary field name for Python code
+    ref: str
     summary: str | None = None  # OAS 3.1+ only
     description: str | None = None  # OAS 3.1+ only
+
+    @pydantic.model_validator(mode="before")
+    @classmethod
+    def handle_dollar_ref(cls, data: typing.Any) -> typing.Any:
+        """Handle $ref in input data by converting it to ref.
+
+        This allows accepting both ref= and $ref in dictionaries.
+        """
+        if isinstance(data, dict) and "$ref" in data:
+            data = data.copy()
+            data["ref"] = data.pop("$ref")
+        return data
+
+    def model_dump(self, **kwargs) -> dict[str, typing.Any]:
+        """Serialize with $ref instead of ref."""
+        result = super().model_dump(**kwargs)
+        if "ref" in result:
+            result["$ref"] = result.pop("ref")
+        return result
 
     def __str__(self) -> str:
         """Return a readable string representation of the reference."""

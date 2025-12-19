@@ -137,24 +137,3 @@ class OpenAPISpec(pydantic.BaseModel):
         """
         resolver = spec_reference_resolver.ReferenceResolver(self)
         return resolver.get_all_references()
-
-    def is_circular_reference(self, ref: spec_reference.Reference | str) -> bool:
-        """Check if a reference would create a circular dependency.
-
-        Tests whether resolving a reference would result in a circular reference chain.
-        This is useful for detecting recursive schemas.
-
-        Args:
-            ref: Reference to check
-
-        Returns:
-            True if the reference is circular
-
-        Example:
-            >>> from cicerone.parse import parse_spec_from_file
-            >>> spec = parse_spec_from_file("openapi.yaml")
-            >>> if spec.is_circular_reference('#/components/schemas/Node'):
-            ...     print("Node schema has a circular reference (e.g., recursive tree)")
-        """
-        resolver = spec_reference_resolver.ReferenceResolver(self)
-        return resolver.is_circular_reference(ref)

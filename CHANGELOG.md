@@ -13,7 +13,6 @@
   - New `ReferenceResolver` class for navigating and resolving references
   - `resolve_reference()` method returns typed Pydantic objects (Schema, Response, etc.) not raw dicts
   - Added `get_all_references()` method to OpenAPISpec to find all references in the specification
-  - Added `is_circular_reference()` method to OpenAPISpec for detecting circular reference chains
   - Support for local references (e.g., `#/components/schemas/User`)
   - Full support for JSON Pointer syntax in references
 

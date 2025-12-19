@@ -11,7 +11,7 @@ class TestReference:
 
     def test_basic_reference(self):
         """Test creating a basic reference."""
-        ref = Reference(**{"$ref": "#/components/schemas/User"})
+        ref = Reference(ref="#/components/schemas/User")
         assert ref.ref == "#/components/schemas/User"
         assert ref.summary is None
         assert ref.description is None
@@ -19,7 +19,7 @@ class TestReference:
     def test_reference_with_summary_and_description(self):
         """Test reference with OAS 3.1 summary and description."""
         ref = Reference(
-            **{"$ref": "#/components/schemas/User"},
+            ref="#/components/schemas/User",
             summary="User schema",
             description="Detailed user information",
         )
@@ -39,51 +39,51 @@ class TestReference:
 
     def test_is_local_reference(self):
         """Test detecting local references."""
-        local_ref = Reference(**{"$ref": "#/components/schemas/User"})
+        local_ref = Reference(ref="#/components/schemas/User")
         assert local_ref.is_local is True
         assert local_ref.is_external is False
 
     def test_is_external_reference(self):
         """Test detecting external references."""
-        external_ref = Reference(**{"$ref": "./models/user.yaml"})
+        external_ref = Reference(ref="./models/user.yaml")
         assert external_ref.is_external is True
         assert external_ref.is_local is False
 
-        url_ref = Reference(**{"$ref": "https://example.com/schemas/user.json"})
+        url_ref = Reference(ref="https://example.com/schemas/user.json")
         assert url_ref.is_external is True
         assert url_ref.is_local is False
 
     def test_pointer_property(self):
         """Test extracting the JSON Pointer from a reference."""
-        ref = Reference(**{"$ref": "#/components/schemas/User"})
+        ref = Reference(ref="#/components/schemas/User")
         assert ref.pointer == "/components/schemas/User"
 
-        ref_with_fragment = Reference(**{"$ref": "./models.yaml#/Pet"})
+        ref_with_fragment = Reference(ref="./models.yaml#/Pet")
         assert ref_with_fragment.pointer == "/Pet"
 
-        ref_no_fragment = Reference(**{"$ref": "./models.yaml"})
+        ref_no_fragment = Reference(ref="./models.yaml")
         assert ref_no_fragment.pointer == ""
 
     def test_document_property(self):
         """Test extracting the document part from external references."""
-        local_ref = Reference(**{"$ref": "#/components/schemas/User"})
+        local_ref = Reference(ref="#/components/schemas/User")
         assert local_ref.document == ""
 
-        file_ref = Reference(**{"$ref": "./models.yaml#/Pet"})
+        file_ref = Reference(ref="./models.yaml#/Pet")
         assert file_ref.document == "./models.yaml"
 
-        file_ref_no_fragment = Reference(**{"$ref": "./models.yaml"})
+        file_ref_no_fragment = Reference(ref="./models.yaml")
         assert file_ref_no_fragment.document == "./models.yaml"
 
     def test_pointer_parts(self):
         """Test splitting the pointer into parts."""
-        ref = Reference(**{"$ref": "#/components/schemas/User"})
+        ref = Reference(ref="#/components/schemas/User")
         assert ref.pointer_parts == ["components", "schemas", "User"]
 
-        ref_root = Reference(**{"$ref": "#/"})
+        ref_root = Reference(ref="#/")
         assert ref_root.pointer_parts == []
 
-        ref_no_pointer = Reference(**{"$ref": "./models.yaml"})
+        ref_no_pointer = Reference(ref="./models.yaml")
         assert ref_no_pointer.pointer_parts == []
 
     def test_is_reference_static_method(self):
@@ -95,7 +95,7 @@ class TestReference:
 
     def test_reference_str_representation(self):
         """Test string representation of references."""
-        ref = Reference(**{"$ref": "#/components/schemas/User"})
+        ref = Reference(ref="#/components/schemas/User")
         str_repr = str(ref)
         assert "Reference" in str_repr
         assert "#/components/schemas/User" in str_repr
@@ -103,7 +103,7 @@ class TestReference:
     def test_reference_str_with_summary(self):
         """Test string representation with summary."""
         ref = Reference(
-            **{"$ref": "#/components/schemas/User"},
+            ref="#/components/schemas/User",
             summary="A very long summary that should be truncated when displayed in the string representation",
         )
         str_repr = str(ref)
@@ -113,7 +113,7 @@ class TestReference:
     def test_reference_str_with_description(self):
         """Test string representation with description."""
         ref = Reference(
-            **{"$ref": "#/components/schemas/User"},
+            ref="#/components/schemas/User",
             description="A very long description that should be truncated when displayed",
         )
         str_repr = str(ref)
@@ -144,7 +144,7 @@ class TestReferenceResolver:
         spec = parse_spec_from_file("tests/fixtures/petstore_openapi3.yaml")
         resolver = ReferenceResolver(spec)
 
-        ref = Reference(**{"$ref": "#/components/schemas/User"})
+        ref = Reference(ref="#/components/schemas/User")
         user_schema = resolver.resolve_reference(ref)
         assert isinstance(user_schema, Schema)
         assert user_schema.type == "object"
@@ -417,7 +417,7 @@ class TestReferenceResolver:
         spec = parse_spec_from_dict(spec_data)
         resolver = ReferenceResolver(spec)
 
-        ref = Reference(**{"$ref": "./external.yaml"})
+        ref = Reference(ref="./external.yaml")
         with pytest.raises(ValueError, match="Expected local reference"):
             resolver._resolve_local_reference(ref)
 
@@ -450,7 +450,9 @@ class TestOpenAPISpecReferenceIntegration:
         assert all(v.is_local for v in all_refs.values())
 
     def test_is_circular_reference_from_spec(self):
-        """Test checking for circular references directly from the spec."""
+        """Test checking for circular references using the resolver directly."""
+        from cicerone.references import ReferenceResolver
+
         spec_data = {
             "openapi": "3.0.0",
             "info": {"title": "Test", "version": "1.0.0"},
@@ -470,12 +472,15 @@ class TestOpenAPISpecReferenceIntegration:
             },
         }
         spec = parse_spec_from_dict(spec_data)
+        resolver = ReferenceResolver(spec)
 
         # The schema itself is not circular, but contains a circular reference
-        assert spec.is_circular_reference("#/components/schemas/Node") is False
+        assert resolver.is_circular_reference("#/components/schemas/Node") is False
 
     def test_is_circular_reference_true(self):
-        """Test detecting a truly circular reference."""
+        """Test detecting a truly circular reference using the resolver directly."""
+        from cicerone.references import ReferenceResolver
+
         spec_data = {
             "openapi": "3.0.0",
             "info": {"title": "Test", "version": "1.0.0"},
@@ -488,9 +493,10 @@ class TestOpenAPISpecReferenceIntegration:
             },
         }
         spec = parse_spec_from_dict(spec_data)
+        resolver = ReferenceResolver(spec)
 
         # This creates a true circular chain
-        assert spec.is_circular_reference("#/components/schemas/A") is True
+        assert resolver.is_circular_reference("#/components/schemas/A") is True
 
     def test_resolve_reference_in_paths(self):
         """Test resolving references found in paths."""

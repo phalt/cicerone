@@ -116,7 +116,7 @@ from cicerone.references import Reference
 from cicerone.spec import Schema
 
 # Create a reference object
-ref = Reference(**{"$ref": '#/components/schemas/Pet'})
+ref = Reference(ref='#/components/schemas/Pet')
 
 # Check reference type
 print(f"Is local: {ref.is_local}")  # True
@@ -141,8 +141,7 @@ In OpenAPI 3.1, Reference Objects can have `summary` and `description` fields:
 ```python
 from cicerone.references import Reference
 
-ref = Reference(
-    **{"$ref": '#/components/schemas/User'},
+ref = Reference(ref='#/components/schemas/User',
     summary='User schema',
     description='Represents a user in the system'
 )
