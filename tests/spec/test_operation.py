@@ -1,6 +1,8 @@
 """Tests for Operation model."""
 
-from cicerone.spec import Operation
+from __future__ import annotations
+
+from cicerone import spec as cicerone_spec
 
 
 class TestOperation:
@@ -16,7 +18,7 @@ class TestOperation:
             "parameters": [{"name": "limit", "in": "query"}],
             "responses": {"200": {"description": "OK"}},
         }
-        operation = Operation.from_dict("GET", "/users", data)
+        operation = cicerone_spec.Operation.from_dict("GET", "/users", data)
         assert operation.method == "GET"
         assert operation.path == "/users"
         assert operation.operation_id == "listUsers"
@@ -33,7 +35,7 @@ class TestOperation:
             "summary": "List users",
             "tags": ["users"],
         }
-        operation = Operation.from_dict("GET", "/users", data)
+        operation = cicerone_spec.Operation.from_dict("GET", "/users", data)
         str_repr = str(operation)
         assert "<Operation:" in str_repr
         assert "GET /users" in str_repr
@@ -44,7 +46,7 @@ class TestOperation:
     def test_operation_str_without_optional_fields(self):
         """Test __str__ method without optional fields."""
         data: dict[str, str] = {}
-        operation = Operation.from_dict("POST", "/posts", data)
+        operation = cicerone_spec.Operation.from_dict("POST", "/posts", data)
         str_repr = str(operation)
         assert "<Operation:" in str_repr
         assert "POST /posts" in str_repr

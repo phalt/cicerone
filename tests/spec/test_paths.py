@@ -1,8 +1,10 @@
 """Tests for Paths container."""
 
-from typing import Any
+from __future__ import annotations
 
-from cicerone.spec import Paths
+import typing
+
+from cicerone import spec as cicerone_spec
 
 
 class TestPaths:
@@ -18,7 +20,7 @@ class TestPaths:
                 "get": {"operationId": "listPosts"},
             },
         }
-        paths = Paths.from_dict(data)
+        paths = cicerone_spec.Paths.from_dict(data)
         assert "/users" in paths
         assert "/posts" in paths
         assert paths["/users"].path == "/users"
@@ -34,7 +36,7 @@ class TestPaths:
                 "get": {"operationId": "listPosts"},
             },
         }
-        paths = Paths.from_dict(data)
+        paths = cicerone_spec.Paths.from_dict(data)
         operations = list(paths.all_operations())
         assert len(operations) == 3
         op_ids = [op.operation_id for op in operations]
@@ -53,7 +55,7 @@ class TestPaths:
                 "get": {"operationId": "listPosts"},
             },
         }
-        paths = Paths.from_dict(data)
+        paths = cicerone_spec.Paths.from_dict(data)
         str_repr = str(paths)
         assert "<Paths:" in str_repr
         assert "2 paths" in str_repr
@@ -63,8 +65,8 @@ class TestPaths:
 
     def test_paths_str_many_paths(self):
         """Test __str__ method with many paths (should truncate)."""
-        data: dict[str, Any] = {f"/path{i}": {"get": {}} for i in range(10)}
-        paths = Paths.from_dict(data)
+        data: dict[str, typing.Any] = {f"/path{i}": {"get": {}} for i in range(10)}
+        paths = cicerone_spec.Paths.from_dict(data)
         str_repr = str(paths)
         assert "10 paths" in str_repr
         assert "(+7 more)" in str_repr

@@ -7,25 +7,25 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel, Field
+import pydantic
 
-from cicerone.spec.model_utils import parse_collection
+from cicerone.spec import model_utils
 
 
-class ServerVariable(BaseModel):
+class ServerVariable(pydantic.BaseModel):
     """Represents a server variable for use in server URL template substitution."""
 
     # Allow extra fields to support vendor extensions
     model_config = {"extra": "allow"}
 
-    enum: list[str] = Field(default_factory=list)
+    enum: list[str] = pydantic.Field(default_factory=list)
     default: str
     description: str | None = None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> ServerVariable:
+    def from_dict(cls, data: dict[str, typing.Any]) -> ServerVariable:
         """Create a ServerVariable from a dictionary."""
         excluded = {"enum", "default", "description"}
         return cls(
@@ -36,7 +36,7 @@ class ServerVariable(BaseModel):
         )
 
 
-class Server(BaseModel):
+class Server(pydantic.BaseModel):
     """Represents an OpenAPI Server object."""
 
     # Allow extra fields to support vendor extensions
@@ -44,7 +44,7 @@ class Server(BaseModel):
 
     url: str
     description: str | None = None
-    variables: dict[str, ServerVariable] = Field(default_factory=dict)
+    variables: dict[str, ServerVariable] = pydantic.Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the server."""
@@ -56,12 +56,12 @@ class Server(BaseModel):
         return f"<Server: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Server:
+    def from_dict(cls, data: dict[str, typing.Any]) -> Server:
         """Create a Server from a dictionary."""
         excluded = {"url", "description", "variables"}
         return cls(
             url=data["url"],
             description=data.get("description"),
-            variables=parse_collection(data, "variables", ServerVariable.from_dict),
+            variables=model_utils.parse_collection(data, "variables", ServerVariable.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

@@ -4,24 +4,26 @@ These tests verify that cicerone can successfully parse the OpenAPI example
 schemas from https://learn.openapis.org/examples/ and capture all elements.
 """
 
-from pathlib import Path
+from __future__ import annotations
+
+import pathlib
 
 import pytest
 
-from cicerone.parse import parse_spec_from_file
+from cicerone import parse as cicerone_parse
 
 
 class TestOpenAPIExamples:
     """Test parsing of OpenAPI example schemas."""
 
     @pytest.fixture
-    def examples_dir(self) -> Path:
+    def examples_dir(self) -> pathlib.Path:
         """Return the path to the openapi_examples fixtures directory."""
-        return Path(__file__).parent / "fixtures" / "openapi_examples"
+        return pathlib.Path(__file__).parent / "fixtures" / "openapi_examples"
 
-    def test_parse_api_with_examples(self, examples_dir: Path) -> None:
+    def test_parse_api_with_examples(self, examples_dir: pathlib.Path) -> None:
         """Test parsing api-with-examples.json (focuses on example objects)."""
-        spec = parse_spec_from_file(examples_dir / "api-with-examples.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "api-with-examples.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -48,9 +50,9 @@ class TestOpenAPIExamples:
         assert get_op.path == "/"
         assert get_op.operation_id == "listVersionsv2"
 
-    def test_parse_callback_example(self, examples_dir: Path) -> None:
+    def test_parse_callback_example(self, examples_dir: pathlib.Path) -> None:
         """Test parsing callback-example.json (focuses on callbacks)."""
-        spec = parse_spec_from_file(examples_dir / "callback-example.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "callback-example.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -75,9 +77,9 @@ class TestOpenAPIExamples:
         on_data_callback = callbacks["onData"]
         assert "{$request.query.callbackUrl}/data" in on_data_callback
 
-    def test_parse_non_oauth_scopes(self, examples_dir: Path) -> None:
+    def test_parse_non_oauth_scopes(self, examples_dir: pathlib.Path) -> None:
         """Test parsing non-oauth-scopes.json (security without OAuth)."""
-        spec = parse_spec_from_file(examples_dir / "non-oauth-scopes.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "non-oauth-scopes.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 1
@@ -100,9 +102,9 @@ class TestOpenAPIExamples:
         assert get_op.model_extra is not None
         assert "security" in get_op.model_extra
 
-    def test_parse_petstore(self, examples_dir: Path) -> None:
+    def test_parse_petstore(self, examples_dir: pathlib.Path) -> None:
         """Test parsing petstore.json (basic petstore example)."""
-        spec = parse_spec_from_file(examples_dir / "petstore.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "petstore.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -143,9 +145,9 @@ class TestOpenAPIExamples:
         assert get_op.operation_id == "listPets"
         assert get_op.summary == "List all pets"
 
-    def test_parse_petstore_expanded(self, examples_dir: Path) -> None:
+    def test_parse_petstore_expanded(self, examples_dir: pathlib.Path) -> None:
         """Test parsing petstore-expanded.json (extended petstore with more features)."""
-        spec = parse_spec_from_file(examples_dir / "petstore-expanded.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "petstore-expanded.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -179,9 +181,9 @@ class TestOpenAPIExamples:
         assert pet_schema.all_of is not None
         assert len(pet_schema.all_of) == 2
 
-    def test_parse_tictactoe(self, examples_dir: Path) -> None:
+    def test_parse_tictactoe(self, examples_dir: pathlib.Path) -> None:
         """Test parsing tictactoe.json (includes tags and security)."""
-        spec = parse_spec_from_file(examples_dir / "tictactoe.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "tictactoe.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 1
@@ -205,9 +207,9 @@ class TestOpenAPIExamples:
         assert "rowParam" in spec.components.parameters
         assert "columnParam" in spec.components.parameters
 
-    def test_parse_uspto(self, examples_dir: Path) -> None:
+    def test_parse_uspto(self, examples_dir: pathlib.Path) -> None:
         """Test parsing uspto.json (includes server variables and tags)."""
-        spec = parse_spec_from_file(examples_dir / "uspto.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "uspto.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 0
@@ -243,9 +245,9 @@ class TestOpenAPIExamples:
         metadata_tag = next(tag for tag in spec.tags if tag.name == "metadata")
         assert metadata_tag.description == "Find out about the data sets"
 
-    def test_parse_webhook_example(self, examples_dir: Path) -> None:
+    def test_parse_webhook_example(self, examples_dir: pathlib.Path) -> None:
         """Test parsing webhook-example.json (OpenAPI 3.1 webhooks feature)."""
-        spec = parse_spec_from_file(examples_dir / "webhook-example.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "webhook-example.json")
         assert spec is not None
         assert spec.version.major == 3
         assert spec.version.minor == 1
@@ -281,7 +283,7 @@ class TestOpenAPIExamples:
         assert "id" in pet_schema.properties
         assert "name" in pet_schema.properties
 
-    def test_all_examples_parse_successfully(self, examples_dir: Path) -> None:
+    def test_all_examples_parse_successfully(self, examples_dir: pathlib.Path) -> None:
         """Ensure all example files can be parsed without errors."""
         example_files = [
             "api-with-examples.json",
@@ -295,14 +297,14 @@ class TestOpenAPIExamples:
         ]
 
         for filename in example_files:
-            spec = parse_spec_from_file(examples_dir / filename)
+            spec = cicerone_parse.parse_spec_from_file(examples_dir / filename)
             assert spec is not None, f"Failed to parse {filename}"
             assert spec.version is not None, f"No version in {filename}"
             assert spec.info is not None, f"No info in {filename}"
 
-    def test_schema_composition_keywords(self, examples_dir: Path) -> None:
+    def test_schema_composition_keywords(self, examples_dir: pathlib.Path) -> None:
         """Test that schema composition keywords (allOf, oneOf, anyOf) are captured."""
-        spec = parse_spec_from_file(examples_dir / "petstore-expanded.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "petstore-expanded.json")
 
         # Pet schema uses allOf
         pet_schema = spec.components.schemas["Pet"]
@@ -321,9 +323,9 @@ class TestOpenAPIExamples:
         assert second_element.properties["id"].type == "integer"
         assert second_element.required == ["id"]
 
-    def test_all_schema_elements_captured(self, examples_dir: Path) -> None:
+    def test_all_schema_elements_captured(self, examples_dir: pathlib.Path) -> None:
         """Verify all schema elements are captured including format, example, etc."""
-        spec = parse_spec_from_file(examples_dir / "petstore.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "petstore.json")
 
         # Check that schemas preserve all fields
         pets_schema = spec.components.schemas["Pets"]
@@ -336,10 +338,10 @@ class TestOpenAPIExamples:
         assert error_schema.type == "object"
         assert error_schema.required == ["code", "message"]
 
-    def test_top_level_security_and_external_docs(self, examples_dir: Path) -> None:
+    def test_top_level_security_and_external_docs(self, examples_dir: pathlib.Path) -> None:
         """Test that top-level security and externalDocs are captured."""
         # Note: Need to check raw field since our examples don't have top-level security/externalDocs
-        spec = parse_spec_from_file(examples_dir / "tictactoe.json")
+        spec = cicerone_parse.parse_spec_from_file(examples_dir / "tictactoe.json")
 
         # Verify security field exists (even if empty)
         assert spec.security is not None

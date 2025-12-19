@@ -1,6 +1,8 @@
 """Tests for Schema model."""
 
-from cicerone.spec import Schema
+from __future__ import annotations
+
+from cicerone import spec as cicerone_spec
 
 
 class TestSchema:
@@ -19,7 +21,7 @@ class TestSchema:
                 "age": {"type": "integer"},
             },
         }
-        schema = Schema.from_dict(data)
+        schema = cicerone_spec.Schema.from_dict(data)
         assert schema.type == "object"
         assert schema.title == "User"
         assert schema.description == "A user object"
@@ -40,7 +42,7 @@ class TestSchema:
                 },
             },
         }
-        schema = Schema.from_dict(data)
+        schema = cicerone_spec.Schema.from_dict(data)
         assert "user" in schema.properties
         assert schema.properties["user"].type == "object"
         assert "name" in schema.properties["user"].properties
@@ -48,7 +50,7 @@ class TestSchema:
     def test_array_schema(self):
         """Test creating a schema with array items."""
         data = {"type": "array", "items": {"type": "string"}}
-        schema = Schema.from_dict(data)
+        schema = cicerone_spec.Schema.from_dict(data)
         assert schema.type == "array"
         assert schema.items is not None
         assert schema.items.type == "string"
@@ -64,7 +66,7 @@ class TestSchema:
             },
             "required": ["id", "name"],
         }
-        schema = Schema.from_dict(data)
+        schema = cicerone_spec.Schema.from_dict(data)
         str_repr = str(schema)
         assert "<Schema:" in str_repr
         assert "'User'" in str_repr
@@ -75,7 +77,7 @@ class TestSchema:
     def test_schema_str_array_type(self):
         """Test __str__ method for array schema."""
         data = {"type": "array", "items": {"type": "string"}}
-        schema = Schema.from_dict(data)
+        schema = cicerone_spec.Schema.from_dict(data)
         str_repr = str(schema)
         assert "type=array" in str_repr
         assert "items=string" in str_repr
@@ -83,6 +85,6 @@ class TestSchema:
     def test_schema_str_empty(self):
         """Test __str__ method for empty schema."""
         data: dict[str, str] = {}
-        schema = Schema.from_dict(data)
+        schema = cicerone_spec.Schema.from_dict(data)
         str_repr = str(schema)
         assert "empty schema" in str_repr

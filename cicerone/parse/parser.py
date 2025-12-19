@@ -1,24 +1,26 @@
 """Parser module for creating OpenAPISpec from various sources."""
 
+from __future__ import annotations
+
 import json
-from pathlib import Path
-from typing import Any, Mapping
-from urllib.request import Request, urlopen
+import pathlib
+import typing
+from urllib import request as urllib_request
 
 import yaml
 
-from cicerone.spec.components import Components
-from cicerone.spec.info import Info
-from cicerone.spec.model_utils import parse_list, parse_nested_object
-from cicerone.spec.openapi_spec import OpenAPISpec
-from cicerone.spec.paths import Paths
-from cicerone.spec.server import Server
-from cicerone.spec.tag import ExternalDocumentation, Tag
-from cicerone.spec.version import Version
-from cicerone.spec.webhooks import Webhooks
+from cicerone.spec import components as spec_components
+from cicerone.spec import info as spec_info
+from cicerone.spec import model_utils
+from cicerone.spec import openapi_spec as spec_openapi
+from cicerone.spec import paths as spec_paths
+from cicerone.spec import server as spec_server
+from cicerone.spec import tag as spec_tag
+from cicerone.spec import version as spec_version
+from cicerone.spec import webhooks as spec_webhooks
 
 
-def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
+def parse_spec_from_dict(data: typing.Mapping[str, typing.Any]) -> spec_openapi.OpenAPISpec:
     """Create an OpenAPISpec from a dictionary.
 
     Args:
@@ -33,42 +35,44 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     """
     # Detect version
     version_str = data.get("openapi", "3.0.0")
-    version = Version(version_str)
+    version = spec_version.Version(version_str)
 
     # Parse info
-    info = parse_nested_object(data, "info", Info.from_dict)
+    info = model_utils.parse_nested_object(data, "info", spec_info.Info.from_dict)
 
     # Parse jsonSchemaDialect (OpenAPI 3.1+)
     json_schema_dialect = data.get("jsonSchemaDialect")
 
     # Parse paths
     paths_data = data.get("paths", {})
-    paths = Paths.from_dict(paths_data)
+    paths = spec_paths.Paths.from_dict(paths_data)
 
     # Parse webhooks (OpenAPI 3.1+)
-    webhooks = parse_nested_object(data, "webhooks", Webhooks.from_dict) or Webhooks(items={})
+    webhooks = model_utils.parse_nested_object(
+        data, "webhooks", spec_webhooks.Webhooks.from_dict
+    ) or spec_webhooks.Webhooks(items={})
 
     # Parse components
-    components = Components.from_spec(data)
+    components = spec_components.Components.from_spec(data)
 
     # Parse servers
-    servers = parse_list(data, "servers", Server.from_dict)
+    servers = model_utils.parse_list(data, "servers", spec_server.Server.from_dict)
 
     # Parse security (top-level security requirements)
     security = data.get("security", [])
 
     # Parse tags
-    tags = parse_list(data, "tags", Tag.from_dict)
+    tags = model_utils.parse_list(data, "tags", spec_tag.Tag.from_dict)
 
     # Parse externalDocs
-    external_docs = parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict)
+    external_docs = model_utils.parse_nested_object(data, "externalDocs", spec_tag.ExternalDocumentation.from_dict)
 
     # Convert Mapping to dict for storage
     # This ensures we have a real dict (not just a Mapping) for the raw field
     # If data is already a dict, this is a no-op
     raw_dict = dict(data)
 
-    return OpenAPISpec(
+    return spec_openapi.OpenAPISpec(
         raw=raw_dict,
         version=version,
         info=info,
@@ -83,7 +87,7 @@ def parse_spec_from_dict(data: Mapping[str, Any]) -> OpenAPISpec:
     )
 
 
-def parse_spec_from_json(text: str) -> OpenAPISpec:
+def parse_spec_from_json(text: str) -> spec_openapi.OpenAPISpec:
     """Create an OpenAPISpec from a JSON string.
 
     Args:
@@ -100,7 +104,7 @@ def parse_spec_from_json(text: str) -> OpenAPISpec:
     return parse_spec_from_dict(data)
 
 
-def parse_spec_from_yaml(text: str) -> OpenAPISpec:
+def parse_spec_from_yaml(text: str) -> spec_openapi.OpenAPISpec:
     """Create an OpenAPISpec from a YAML string.
 
     Args:
@@ -122,7 +126,7 @@ def parse_spec_from_yaml(text: str) -> OpenAPISpec:
     return parse_spec_from_dict(data)
 
 
-def parse_spec_from_file(path: str | Path) -> OpenAPISpec:
+def parse_spec_from_file(path: str | pathlib.Path) -> spec_openapi.OpenAPISpec:
     """Create an OpenAPISpec from a file.
 
     Auto-detects format from file extension (.yaml/.yml for YAML, otherwise tries JSON).
@@ -136,7 +140,7 @@ def parse_spec_from_file(path: str | Path) -> OpenAPISpec:
     Example:
         >>> spec = parse_spec_from_file("openapi.yaml")
     """
-    path_obj = Path(path) if isinstance(path, str) else path
+    path_obj = pathlib.Path(path) if isinstance(path, str) else path
     content = path_obj.read_text()
 
     # Detect format from extension
@@ -150,7 +154,7 @@ def parse_spec_from_file(path: str | Path) -> OpenAPISpec:
             return parse_spec_from_yaml(content)
 
 
-def parse_spec_from_url(url: str) -> OpenAPISpec:
+def parse_spec_from_url(url: str) -> spec_openapi.OpenAPISpec:
     """Create an OpenAPISpec from a URL.
 
     Detects format from Content-Type header, defaulting to JSON with YAML fallback.
@@ -164,8 +168,8 @@ def parse_spec_from_url(url: str) -> OpenAPISpec:
     Example:
         >>> spec = parse_spec_from_url("https://api.example.com/openapi.json")
     """
-    request = Request(url)
-    with urlopen(request) as response:
+    request = urllib_request.Request(url)
+    with urllib_request.urlopen(request) as response:
         content = response.read().decode("utf-8")
         content_type = response.headers.get("Content-Type", "")
 

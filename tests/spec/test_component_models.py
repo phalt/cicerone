@@ -1,6 +1,8 @@
 """Tests for component models."""
 
-from cicerone.spec import Example, Header, Parameter, RequestBody, Response, SecurityScheme
+from __future__ import annotations
+
+from cicerone import spec as cicerone_spec
 
 
 class TestParameter:
@@ -15,7 +17,7 @@ class TestParameter:
             "required": False,
             "schema": {"type": "integer"},
         }
-        param = Parameter.from_dict(data)
+        param = cicerone_spec.Parameter.from_dict(data)
         assert param.name == "page"
         assert param.in_ == "query"
         assert param.description == "Page number"
@@ -33,7 +35,7 @@ class TestResponse:
             "description": "Success response",
             "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
         }
-        response = Response.from_dict(data)
+        response = cicerone_spec.Response.from_dict(data)
         assert response.description == "Success response"
         assert "application/json" in response.content
 
@@ -48,7 +50,7 @@ class TestRequestBody:
             "required": True,
             "content": {"application/json": {"schema": {"$ref": "#/components/schemas/User"}}},
         }
-        body = RequestBody.from_dict(data)
+        body = cicerone_spec.RequestBody.from_dict(data)
         assert body.description == "User request body"
         assert body.required is True
         assert "application/json" in body.content
@@ -65,7 +67,7 @@ class TestSecurityScheme:
             "bearerFormat": "JWT",
             "description": "Bearer token authentication",
         }
-        scheme = SecurityScheme.from_dict(data)
+        scheme = cicerone_spec.SecurityScheme.from_dict(data)
         assert scheme.type == "http"
         assert scheme.scheme == "bearer"
         assert scheme.bearerFormat == "JWT"
@@ -77,7 +79,7 @@ class TestSecurityScheme:
             "name": "X-API-Key",
             "in": "header",
         }
-        scheme = SecurityScheme.from_dict(data)
+        scheme = cicerone_spec.SecurityScheme.from_dict(data)
         assert scheme.type == "apiKey"
         assert scheme.name == "X-API-Key"
         assert scheme.in_ == "header"
@@ -92,7 +94,7 @@ class TestExample:
             "summary": "Example user",
             "value": {"id": "123", "name": "John"},
         }
-        example = Example.from_dict(data)
+        example = cicerone_spec.Example.from_dict(data)
         assert example.summary == "Example user"
         assert example.value == {"id": "123", "name": "John"}
 
@@ -106,7 +108,7 @@ class TestHeader:
             "description": "Rate limit header",
             "schema": {"type": "integer"},
         }
-        header = Header.from_dict(data)
+        header = cicerone_spec.Header.from_dict(data)
         assert header.description == "Rate limit header"
         assert header.schema_ is not None
         assert header.schema_.type == "integer"

@@ -4,15 +4,17 @@ This module provides reusable helpers for parsing OpenAPI specification data
 into model objects, including nested object parsing and collection handling.
 """
 
-from typing import Any, Callable, Mapping, TypeVar
+from __future__ import annotations
 
-T = TypeVar("T")
+import typing
+
+T = typing.TypeVar("T")
 
 
 def parse_nested_object(
-    data: Mapping[str, Any],
+    data: typing.Mapping[str, typing.Any],
     field_name: str,
-    parser: Callable[[dict[str, Any]], T],
+    parser_func: typing.Callable[[dict[str, typing.Any]], T],
 ) -> T | None:
     """Parse a nested object field if it exists.
 
@@ -28,14 +30,14 @@ def parse_nested_object(
         parse_nested_object(data, "schema", Schema.from_dict)
     """
     if field_name in data:
-        return parser(data[field_name])
+        return parser_func(data[field_name])
     return None
 
 
 def parse_collection(
-    data: Mapping[str, Any],
+    data: typing.Mapping[str, typing.Any],
     field_name: str,
-    parser: Callable[[dict[str, Any]], T],
+    parser_func: typing.Callable[[dict[str, typing.Any]], T],
 ) -> dict[str, T]:
     """Parse a collection of objects into a dictionary.
 
@@ -51,14 +53,14 @@ def parse_collection(
         parse_collection(data, "examples", Example.from_dict)
     """
     if field_name in data:
-        return {name: parser(item_data) for name, item_data in data[field_name].items()}
+        return {name: parser_func(item_data) for name, item_data in data[field_name].items()}
     return {}
 
 
 def parse_list(
-    data: Mapping[str, Any],
+    data: typing.Mapping[str, typing.Any],
     field_name: str,
-    parser: Callable[[dict[str, Any]], T],
+    parser_func: typing.Callable[[dict[str, typing.Any]], T],
 ) -> list[T]:
     """Parse a list of objects.
 
@@ -74,5 +76,5 @@ def parse_list(
         parse_list(data, "servers", Server.from_dict)
     """
     if field_name in data and isinstance(data[field_name], list):
-        return [parser(item_data) for item_data in data[field_name]]
+        return [parser_func(item_data) for item_data in data[field_name]]
     return []
