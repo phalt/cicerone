@@ -3,8 +3,7 @@
 ## Explore OpenAPI schemas, the Pythonic way
 
 [![Package version](https://img.shields.io/pypi/v/cicerone?color=%2334D058&label=latest%20version)](https://pypi.org/project/cicerone)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cicerone?label=python%20support)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/cicerone)
+[![codecov](https://codecov.io/github/phalt/cicerone/graph/badge.svg?token=BAQE27Z4Y7)](https://codecov.io/github/phalt/cicerone)
 ![PyPI - License](https://img.shields.io/pypi/l/cicerone)
 
 Cicerone lets you parse OpenAPI schemas into Python objects for inspection, traversal, and tooling.
