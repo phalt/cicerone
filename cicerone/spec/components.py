@@ -100,11 +100,11 @@ class Components(pydantic.BaseModel):
                 responses=model_utils.parse_collection(components, "responses", spec_response.Response.from_dict),
                 parameters=model_utils.parse_collection(components, "parameters", spec_parameter.Parameter.from_dict),
                 examples=model_utils.parse_collection(components, "examples", spec_example.Example.from_dict),
-                requestBodies=model_utils.parse_collection(
+                request_bodies=model_utils.parse_collection(
                     components, "requestBodies", spec_request_body.RequestBody.from_dict
                 ),
                 headers=model_utils.parse_collection(components, "headers", spec_header.Header.from_dict),
-                securitySchemes=model_utils.parse_collection(
+                security_schemes=model_utils.parse_collection(
                     components, "securitySchemes", spec_security_scheme.SecurityScheme.from_dict
                 ),
                 links=model_utils.parse_collection(components, "links", spec_link.Link.from_dict),
