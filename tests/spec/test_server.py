@@ -1,6 +1,8 @@
 """Tests for Server model."""
 
-from cicerone.spec import Server, ServerVariable
+from __future__ import annotations
+
+from cicerone import spec as cicerone_spec
 
 
 class TestServerVariable:
@@ -13,7 +15,7 @@ class TestServerVariable:
             "enum": ["https", "http"],
             "description": "The protocol to use",
         }
-        var = ServerVariable.from_dict(data)
+        var = cicerone_spec.ServerVariable.from_dict(data)
         assert var.default == "https"
         assert var.enum == ["https", "http"]
         assert var.description == "The protocol to use"
@@ -21,7 +23,7 @@ class TestServerVariable:
     def test_server_variable_minimal(self):
         """Test creating ServerVariable with only required fields."""
         data = {"default": "v1"}
-        var = ServerVariable.from_dict(data)
+        var = cicerone_spec.ServerVariable.from_dict(data)
         assert var.default == "v1"
         assert var.enum == []
         assert var.description is None
@@ -33,7 +35,7 @@ class TestServer:
     def test_server_minimal(self):
         """Test creating minimal Server."""
         data = {"url": "https://api.example.com"}
-        server = Server.from_dict(data)
+        server = cicerone_spec.Server.from_dict(data)
         assert server.url == "https://api.example.com"
         assert server.description is None
         assert len(server.variables) == 0
@@ -44,7 +46,7 @@ class TestServer:
             "url": "https://api.example.com",
             "description": "Production server",
         }
-        server = Server.from_dict(data)
+        server = cicerone_spec.Server.from_dict(data)
         assert server.url == "https://api.example.com"
         assert server.description == "Production server"
 
@@ -59,7 +61,7 @@ class TestServer:
                 }
             },
         }
-        server = Server.from_dict(data)
+        server = cicerone_spec.Server.from_dict(data)
         assert server.url == "https://{environment}.example.com"
         assert "environment" in server.variables
         assert server.variables["environment"].default == "api"
@@ -68,7 +70,7 @@ class TestServer:
     def test_server_str_representation(self):
         """Test __str__ method of Server."""
         data = {"url": "https://api.example.com"}
-        server = Server.from_dict(data)
+        server = cicerone_spec.Server.from_dict(data)
         str_repr = str(server)
         assert "<Server:" in str_repr
         assert "url=https://api.example.com" in str_repr
@@ -79,7 +81,7 @@ class TestServer:
             "url": "https://api.example.com",
             "description": "Production server",
         }
-        server = Server.from_dict(data)
+        server = cicerone_spec.Server.from_dict(data)
         str_repr = str(server)
         assert "Production server" in str_repr
 
@@ -91,6 +93,6 @@ class TestServer:
                 "env": {"default": "api"},
             },
         }
-        server = Server.from_dict(data)
+        server = cicerone_spec.Server.from_dict(data)
         str_repr = str(server)
         assert "1 variables" in str_repr

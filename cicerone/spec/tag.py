@@ -6,14 +6,14 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel
+import pydantic
 
-from cicerone.spec.model_utils import parse_nested_object
+from cicerone.spec import model_utils
 
 
-class ExternalDocumentation(BaseModel):
+class ExternalDocumentation(pydantic.BaseModel):
     """Represents external documentation."""
 
     # Allow extra fields to support vendor extensions
@@ -23,7 +23,7 @@ class ExternalDocumentation(BaseModel):
     description: str | None = None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> ExternalDocumentation:
+    def from_dict(cls, data: dict[str, typing.Any]) -> ExternalDocumentation:
         """Create ExternalDocumentation from a dictionary."""
         excluded = {"url", "description"}
         return cls(
@@ -33,7 +33,7 @@ class ExternalDocumentation(BaseModel):
         )
 
 
-class Tag(BaseModel):
+class Tag(pydantic.BaseModel):
     """Represents an OpenAPI Tag object."""
 
     # Allow extra fields to support vendor extensions
@@ -52,12 +52,12 @@ class Tag(BaseModel):
         return f"<Tag: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Tag:
+    def from_dict(cls, data: dict[str, typing.Any]) -> Tag:
         """Create a Tag from a dictionary."""
         excluded = {"name", "description", "externalDocs"}
         return cls(
             name=data["name"],
             description=data.get("description"),
-            external_docs=parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict),
+            external_docs=model_utils.parse_nested_object(data, "externalDocs", ExternalDocumentation.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

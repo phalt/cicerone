@@ -3,13 +3,22 @@
 ## Explore OpenAPI schemas, the Pythonic way
 
 [![Package version](https://img.shields.io/pypi/v/cicerone?color=%2334D058&label=latest%20version)](https://pypi.org/project/cicerone)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cicerone?label=python%20support)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/cicerone)
+[![codecov](https://codecov.io/github/phalt/cicerone/graph/badge.svg?token=BAQE27Z4Y7)](https://codecov.io/github/phalt/cicerone)
 ![PyPI - License](https://img.shields.io/pypi/l/cicerone)
 
 Cicerone lets you parse OpenAPI schemas into Python objects for inspection, traversal, and tooling.
 
 The goal of Cicerone is to be fast, minimal, fully typed, and designed for Python developers by Python developers.
+
+## Features
+
+- **Full support**: Tested against real-world and example specifications to be 100% compliant.
+- **Pydantic-based models**: Type-safe object models.
+- **Multiple input formats**: Load from files, URLs, or in-memory data
+- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
+- **Minimal dependencies**: Only relies on Pydantic and yaml. The rest is core Python.
+- **Simple API**: Intuitive methods for common operations
+- **Modern Python**: Fully typed and 100% test coverage codebase.
 
 ## Installation
 
@@ -32,28 +41,22 @@ uv add cicerone
 Load OpenAPI specifications from various sources:
 
 ```python
-from cicerone.parse import (
-    parse_spec_from_file,
-    parse_spec_from_url,
-    parse_spec_from_dict,
-    parse_spec_from_json,
-    parse_spec_from_yaml,
-)
+from cicerone import parse as cicerone_parse
 
 # From a file (auto-detects YAML/JSON)
-file_spec = parse_spec_from_file("openapi.yaml")
+file_spec = cicerone_parse.parse_spec_from_file("openapi.yaml")
 
 # From a URL
-url_spec = parse_spec_from_url("https://api.example.com/openapi.json")
+url_spec = cicerone_parse.parse_spec_from_url("https://api.example.com/openapi.json")
 
 # From a dictionary
-dict_spec = parse_spec_from_dict({"openapi": "3.0.0", ...})
+dict_spec = cicerone_parse.parse_spec_from_dict({"openapi": "3.0.0", ...})
 
 # From JSON string
-json_spec = parse_spec_from_json('{"openapi": "3.0.0", ...}')
+json_spec = cicerone_parse.parse_spec_from_json('{"openapi": "3.0.0", ...}')
 
 # From YAML string
-yaml_spec = parse_spec_from_yaml('openapi: "3.0.0"\n...')
+yaml_spec = cicerone_parse.parse_spec_from_yaml('openapi: "3.0.0"\n...')
 ```
 
 ### Exploring the schema
@@ -61,9 +64,9 @@ yaml_spec = parse_spec_from_yaml('openapi: "3.0.0"\n...')
 Once parsed, traverse the schema:
 
 ```python
-from cicerone.parse import parse_spec_from_file
+from cicerone import parse as cicerone_parse
 
-spec = parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
+spec = cicerone_parse.parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
 
 print("OpenAPISpec:", spec)
 print("Paths:", spec.paths)
@@ -97,11 +100,3 @@ print(f"Major: {spec.version.major}, Minor: {spec.version.minor}")
 # Raw spec data
 print(f"Title: {spec.raw['info']['title']}")
 ```
-
-## Features
-
-- **Pydantic-based models**: Type-safe, validated object models
-- **Multiple input formats**: Load from files, URLs, or in-memory data
-- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
-- **Pythonic traversal**: Navigate specs using familiar Python patterns
-- **Simple API**: Intuitive methods for common operations

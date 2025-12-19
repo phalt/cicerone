@@ -6,14 +6,14 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel, Field
+import pydantic
 
-from cicerone.spec.path_item import PathItem
+from cicerone.spec import path_item as spec_path_item
 
 
-class Callback(BaseModel):
+class Callback(pydantic.BaseModel):
     """Represents an OpenAPI Callback Object.
 
     A callback is a map of runtime expressions to Path Item Objects.
@@ -24,10 +24,10 @@ class Callback(BaseModel):
     model_config = {"extra": "allow"}
 
     # Callbacks are a dict of expression -> PathItem
-    expressions: dict[str, PathItem] = Field(default_factory=dict)
+    expressions: dict[str, spec_path_item.PathItem] = pydantic.Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Callback:
+    def from_dict(cls, data: dict[str, typing.Any]) -> Callback:
         """Create a Callback from a dictionary.
 
         Args:
@@ -37,13 +37,13 @@ class Callback(BaseModel):
             Callback object with expressions parsed as PathItem objects
         """
         # Parse each expression as a PathItem
-        expressions: dict[str, PathItem] = {}
+        expressions: dict[str, spec_path_item.PathItem] = {}
         for expression, path_item_data in data.items():
-            expressions[expression] = PathItem.from_dict(expression, path_item_data)
+            expressions[expression] = spec_path_item.PathItem.from_dict(expression, path_item_data)
 
         return cls(expressions=expressions)
 
-    def get(self, expression: str) -> PathItem | None:
+    def get(self, expression: str) -> spec_path_item.PathItem | None:
         """Get a PathItem for a given expression.
 
         Args:

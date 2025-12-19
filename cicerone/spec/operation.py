@@ -4,19 +4,21 @@ References:
 - OpenAPI 3.x Operation Object: https://spec.openapis.org/oas/v3.1.0#operation-object
 """
 
-from typing import Any, ClassVar, Mapping
+from __future__ import annotations
 
-from pydantic import BaseModel, Field
+import typing
+
+import pydantic
 
 
-class Operation(BaseModel):
+class Operation(pydantic.BaseModel):
     """Represents an HTTP operation (GET, POST, etc.)."""
 
     # Allow extra fields to support vendor extensions and future spec additions
     model_config = {"extra": "allow"}
 
     # Fields that are explicitly mapped in from_dict() to avoid double-processing
-    EXPLICITLY_MAPPED_FIELDS: ClassVar[set[str]] = {
+    EXPLICITLY_MAPPED_FIELDS: typing.ClassVar[set[str]] = {
         "operationId",
         "summary",
         "description",
@@ -27,12 +29,12 @@ class Operation(BaseModel):
 
     method: str
     path: str
-    operation_id: str | None = Field(None, alias="operationId")
+    operation_id: str | None = pydantic.Field(None, alias="operationId")
     summary: str | None = None
     description: str | None = None
-    tags: list[str] = Field(default_factory=list)
-    parameters: list[Any] = Field(default_factory=list)
-    responses: dict[str, Any] = Field(default_factory=dict)
+    tags: list[str] = pydantic.Field(default_factory=list)
+    parameters: list[typing.Any] = pydantic.Field(default_factory=list)
+    responses: dict[str, typing.Any] = pydantic.Field(default_factory=dict)
 
     def __str__(self) -> str:
         """Return a readable string representation of the operation."""
@@ -46,7 +48,7 @@ class Operation(BaseModel):
         return f"<Operation: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, method: str, path: str, data: Mapping[str, Any]) -> "Operation":
+    def from_dict(cls, method: str, path: str, data: typing.Mapping[str, typing.Any]) -> "Operation":
         """Create an Operation from a dictionary."""
         return cls(
             method=method,

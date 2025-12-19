@@ -1,6 +1,8 @@
 """Tests for PathItem model."""
 
-from cicerone.spec import PathItem
+from __future__ import annotations
+
+from cicerone import spec as cicerone_spec
 
 
 class TestPathItem:
@@ -18,7 +20,7 @@ class TestPathItem:
                 "summary": "Create user",
             },
         }
-        path_item = PathItem.from_dict("/users", data)
+        path_item = cicerone_spec.PathItem.from_dict("/users", data)
         assert path_item.path == "/users"
         assert "get" in path_item.operations
         assert "post" in path_item.operations
@@ -32,7 +34,7 @@ class TestPathItem:
             "post": {"operationId": "createUser"},
             "delete": {"operationId": "deleteUser"},
         }
-        path_item = PathItem.from_dict("/users/{id}", data)
+        path_item = cicerone_spec.PathItem.from_dict("/users/{id}", data)
         str_repr = str(path_item)
         assert "<PathItem:" in str_repr
         assert "/users/{id}" in str_repr

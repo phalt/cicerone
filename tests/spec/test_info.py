@@ -1,6 +1,8 @@
 """Tests for Info model."""
 
-from cicerone.spec import Contact, Info, License
+from __future__ import annotations
+
+from cicerone import spec as cicerone_spec
 
 
 class TestContact:
@@ -13,7 +15,7 @@ class TestContact:
             "url": "https://example.com",
             "email": "api@example.com",
         }
-        contact = Contact.from_dict(data)
+        contact = cicerone_spec.Contact.from_dict(data)
         assert contact.name == "API Team"
         assert contact.url == "https://example.com"
         assert contact.email == "api@example.com"
@@ -21,7 +23,7 @@ class TestContact:
     def test_contact_partial_data(self):
         """Test creating Contact with partial data."""
         data = {"name": "API Team"}
-        contact = Contact.from_dict(data)
+        contact = cicerone_spec.Contact.from_dict(data)
         assert contact.name == "API Team"
         assert contact.url is None
         assert contact.email is None
@@ -29,7 +31,7 @@ class TestContact:
     def test_contact_empty_dict(self):
         """Test creating Contact from empty dict."""
         data: dict[str, str] = {}
-        contact = Contact.from_dict(data)
+        contact = cicerone_spec.Contact.from_dict(data)
         assert contact.name is None
         assert contact.url is None
         assert contact.email is None
@@ -44,7 +46,7 @@ class TestLicense:
             "name": "Apache 2.0",
             "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
         }
-        license = License.from_dict(data)
+        license = cicerone_spec.License.from_dict(data)
         assert license.name == "Apache 2.0"
         assert license.url == "https://www.apache.org/licenses/LICENSE-2.0.html"
 
@@ -54,7 +56,7 @@ class TestLicense:
             "name": "MIT",
             "identifier": "MIT",
         }
-        license = License.from_dict(data)
+        license = cicerone_spec.License.from_dict(data)
         assert license.name == "MIT"
         assert license.identifier == "MIT"
 
@@ -68,7 +70,7 @@ class TestInfo:
             "title": "Test API",
             "version": "1.0.0",
         }
-        info = Info.from_dict(data)
+        info = cicerone_spec.Info.from_dict(data)
         assert info.title == "Test API"
         assert info.version == "1.0.0"
         assert info.summary is None
@@ -91,7 +93,7 @@ class TestInfo:
                 "url": "https://opensource.org/licenses/MIT",
             },
         }
-        info = Info.from_dict(data)
+        info = cicerone_spec.Info.from_dict(data)
         assert info.title == "Test API"
         assert info.version == "1.0.0"
         assert info.summary == "A test API"
@@ -108,7 +110,7 @@ class TestInfo:
             "title": "Test API",
             "version": "1.0.0",
         }
-        info = Info.from_dict(data)
+        info = cicerone_spec.Info.from_dict(data)
         str_repr = str(info)
         assert "<Info:" in str_repr
         assert "Test API" in str_repr
@@ -121,7 +123,7 @@ class TestInfo:
             "version": "1.0.0",
             "description": "A test API for testing",
         }
-        info = Info.from_dict(data)
+        info = cicerone_spec.Info.from_dict(data)
         str_repr = str(info)
         assert "<Info:" in str_repr
         assert "desc=" in str_repr
@@ -133,7 +135,7 @@ class TestInfo:
             "version": "1.0.0",
             "description": "A" * 100,  # Very long description
         }
-        info = Info.from_dict(data)
+        info = cicerone_spec.Info.from_dict(data)
         str_repr = str(info)
         assert "..." in str_repr  # Should be truncated
         assert len(str_repr) < 200  # Should not be too long

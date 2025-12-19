@@ -35,6 +35,7 @@ clean:  ## Clear any cache files and test files
 	rm -rf dist/
 	rm -rf **/__pycache__
 	rm -rf **/*.pyc
+	rm -rf .coverage
 
 test:  ## Run tests
 	uv run pytest -vvv

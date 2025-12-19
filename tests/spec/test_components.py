@@ -1,6 +1,8 @@
 """Tests for Components container."""
 
-from cicerone.spec import Components
+from __future__ import annotations
+
+from cicerone import spec as cicerone_spec
 
 
 class TestComponents:
@@ -19,7 +21,7 @@ class TestComponents:
                 },
             },
         }
-        components = Components.from_spec(raw)
+        components = cicerone_spec.Components.from_spec(raw)
         assert "User" in components.schemas
         user_schema = components.get_schema("User")
         assert user_schema is not None
@@ -59,7 +61,7 @@ class TestComponents:
                 },
             },
         }
-        components = Components.from_spec(raw)
+        components = cicerone_spec.Components.from_spec(raw)
 
         # Verify all component types are parsed
         assert len(components.schemas) == 1
@@ -85,7 +87,7 @@ class TestComponents:
 
     def test_components_str_representation_empty(self):
         """Test __str__ method for empty components."""
-        components = Components()
+        components = cicerone_spec.Components()
         str_repr = str(components)
         assert "<Components: empty>" in str_repr
 
@@ -100,7 +102,7 @@ class TestComponents:
                 },
             },
         }
-        components = Components.from_spec(raw)
+        components = cicerone_spec.Components.from_spec(raw)
         str_repr = str(components)
         assert "<Components:" in str_repr
         assert "2 schemas" in str_repr
@@ -117,7 +119,7 @@ class TestComponents:
                 "requestBodies": {"Body1": {"description": "test"}},
             },
         }
-        components = Components.from_spec(raw)
+        components = cicerone_spec.Components.from_spec(raw)
         str_repr = str(components)
         assert "<Components:" in str_repr
         # Should show first 3 types and indicate more
@@ -133,7 +135,7 @@ class TestComponents:
                 "callbacks": {"WebhookCallback": {"expression": "http://example.com"}},
             },
         }
-        components = Components.from_spec(raw)
+        components = cicerone_spec.Components.from_spec(raw)
         str_repr = str(components)
         assert "<Components:" in str_repr
         assert "1 headers" in str_repr or "1 links" in str_repr or "1 callbacks" in str_repr
@@ -148,7 +150,7 @@ class TestComponents:
                 },
             },
         }
-        components = Components.from_spec(raw)
+        components = cicerone_spec.Components.from_spec(raw)
         str_repr = str(components)
         assert "<Components:" in str_repr
         assert "1 securitySchemes" in str_repr

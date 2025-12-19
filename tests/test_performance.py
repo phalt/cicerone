@@ -1,10 +1,12 @@
 """Performance benchmarks for OpenAPI spec parsing and traversal."""
 
-from pathlib import Path
+from __future__ import annotations
+
+import pathlib
 
 import pytest
 
-from cicerone.parse import parse_spec_from_file
+from cicerone import parse as cicerone_parse
 
 
 class TestPerformance:
@@ -13,21 +15,21 @@ class TestPerformance:
     @pytest.fixture
     def petstore_spec_path(self):
         """Path to simple petstore spec."""
-        return Path(__file__).parent / "fixtures" / "petstore_openapi3.yaml"
+        return pathlib.Path(__file__).parent / "fixtures" / "petstore_openapi3.yaml"
 
     @pytest.fixture
     def complex_spec_path(self):
         """Path to complex spec."""
-        return Path(__file__).parent / "fixtures" / "complex_api.yaml"
+        return pathlib.Path(__file__).parent / "fixtures" / "complex_api.yaml"
 
     def test_parse_simple_spec_performance(self, benchmark, petstore_spec_path):
         """Benchmark parsing a simple OpenAPI spec."""
-        result = benchmark(parse_spec_from_file, petstore_spec_path)
+        result = benchmark(cicerone_parse.parse_spec_from_file, petstore_spec_path)
         assert result.version.major == 3
 
     def test_parse_complex_spec_performance(self, benchmark, complex_spec_path):
         """Benchmark parsing a complex OpenAPI spec with many paths and schemas."""
-        result = benchmark(parse_spec_from_file, complex_spec_path)
+        result = benchmark(cicerone_parse.parse_spec_from_file, complex_spec_path)
         assert result.version.major == 3
         # Verify it parsed all the data
         assert len(result.paths.items) >= 70
@@ -35,7 +37,7 @@ class TestPerformance:
 
     def test_traverse_all_operations_performance(self, benchmark, complex_spec_path):
         """Benchmark traversing all operations in a complex spec."""
-        spec = parse_spec_from_file(complex_spec_path)
+        spec = cicerone_parse.parse_spec_from_file(complex_spec_path)
 
         def traverse_operations():
             return list(spec.all_operations())
@@ -46,7 +48,7 @@ class TestPerformance:
 
     def test_find_operation_by_id_performance(self, benchmark, complex_spec_path):
         """Benchmark finding an operation by operationId."""
-        spec = parse_spec_from_file(complex_spec_path)
+        spec = cicerone_parse.parse_spec_from_file(complex_spec_path)
 
         def find_operation():
             return spec.operation_by_operation_id("getResource25")
@@ -57,7 +59,7 @@ class TestPerformance:
 
     def test_access_nested_schema_properties_performance(self, benchmark, complex_spec_path):
         """Benchmark accessing nested schema properties."""
-        spec = parse_spec_from_file(complex_spec_path)
+        spec = cicerone_parse.parse_spec_from_file(complex_spec_path)
 
         def access_schema():
             schema = spec.components.get_schema("Resource10")
@@ -73,7 +75,7 @@ class TestPerformance:
 
     def test_iterate_all_schemas_performance(self, benchmark, complex_spec_path):
         """Benchmark iterating through all schemas."""
-        spec = parse_spec_from_file(complex_spec_path)
+        spec = cicerone_parse.parse_spec_from_file(complex_spec_path)
 
         def iterate_schemas():
             schemas = []
@@ -91,11 +93,11 @@ class TestScalability:
     @pytest.fixture
     def complex_spec_path(self):
         """Path to complex spec."""
-        return Path(__file__).parent / "fixtures" / "complex_api.yaml"
+        return pathlib.Path(__file__).parent / "fixtures" / "complex_api.yaml"
 
     def test_large_spec_operations_count(self, complex_spec_path):
         """Verify we can handle specs with many operations."""
-        spec = parse_spec_from_file(complex_spec_path)
+        spec = cicerone_parse.parse_spec_from_file(complex_spec_path)
         operations = list(spec.all_operations())
 
         # Should handle 200+ operations efficiently
@@ -108,7 +110,7 @@ class TestScalability:
 
     def test_large_spec_schemas_count(self, complex_spec_path):
         """Verify we can handle specs with many schemas."""
-        spec = parse_spec_from_file(complex_spec_path)
+        spec = cicerone_parse.parse_spec_from_file(complex_spec_path)
 
         # Should handle 100+ schemas
         assert len(spec.components.schemas) >= 100
@@ -119,7 +121,7 @@ class TestScalability:
 
     def test_operation_lookup_efficiency(self, complex_spec_path):
         """Test operation lookup remains efficient with many operations."""
-        spec = parse_spec_from_file(complex_spec_path)
+        spec = cicerone_parse.parse_spec_from_file(complex_spec_path)
 
         # Should find operations regardless of position
         first_op = spec.operation_by_operation_id("getResource0")

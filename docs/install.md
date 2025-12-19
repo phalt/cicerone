@@ -1,12 +1,12 @@
 # 🏗️ Install
 
-## With pipx (Python)
+## With pip
 
 ```sh
 pip install cicerone
 ```
 
-## With uv (Python)
+## With uv
 
 ```sh
 uv add cicerone

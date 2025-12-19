@@ -6,34 +6,34 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
+import typing
 
-from pydantic import BaseModel, Field
+import pydantic
 
-from cicerone.spec.example import Example
-from cicerone.spec.model_utils import parse_collection, parse_nested_object
-from cicerone.spec.schema import Schema
+from cicerone.spec import example as spec_example
+from cicerone.spec import model_utils
+from cicerone.spec import schema as spec_schema
 
 
-class Parameter(BaseModel):
+class Parameter(pydantic.BaseModel):
     """Represents an OpenAPI parameter object."""
 
     # Allow extra fields to support vendor extensions and future spec additions
     model_config = {"extra": "allow"}
 
     name: str | None = None
-    in_: str | None = Field(None, alias="in")
+    in_: str | None = pydantic.Field(None, alias="in")
     description: str | None = None
     required: bool = False
-    schema_: Schema | None = Field(None, alias="schema")
+    schema_: spec_schema.Schema | None = pydantic.Field(None, alias="schema")
     # OpenAPI 3.x fields
     style: str | None = None
     explode: bool | None = None
-    example: Any | None = None
-    examples: dict[str, Example] = Field(default_factory=dict)
+    example: typing.Any | None = None
+    examples: dict[str, spec_example.Example] = pydantic.Field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Parameter:
+    def from_dict(cls, data: dict[str, typing.Any]) -> Parameter:
         """Create a Parameter from a dictionary."""
         excluded = {
             "name",
@@ -51,10 +51,10 @@ class Parameter(BaseModel):
             **{"in": data.get("in")},
             description=data.get("description"),
             required=data.get("required", False),
-            schema=parse_nested_object(data, "schema", Schema.from_dict),
+            schema=model_utils.parse_nested_object(data, "schema", spec_schema.Schema.from_dict),
             style=data.get("style"),
             explode=data.get("explode"),
             example=data.get("example"),
-            examples=parse_collection(data, "examples", Example.from_dict),
+            examples=model_utils.parse_collection(data, "examples", spec_example.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )

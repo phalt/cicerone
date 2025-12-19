@@ -4,15 +4,17 @@ References:
 - OpenAPI 3.x Security Scheme Object: https://spec.openapis.org/oas/v3.1.0#security-scheme-object
 """
 
-from typing import Any
+from __future__ import annotations
 
-from pydantic import BaseModel, Field
+import typing
 
-from cicerone.spec.model_utils import parse_nested_object
-from cicerone.spec.oauth_flows import OAuthFlows
+import pydantic
+
+from cicerone.spec import model_utils
+from cicerone.spec import oauth_flows as spec_oauth_flows
 
 
-class SecurityScheme(BaseModel):
+class SecurityScheme(pydantic.BaseModel):
     """Represents an OpenAPI security scheme object."""
 
     # Allow extra fields to support vendor extensions and future spec additions
@@ -21,14 +23,14 @@ class SecurityScheme(BaseModel):
     type: str | None = None
     description: str | None = None
     name: str | None = None
-    in_: str | None = Field(None, alias="in")
+    in_: str | None = pydantic.Field(None, alias="in")
     scheme: str | None = None
-    bearerFormat: str | None = Field(None, alias="bearerFormat")
-    flows: OAuthFlows | None = None
-    openIdConnectUrl: str | None = Field(None, alias="openIdConnectUrl")
+    bearerFormat: str | None = pydantic.Field(None, alias="bearerFormat")
+    flows: spec_oauth_flows.OAuthFlows | None = None
+    openIdConnectUrl: str | None = pydantic.Field(None, alias="openIdConnectUrl")
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "SecurityScheme":
+    def from_dict(cls, data: dict[str, typing.Any]) -> "SecurityScheme":
         """Create a SecurityScheme from a dictionary."""
         excluded = {"type", "description", "name", "in", "scheme", "bearerFormat", "flows", "openIdConnectUrl"}
         return cls(
@@ -38,7 +40,7 @@ class SecurityScheme(BaseModel):
             **{"in": data.get("in")},
             scheme=data.get("scheme"),
             bearerFormat=data.get("bearerFormat"),
-            flows=parse_nested_object(data, "flows", OAuthFlows.from_dict),
+            flows=model_utils.parse_nested_object(data, "flows", spec_oauth_flows.OAuthFlows.from_dict),
             openIdConnectUrl=data.get("openIdConnectUrl"),
             **{k: v for k, v in data.items() if k not in excluded},
         )
