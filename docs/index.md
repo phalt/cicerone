@@ -19,7 +19,7 @@ The goal of Cicerone is to be fast, minimal, fully typed, and designed for Pytho
 - **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
 - **Minimal dependencies**: Only relies on Pydantic and yaml. The rest is core Python.
 - **Simple API**: Intuitive methods for common operations
-   **Modern Python**: Fully typed and 100% test coverage codebase.
+- **Modern Python**: Fully typed and 100% test coverage codebase.
 
 ## Installation
 
@@ -42,28 +42,22 @@ uv add cicerone
 Load OpenAPI specifications from various sources:
 
 ```python
-from cicerone.parse import (
-    parse_spec_from_file,
-    parse_spec_from_url,
-    parse_spec_from_dict,
-    parse_spec_from_json,
-    parse_spec_from_yaml,
-)
+from cicerone import parse as cicerone_parse
 
 # From a file (auto-detects YAML/JSON)
-file_spec = parse_spec_from_file("openapi.yaml")
+file_spec = cicerone_parse.parse_spec_from_file("openapi.yaml")
 
 # From a URL
-url_spec = parse_spec_from_url("https://api.example.com/openapi.json")
+url_spec = cicerone_parse.parse_spec_from_url("https://api.example.com/openapi.json")
 
 # From a dictionary
-dict_spec = parse_spec_from_dict({"openapi": "3.0.0", ...})
+dict_spec = cicerone_parse.parse_spec_from_dict({"openapi": "3.0.0", ...})
 
 # From JSON string
-json_spec = parse_spec_from_json('{"openapi": "3.0.0", ...}')
+json_spec = cicerone_parse.parse_spec_from_json('{"openapi": "3.0.0", ...}')
 
 # From YAML string
-yaml_spec = parse_spec_from_yaml('openapi: "3.0.0"\n...')
+yaml_spec = cicerone_parse.parse_spec_from_yaml('openapi: "3.0.0"\n...')
 ```
 
 ### Exploring the schema
@@ -71,9 +65,9 @@ yaml_spec = parse_spec_from_yaml('openapi: "3.0.0"\n...')
 Once parsed, traverse the schema:
 
 ```python
-from cicerone.parse import parse_spec_from_file
+from cicerone import parse as cicerone_parse
 
-spec = parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
+spec = cicerone_parse.parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
 
 print("OpenAPISpec:", spec)
 print("Paths:", spec.paths)
