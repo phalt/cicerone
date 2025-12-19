@@ -554,3 +554,4 @@ class TestOpenAPISpecReferenceIntegration:
         assert isinstance(path_item, PathItem)
         assert path_item.get is not None
         assert path_item.get.summary == "List users"
+
