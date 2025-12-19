@@ -14,6 +14,8 @@ from cicerone.spec.operation import Operation
 from cicerone.spec.parameter import Parameter
 from cicerone.spec.path_item import PathItem
 from cicerone.spec.paths import Paths
+from cicerone.spec.reference import Reference
+from cicerone.spec.reference_resolver import ReferenceResolver
 from cicerone.spec.request_body import RequestBody
 from cicerone.spec.response import Response
 from cicerone.spec.schema import Schema
@@ -48,6 +50,8 @@ __all__ = [
     "Parameter",
     "PathItem",
     "Paths",
+    "Reference",
+    "ReferenceResolver",
     "RequestBody",
     "Response",
     "Schema",

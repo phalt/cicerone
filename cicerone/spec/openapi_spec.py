@@ -15,6 +15,8 @@ from cicerone.spec import components as spec_components
 from cicerone.spec import info as spec_info
 from cicerone.spec import operation as spec_operation
 from cicerone.spec import paths as spec_paths
+from cicerone.spec import reference as spec_reference
+from cicerone.spec import reference_resolver as spec_reference_resolver
 from cicerone.spec import server as spec_server
 from cicerone.spec import tag as spec_tag
 from cicerone.spec import version as spec_version
@@ -80,3 +82,77 @@ class OpenAPISpec(pydantic.BaseModel):
             ...     print(op.method, op.path, op.operation_id)
         """
         yield from itertools.chain(self.paths.all_operations(), self.webhooks.all_operations())
+
+    def resolve_reference(
+        self,
+        ref: spec_reference.Reference | str,
+        follow_nested: bool = True,
+    ) -> typing.Any:
+        """Resolve a reference to its target object.
+
+        This method resolves $ref references in the OpenAPI specification,
+        supporting both local references (within this document) and following
+        chains of nested references.
+
+        Args:
+            ref: Reference object or reference string (e.g., '#/components/schemas/User')
+            follow_nested: If True, recursively resolves nested references
+
+        Returns:
+            The target object that the reference points to
+
+        Raises:
+            ValueError: If the reference cannot be resolved
+            RecursionError: If a circular reference is detected
+
+        Example:
+            >>> from cicerone.parse import parse_spec_from_file
+            >>> spec = parse_spec_from_file("openapi.yaml")
+            >>> user_schema = spec.resolve_reference('#/components/schemas/User')
+            >>> # Or use a Reference object
+            >>> ref = Reference(ref='#/components/schemas/User')
+            >>> user_schema = spec.resolve_reference(ref)
+        """
+        resolver = spec_reference_resolver.ReferenceResolver(self)
+        return resolver.resolve_reference(ref, follow_nested=follow_nested)
+
+    def get_all_references(self) -> list[spec_reference.Reference]:
+        """Get all references in the specification.
+
+        Recursively searches the entire OpenAPI specification for all $ref keywords
+        and returns them as Reference objects.
+
+        Returns:
+            List of all Reference objects found in the spec
+
+        Example:
+            >>> from cicerone.parse import parse_spec_from_file
+            >>> spec = parse_spec_from_file("openapi.yaml")
+            >>> all_refs = spec.get_all_references()
+            >>> local_refs = [r for r in all_refs if r.is_local]
+            >>> external_refs = [r for r in all_refs if r.is_external]
+            >>> print(f"Found {len(all_refs)} references")
+        """
+        resolver = spec_reference_resolver.ReferenceResolver(self)
+        return resolver.get_all_references()
+
+    def is_circular_reference(self, ref: spec_reference.Reference | str) -> bool:
+        """Check if a reference would create a circular dependency.
+
+        Tests whether resolving a reference would result in a circular reference chain.
+        This is useful for detecting recursive schemas.
+
+        Args:
+            ref: Reference to check
+
+        Returns:
+            True if the reference is circular
+
+        Example:
+            >>> from cicerone.parse import parse_spec_from_file
+            >>> spec = parse_spec_from_file("openapi.yaml")
+            >>> if spec.is_circular_reference('#/components/schemas/Node'):
+            ...     print("Node schema has a circular reference (e.g., recursive tree)")
+        """
+        resolver = spec_reference_resolver.ReferenceResolver(self)
+        return resolver.is_circular_reference(ref)
