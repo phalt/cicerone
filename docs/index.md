@@ -19,6 +19,7 @@ The goal of Cicerone is to be fast, minimal, fully typed, and designed for Pytho
 - **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
 - **Minimal dependencies**: Only relies on Pydantic and yaml. The rest is core Python.
 - **Simple API**: Intuitive methods for common operations
+   **Modern Python**: Fully typed and 100% test coverage codebase.
 
 ## Installation
 
