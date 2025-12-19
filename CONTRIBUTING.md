@@ -74,12 +74,9 @@ make test
 
 ### Preparing changes for review
 
-Once you have made changes, here is a good check list to run through to get it published for review:
-
-Regenerate the test clients to see what has changed, and if tests pass:
+See if tests pass:
 
 ```sh
-make generate-test-clients
 make test
 ```
 
