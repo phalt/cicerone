@@ -3,7 +3,7 @@
 import pytest
 
 from cicerone.parse import parse_spec_from_dict, parse_spec_from_file
-from cicerone.spec import Reference, ReferenceResolver
+from cicerone.references import Reference, ReferenceResolver
 
 
 class TestReference:
@@ -126,22 +126,28 @@ class TestReferenceResolver:
 
     def test_resolve_simple_local_reference(self):
         """Test resolving a simple local reference to a schema."""
+        from cicerone.spec import Schema
+
         spec = parse_spec_from_file("tests/fixtures/petstore_openapi3.yaml")
         resolver = ReferenceResolver(spec)
 
         user_schema = resolver.resolve_reference("#/components/schemas/User")
-        assert user_schema["type"] == "object"
-        assert "id" in user_schema["properties"]
-        assert "username" in user_schema["properties"]
+        assert isinstance(user_schema, Schema)
+        assert user_schema.type == "object"
+        assert "id" in user_schema.properties
+        assert "username" in user_schema.properties
 
     def test_resolve_reference_with_reference_object(self):
         """Test resolving using a Reference object."""
+        from cicerone.spec import Schema
+
         spec = parse_spec_from_file("tests/fixtures/petstore_openapi3.yaml")
         resolver = ReferenceResolver(spec)
 
         ref = Reference(ref="#/components/schemas/User")
         user_schema = resolver.resolve_reference(ref)
-        assert user_schema["type"] == "object"
+        assert isinstance(user_schema, Schema)
+        assert user_schema.type == "object"
 
     def test_resolve_reference_not_found(self):
         """Test resolving a reference that doesn't exist."""
@@ -161,6 +167,8 @@ class TestReferenceResolver:
 
     def test_resolve_nested_reference(self):
         """Test resolving nested references."""
+        from cicerone.spec import Schema
+
         spec_data = {
             "openapi": "3.0.0",
             "info": {"title": "Test", "version": "1.0.0"},
@@ -180,10 +188,11 @@ class TestReferenceResolver:
 
         # With follow_nested=True (default), should resolve to Person
         person_schema = resolver.resolve_reference("#/components/schemas/User")
-        assert person_schema["type"] == "object"
-        assert "name" in person_schema["properties"]
+        assert isinstance(person_schema, Schema)
+        assert person_schema.type == "object"
+        assert "name" in person_schema.properties
 
-        # With follow_nested=False, should return the reference
+        # With follow_nested=False, should return the reference dict
         user_ref = resolver.resolve_reference("#/components/schemas/User", follow_nested=False)
         assert "$ref" in user_ref
 
@@ -293,6 +302,7 @@ class TestReferenceResolver:
         resolver = ReferenceResolver(spec)
 
         root = resolver.resolve_reference("#")
+        assert isinstance(root, dict)
         assert root == spec_data
 
     def test_resolve_reference_with_array_index(self):
@@ -310,6 +320,7 @@ class TestReferenceResolver:
         resolver = ReferenceResolver(spec)
 
         tag = resolver.resolve_reference("#/tags/1")
+        assert isinstance(tag, dict)
         assert tag["name"] == "posts"
 
     def test_resolve_reference_invalid_array_index(self):
@@ -365,11 +376,14 @@ class TestOpenAPISpecReferenceIntegration:
 
     def test_resolve_reference_from_spec(self):
         """Test resolving a reference directly from the spec."""
+        from cicerone.spec import Schema
+
         spec = parse_spec_from_file("tests/fixtures/petstore_openapi3.yaml")
 
         user_schema = spec.resolve_reference("#/components/schemas/User")
-        assert user_schema["type"] == "object"
-        assert "username" in user_schema["properties"]
+        assert isinstance(user_schema, Schema)
+        assert user_schema.type == "object"
+        assert "username" in user_schema.properties
 
     def test_get_all_references_from_spec(self):
         """Test getting all references directly from the spec."""
@@ -427,6 +441,8 @@ class TestOpenAPISpecReferenceIntegration:
 
     def test_resolve_reference_in_paths(self):
         """Test resolving references found in paths."""
+        from cicerone.spec import Schema
+
         spec = parse_spec_from_file("tests/fixtures/petstore_openapi3.yaml")
 
         # Find a reference in the paths section
@@ -437,4 +453,5 @@ class TestOpenAPISpecReferenceIntegration:
 
         # Resolve one of them
         resolved = spec.resolve_reference(path_refs[0])
-        assert resolved["type"] == "object"
+        assert isinstance(resolved, Schema)
+        assert resolved.type == "object"
