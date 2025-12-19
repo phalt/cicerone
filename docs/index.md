@@ -11,6 +11,15 @@ Cicerone lets you parse OpenAPI schemas into Python objects for inspection, trav
 
 The goal of Cicerone is to be fast, minimal, fully typed, and designed for Python developers by Python developers.
 
+## Features
+
+- **Full support**: Tested against real-world and example specifications to be 100% compliant.
+- **Pydantic-based models**: Type-safe object models.
+- **Multiple input formats**: Load from files, URLs, or in-memory data
+- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
+- **Minimal dependencies**: Only relies on Pydantic and yaml. The rest is core Python.
+- **Simple API**: Intuitive methods for common operations
+
 ## Installation
 
 ### pip
@@ -97,11 +106,3 @@ print(f"Major: {spec.version.major}, Minor: {spec.version.minor}")
 # Raw spec data
 print(f"Title: {spec.raw['info']['title']}")
 ```
-
-## Features
-
-- **Pydantic-based models**: Type-safe, validated object models
-- **Multiple input formats**: Load from files, URLs, or in-memory data
-- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
-- **Pythonic traversal**: Navigate specs using familiar Python patterns
-- **Simple API**: Intuitive methods for common operations
