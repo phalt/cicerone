@@ -515,3 +515,42 @@ class TestOpenAPISpecReferenceIntegration:
         resolved = spec.resolve_reference(path_refs[first_ref_key])
         assert isinstance(resolved, Schema)
         assert resolved.type == "object"
+
+    def test_resolve_path_items_component(self):
+        """Test resolving pathItems component (OpenAPI 3.1)."""
+        from cicerone.spec import PathItem
+
+        spec_data = {
+            "openapi": "3.1.0",
+            "info": {"title": "Test", "version": "1.0.0"},
+            "paths": {
+                "/users": {"$ref": "#/components/pathItems/UsersPath"}
+            },
+            "components": {
+                "pathItems": {
+                    "UsersPath": {
+                        "get": {
+                            "summary": "List users",
+                            "responses": {
+                                "200": {
+                                    "description": "Success",
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {"type": "array"}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        }
+        spec = parse_spec_from_dict(spec_data)
+        resolver = ReferenceResolver(spec)
+
+        # Resolve the pathItems reference
+        path_item = resolver.resolve_reference("#/components/pathItems/UsersPath")
+        assert isinstance(path_item, PathItem)
+        assert path_item.get is not None
+        assert path_item.get.summary == "List users"

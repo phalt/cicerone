@@ -204,8 +204,11 @@ components:
 Cicerone detects and handles circular references:
 
 ```python
+from cicerone.references import ReferenceResolver
+
 # Check if a reference is circular
-is_circular = spec.is_circular_reference('#/components/schemas/Node')
+resolver = ReferenceResolver(spec)
+is_circular = resolver.is_circular_reference('#/components/schemas/Node')
 print(f"Is circular: {is_circular}")
 
 # When resolving, circular references are detected
