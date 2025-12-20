@@ -94,3 +94,26 @@ def parse_list(
     if field_name in data and isinstance(data[field_name], list):
         return [parser_func(item_data) for item_data in data[field_name]]
     return []
+
+
+def parse_list_or_none(
+    data: typing.Mapping[str, typing.Any],
+    field_name: str,
+    parser_func: typing.Callable[[dict[str, typing.Any]], T],
+) -> list[T] | None:
+    """Parse a list of objects, returning None if field doesn't exist.
+
+    Args:
+        data: Source dictionary
+        field_name: Name of field containing the list
+        parser: Function to parse each item (usually Class.from_dict)
+
+    Returns:
+        List of parsed objects, or None if field doesn't exist
+
+    Example:
+        parse_list_or_none(data, "allOf", Schema.from_dict)
+    """
+    if field_name in data and isinstance(data[field_name], list):
+        return [parser_func(item_data) for item_data in data[field_name] if isinstance(item_data, dict)]
+    return None

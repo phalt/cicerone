@@ -48,25 +48,19 @@ class Components(pydantic.BaseModel):
 
     def __str__(self) -> str:
         """Return a readable string representation of the components container."""
-        parts = []
-        if self.schemas:
-            parts.append(f"{len(self.schemas)} schemas")
-        if self.responses:
-            parts.append(f"{len(self.responses)} responses")
-        if self.parameters:
-            parts.append(f"{len(self.parameters)} parameters")
-        if self.request_bodies:
-            parts.append(f"{len(self.request_bodies)} requestBodies")
-        if self.examples:
-            parts.append(f"{len(self.examples)} examples")
-        if self.security_schemes:
-            parts.append(f"{len(self.security_schemes)} securitySchemes")
-        if self.headers:
-            parts.append(f"{len(self.headers)} headers")
-        if self.links:
-            parts.append(f"{len(self.links)} links")
-        if self.callbacks:
-            parts.append(f"{len(self.callbacks)} callbacks")
+        component_info = [
+            ("schemas", self.schemas),
+            ("responses", self.responses),
+            ("parameters", self.parameters),
+            ("requestBodies", self.request_bodies),
+            ("examples", self.examples),
+            ("securitySchemes", self.security_schemes),
+            ("headers", self.headers),
+            ("links", self.links),
+            ("callbacks", self.callbacks),
+        ]
+
+        parts = [f"{len(items)} {name}" for name, items in component_info if items]
 
         if not parts:
             return "<Components: empty>"
