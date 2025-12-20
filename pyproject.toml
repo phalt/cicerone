@@ -1,6 +1,6 @@
 [project]
 name = "cicerone"
-version = "0.1.0"
+version = "0.2.0"
 description = "Explore OpenAPI schemas, the Pythonic way"
 authors = [{ name = "Paul Hallett", email = "paulandrewhallett@gmail.com" }]
 license = { text = "MIT" }
