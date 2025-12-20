@@ -11,6 +11,8 @@ import typing
 
 import pydantic
 
+from cicerone.references import reference as spec_reference
+from cicerone.references import reference_resolver as spec_reference_resolver
 from cicerone.spec import components as spec_components
 from cicerone.spec import info as spec_info
 from cicerone.spec import operation as spec_operation
@@ -80,3 +82,58 @@ class OpenAPISpec(pydantic.BaseModel):
             ...     print(op.method, op.path, op.operation_id)
         """
         yield from itertools.chain(self.paths.all_operations(), self.webhooks.all_operations())
+
+    def resolve_reference(
+        self,
+        ref: spec_reference.Reference | str,
+        follow_nested: bool = True,
+    ) -> typing.Any:
+        """Resolve a reference to its target object.
+
+        This method resolves $ref references in the OpenAPI specification,
+        supporting both local references (within this document) and following
+        chains of nested references.
+
+        Args:
+            ref: Reference object or reference string (e.g., '#/components/schemas/User')
+            follow_nested: If True, recursively resolves nested references
+
+        Returns:
+            The target object as a typed Pydantic model (Schema, Response, Parameter, etc.)
+            when the reference points to a recognized component type. Otherwise returns raw data.
+
+        Raises:
+            ValueError: If the reference cannot be resolved
+            RecursionError: If a circular reference is detected
+
+        Example:
+            >>> from cicerone.parse import parse_spec_from_file
+            >>> spec = parse_spec_from_file("openapi.yaml")
+            >>> user_schema = spec.resolve_reference('#/components/schemas/User')
+            >>> # Returns a Schema object, not a dict
+            >>> print(type(user_schema))  # <class 'cicerone.spec.schema.Schema'>
+        """
+        resolver = spec_reference_resolver.ReferenceResolver(self)
+        return resolver.resolve_reference(ref, follow_nested=follow_nested)
+
+    def get_all_references(self) -> dict[str, spec_reference.Reference]:
+        """Get all references in the specification.
+
+        Recursively searches the entire OpenAPI specification for all $ref keywords
+        and returns them as a dictionary mapping reference strings to Reference objects.
+
+        Returns:
+            Dictionary mapping $ref strings to Reference objects
+
+        Example:
+            >>> from cicerone.parse import parse_spec_from_file
+            >>> spec = parse_spec_from_file("openapi.yaml")
+            >>> all_refs = spec.get_all_references()
+            >>> # Access by reference string
+            >>> user_ref = all_refs.get('#/components/schemas/User')
+            >>> # Get all local references
+            >>> local_refs = {k: v for k, v in all_refs.items() if v.is_local}
+            >>> print(f"Found {len(all_refs)} references")
+        """
+        resolver = spec_reference_resolver.ReferenceResolver(self)
+        return resolver.get_all_references()
