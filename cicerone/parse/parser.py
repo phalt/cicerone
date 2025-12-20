@@ -126,6 +126,24 @@ def parse_spec_from_yaml(text: str) -> spec_openapi.OpenAPISpec:
     return parse_spec_from_dict(data)
 
 
+def _parse_with_format_detection(content: str, prefer_yaml: bool = False) -> spec_openapi.OpenAPISpec:
+    """Parse content with automatic format detection.
+
+    Args:
+        content: The content to parse
+        prefer_yaml: If True, parse as YAML. Otherwise try JSON first with YAML fallback.
+
+    Returns:
+        OpenAPISpec instance
+    """
+    if prefer_yaml:
+        return parse_spec_from_yaml(content)
+    try:
+        return parse_spec_from_json(content)
+    except json.JSONDecodeError:
+        return parse_spec_from_yaml(content)
+
+
 def parse_spec_from_file(path: str | pathlib.Path) -> spec_openapi.OpenAPISpec:
     """Create an OpenAPISpec from a file.
 
@@ -142,16 +160,8 @@ def parse_spec_from_file(path: str | pathlib.Path) -> spec_openapi.OpenAPISpec:
     """
     path_obj = pathlib.Path(path) if isinstance(path, str) else path
     content = path_obj.read_text()
-
-    # Detect format from extension
-    if path_obj.suffix.lower() in [".yaml", ".yml"]:
-        return parse_spec_from_yaml(content)
-    else:
-        # Try JSON first, fall back to YAML
-        try:
-            return parse_spec_from_json(content)
-        except json.JSONDecodeError:
-            return parse_spec_from_yaml(content)
+    prefer_yaml = path_obj.suffix.lower() in [".yaml", ".yml"]
+    return _parse_with_format_detection(content, prefer_yaml)
 
 
 def parse_spec_from_url(url: str) -> spec_openapi.OpenAPISpec:
@@ -172,13 +182,5 @@ def parse_spec_from_url(url: str) -> spec_openapi.OpenAPISpec:
     with urllib_request.urlopen(request) as response:
         content = response.read().decode("utf-8")
         content_type = response.headers.get("Content-Type", "")
-
-        # Detect format from content-type
-        if "yaml" in content_type or "yml" in content_type:
-            return parse_spec_from_yaml(content)
-        else:
-            # Try JSON first, fall back to YAML
-            try:
-                return parse_spec_from_json(content)
-            except json.JSONDecodeError:
-                return parse_spec_from_yaml(content)
+        prefer_yaml = "yaml" in content_type or "yml" in content_type
+        return _parse_with_format_detection(content, prefer_yaml)

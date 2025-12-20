@@ -11,6 +11,22 @@ import typing
 T = typing.TypeVar("T")
 
 
+def truncate_text(text: str, max_len: int = 50) -> str:
+    """Truncate text with ellipsis if it exceeds max length.
+
+    Args:
+        text: Text to truncate
+        max_len: Maximum length before truncation
+
+    Returns:
+        Truncated text with '...' appended if needed
+
+    Example:
+        truncate_text("A very long description...", 20)
+    """
+    return text if len(text) <= max_len else f"{text[:max_len]}..."
+
+
 def parse_nested_object(
     data: typing.Mapping[str, typing.Any],
     field_name: str,
@@ -21,7 +37,7 @@ def parse_nested_object(
     Args:
         data: Source dictionary
         field_name: Name of field containing nested object
-        parser: Function to parse the nested object (usually Class.from_dict)
+        parser_func: Function to parse the nested object (usually Class.from_dict)
 
     Returns:
         Parsed object or None if field doesn't exist
@@ -44,7 +60,7 @@ def parse_collection(
     Args:
         data: Source dictionary
         field_name: Name of field containing the collection
-        parser: Function to parse each item (usually Class.from_dict)
+        parser_func: Function to parse each item (usually Class.from_dict)
 
     Returns:
         Dictionary mapping names to parsed objects, empty dict if field doesn't exist
@@ -67,7 +83,7 @@ def parse_list(
     Args:
         data: Source dictionary
         field_name: Name of field containing the list
-        parser: Function to parse each item (usually Class.from_dict)
+        parser_func: Function to parse each item (usually Class.from_dict)
 
     Returns:
         List of parsed objects, empty list if field doesn't exist
@@ -78,3 +94,30 @@ def parse_list(
     if field_name in data and isinstance(data[field_name], list):
         return [parser_func(item_data) for item_data in data[field_name]]
     return []
+
+
+def parse_list_or_none(
+    data: typing.Mapping[str, typing.Any],
+    field_name: str,
+    parser_func: typing.Callable[[dict[str, typing.Any]], T],
+) -> list[T] | None:
+    """Parse a list of objects, returning None if field doesn't exist.
+
+    Note: This function filters out non-dict items before parsing, which is useful
+    for schema composition keywords that should only contain object definitions.
+    This differs from parse_list() which processes all items.
+
+    Args:
+        data: Source dictionary
+        field_name: Name of field containing the list
+        parser_func: Function to parse each item (usually Class.from_dict)
+
+    Returns:
+        List of parsed objects, or None if field doesn't exist
+
+    Example:
+        parse_list_or_none(data, "allOf", Schema.from_dict)
+    """
+    if field_name in data and isinstance(data[field_name], list):
+        return [parser_func(item_data) for item_data in data[field_name] if isinstance(item_data, dict)]
+    return None

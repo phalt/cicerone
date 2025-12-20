@@ -138,13 +138,12 @@ class ReferenceResolver:
         # Navigate through the spec using the pointer path
         current = self.spec.raw
         for i, part in enumerate(ref.pointer_parts):
+            path_so_far = "/" + "/".join(ref.pointer_parts[: i + 1])
             try:
                 current = current[int(part)] if isinstance(current, list) else current[part]
             except (KeyError, IndexError, ValueError) as e:
-                path_so_far = "/" + "/".join(ref.pointer_parts[: i + 1])
                 raise ValueError(f"Reference path not found: {ref.ref} (failed at {path_so_far})") from e
             except TypeError as e:
-                path_so_far = "/" + "/".join(ref.pointer_parts[: i + 1])
                 raise ValueError(
                     f"Cannot navigate through non-dict/list object: {ref.ref} (failed at {path_so_far})"
                 ) from e
@@ -235,6 +234,20 @@ class ReferenceResolver:
         except (ValueError, RecursionError):
             return None
 
+    def _resolve_model_or_recurse(self, model: pydantic.BaseModel) -> typing.Any:
+        """Resolve a model's $ref or recursively resolve its nested references.
+
+        Args:
+            model: Pydantic model to process
+
+        Returns:
+            Resolved object if $ref found, otherwise the model with nested refs resolved
+        """
+        if ref := self._get_ref_from_model(model):
+            if resolved := self._try_resolve_ref(ref):
+                return resolved
+        return self._resolve_nested_references(model)
+
     def _resolve_model_field(
         self, parent_obj: pydantic.BaseModel, field_name: str, field_value: pydantic.BaseModel
     ) -> None:
@@ -245,13 +258,7 @@ class ReferenceResolver:
             field_name: Name of the field being resolved
             field_value: The Pydantic model value to check for $ref
         """
-        if ref := self._get_ref_from_model(field_value):
-            if resolved := self._try_resolve_ref(ref):
-                # For circular references, we keep the reference object rather than raising
-                # This allows linked-list style structures
-                parent_obj.__dict__[field_name] = resolved
-        else:
-            parent_obj.__dict__[field_name] = self._resolve_nested_references(field_value)
+        parent_obj.__dict__[field_name] = self._resolve_model_or_recurse(field_value)
 
     def _resolve_container(self, container: dict | list) -> None:
         """Resolve references in dictionary or list containers.
@@ -263,11 +270,7 @@ class ReferenceResolver:
 
         for key, value in items:
             if isinstance(value, pydantic.BaseModel):
-                if ref := self._get_ref_from_model(value):
-                    if resolved := self._try_resolve_ref(ref):
-                        container[key] = resolved
-                else:
-                    container[key] = self._resolve_nested_references(value)
+                container[key] = self._resolve_model_or_recurse(value)
 
     def get_all_references(
         self,

@@ -65,12 +65,6 @@ class Schema(pydantic.BaseModel):
             "not",
         }
 
-        # Helper to parse list of schemas
-        def parse_schema_list(field_name: str) -> list[Schema] | None:
-            if field_name in data and isinstance(data[field_name], list):
-                return [cls.from_dict(item) for item in data[field_name] if isinstance(item, dict)]
-            return None
-
         return cls(
             title=data.get("title"),
             type=data.get("type"),
@@ -78,9 +72,9 @@ class Schema(pydantic.BaseModel):
             required=data.get("required", []),
             properties=model_utils.parse_collection(data, "properties", cls.from_dict),
             items=model_utils.parse_nested_object(data, "items", cls.from_dict),
-            allOf=parse_schema_list("allOf"),
-            oneOf=parse_schema_list("oneOf"),
-            anyOf=parse_schema_list("anyOf"),
+            allOf=model_utils.parse_list_or_none(data, "allOf", cls.from_dict),
+            oneOf=model_utils.parse_list_or_none(data, "oneOf", cls.from_dict),
+            anyOf=model_utils.parse_list_or_none(data, "anyOf", cls.from_dict),
             # Use dict unpacking for 'not' since it's a Python keyword
             **{"not": model_utils.parse_nested_object(data, "not", cls.from_dict)} if "not" in data else {},
             **{k: v for k, v in data.items() if k not in excluded},

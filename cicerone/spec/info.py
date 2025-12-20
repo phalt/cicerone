@@ -77,8 +77,7 @@ class Info(pydantic.BaseModel):
         """Return a readable string representation of the info object."""
         parts = [f"'{self.title}' v{self.version}"]
         if self.description:
-            desc_preview = self.description[:50] + "..." if len(self.description) > 50 else self.description
-            parts.append(f"desc='{desc_preview}'")
+            parts.append(f"desc='{model_utils.truncate_text(self.description)}'")
         return f"<Info: {', '.join(parts)}>"
 
     @classmethod
