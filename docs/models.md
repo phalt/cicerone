@@ -1,6 +1,6 @@
 # Spec Models
 
-Cicerone provides Pydantic-based models for all OpenAPI 3.x specification objects. These models provide type-safe access to the OpenAPI schema and make it easy to explore and traverse specifications programmatically.
+Cicerone provides Pydantic-based models for all OpenAPI 3.x specification objects. These models provide type-safe access to the OpenAPI schema and make it easy to explore and traverse specifications in a pythonic way.
 
 ## Overview
 
@@ -8,18 +8,42 @@ All spec models are available in the `cicerone.spec` module:
 
 ```python
 from cicerone.spec import (
+    Callback,
+    Components,
+    Contact,
+    Encoding,
+    Example,
+    ExternalDocumentation,
+    Header,
+    Info,
+    License,
+    Link,
+    MediaType,
+    OAuthFlow,
+    OAuthFlows,
     OpenAPISpec,
-    Info, Contact, License,
-    Paths, PathItem, Operation,
-    Components, Schema, Response, Parameter, RequestBody,
-    Server, ServerVariable,
-    Tag, ExternalDocumentation,
-    SecurityScheme, OAuthFlows, OAuthFlow,
-    MediaType, Encoding, Example,
-    Header, Link, Callback,
-    Webhooks,
+    Operation,
+    Parameter,
+    PathItem,
+    Paths,
+    RequestBody,
+    Response,
+    Schema,
+    SecurityScheme,
+    Server,
+    ServerVariable,
+    Tag,
     Version,
+    Webhooks,
 )
+```
+
+Though we recommend importing just the `spec` module to maintain sensible namespacing:
+
+```python
+from cicerone import spec as cicerone_spec
+
+cicerone_spec.OpenAPISpec
 ```
 
 ## Core Models
@@ -29,7 +53,8 @@ from cicerone.spec import (
 The top-level model representing an entire OpenAPI specification.
 
 **Key Attributes:**
-- `version` (Version): OpenAPI version (e.g., "3.0.0", "3.1.0")
+
+- `version` (Version): OpenAPI version
 - `info` (Info): Metadata about the API
 - `paths` (Paths): Available paths and operations
 - `components` (Components): Reusable component definitions
@@ -41,25 +66,31 @@ The top-level model representing an entire OpenAPI specification.
 - `raw` (dict): The original specification as a dictionary
 
 **Key Methods:**
-- `operation_by_operation_id(operation_id)`: Find an operation by its operationId
-- `all_operations()`: Generator yielding all operations
+
+- `operation_by_operation_id(operation_id)`: Find an operation object by its operationId
+- `all_operations()`: Generator yielding all operation objects
 - `resolve_reference(ref)`: Resolve a $ref reference
 - `get_all_references()`: Get all references in the spec
 
 **Example:**
+
 ```python
 from cicerone import parse as cicerone_parse
 
 spec = cicerone_parse.parse_spec_from_file('openapi.yaml')
 
-print(spec)  # <OpenAPISpec: 'My API' v3.0.0, 5 paths, 10 schemas>
+print(spec)  
+>>> <OpenAPISpec: 'My API' v3.0.0, 5 paths, 10 schemas>
 print(f"API: {spec.info.title} v{spec.info.version}")
+>>> API: My API v3.0.0
 print(f"OpenAPI version: {spec.version}")
+>>> OpenAPI version 3.1.0
 
 # Find operation
 op = spec.operation_by_operation_id("createUser")
 if op:
     print(f"Operation: {op.method.upper()} {op.path}")
+>>> Operation: POST /users
 
 # Iterate all operations
 for operation in spec.all_operations():
@@ -71,6 +102,7 @@ for operation in spec.all_operations():
 Metadata about the API.
 
 **Key Attributes:**
+
 - `title` (str): API title (required)
 - `version` (str): API version (required)
 - `description` (str | None): API description
@@ -80,6 +112,7 @@ Metadata about the API.
 - `summary` (str | None): Short summary (OpenAPI 3.1+)
 
 **Example:**
+
 ```python
 print(f"{spec.info.title} v{spec.info.version}")
 if spec.info.description:
@@ -93,6 +126,7 @@ if spec.info.contact:
 Represents a JSON Schema / OpenAPI Schema object. This is one of the most commonly used models for exploring data structures.
 
 **Key Attributes:**
+
 - `type` (str | None): Schema type (object, array, string, number, integer, boolean, null)
 - `title` (str | None): Schema title
 - `description` (str | None): Schema description
@@ -107,6 +141,7 @@ Represents a JSON Schema / OpenAPI Schema object. This is one of the most common
 **Note:** Schema models allow extra fields to support the full JSON Schema vocabulary (format, enum, minimum, maximum, pattern, etc.)
 
 **Example:**
+
 ```python
 # Get a schema from components
 user_schema = spec.components.schemas.get("User")
@@ -131,6 +166,7 @@ if hasattr(user_schema, 'format'):
 Container for reusable component definitions.
 
 **Key Attributes:**
+
 - `schemas` (dict[str, Schema]): Reusable schemas
 - `responses` (dict[str, Response]): Reusable responses
 - `parameters` (dict[str, Parameter]): Reusable parameters
@@ -142,9 +178,11 @@ Container for reusable component definitions.
 - `callbacks` (dict[str, Callback]): Reusable callbacks
 
 **Key Methods:**
+
 - `get_schema(schema_name)`: Get a schema by name
 
 **Example:**
+
 ```python
 # List all schemas
 print(f"Schemas: {list(spec.components.schemas.keys())}")
@@ -166,12 +204,15 @@ for name, scheme in spec.components.security_schemes.items():
 Container for all API paths.
 
 **Key Attributes:**
+
 - `items` (dict[str, PathItem]): Mapping of path strings to PathItem objects
 
 **Key Methods:**
+
 - `all_operations()`: Generator yielding all operations across all paths
 
 **Example:**
+
 ```python
 print(spec.paths)  # <Paths: 5 paths, 12 operations [/users, /users/{id}, ...]>
 
@@ -189,6 +230,7 @@ for operation in spec.paths.all_operations():
 Represents a single path and its operations.
 
 **Key Attributes:**
+
 - `path` (str): The path string (e.g., "/users/{id}")
 - `summary` (str | None): Path summary
 - `description` (str | None): Path description
@@ -197,6 +239,7 @@ Represents a single path and its operations.
 - `servers` (list[Server]): Server overrides for this path
 
 **Example:**
+
 ```python
 users_path = spec.paths.items["/users"]
 print(users_path)  # <PathItem: /users [GET, POST]>
@@ -212,6 +255,7 @@ if users_path.post:
 Represents a single API operation (HTTP method on a path).
 
 **Key Attributes:**
+
 - `method` (str): HTTP method (get, post, put, delete, etc.)
 - `path` (str): The path this operation belongs to
 - `operation_id` (str | None): Unique operation identifier
@@ -226,6 +270,7 @@ Represents a single API operation (HTTP method on a path).
 - `deprecated` (bool): Whether the operation is deprecated
 
 **Example:**
+
 ```python
 op = spec.operation_by_operation_id("createUser")
 
@@ -253,6 +298,7 @@ for status_code, response in op.responses.items():
 Represents a parameter (query, path, header, or cookie).
 
 **Key Attributes:**
+
 - `name` (str): Parameter name
 - `in_` (str): Parameter location (query, path, header, cookie)
 - `description` (str | None): Parameter description
@@ -265,6 +311,7 @@ Represents a parameter (query, path, header, or cookie).
 - `examples` (dict[str, Example]): Multiple examples
 
 **Example:**
+
 ```python
 for param in operation.parameters:
     req_str = "required" if param.required else "optional"
@@ -278,12 +325,14 @@ for param in operation.parameters:
 Represents an operation response.
 
 **Key Attributes:**
+
 - `description` (str): Response description (required)
 - `headers` (dict[str, Header]): Response headers
 - `content` (dict[str, MediaType]): Response content by media type
 - `links` (dict[str, Link]): Response links
 
 **Example:**
+
 ```python
 success_response = operation.responses.get("200")
 if success_response:
@@ -301,11 +350,13 @@ if success_response:
 Represents a request body definition.
 
 **Key Attributes:**
+
 - `description` (str | None): Request body description
 - `content` (dict[str, MediaType]): Content by media type
 - `required` (bool): Whether required
 
 **Example:**
+
 ```python
 if operation.request_body:
     print(f"Required: {operation.request_body.required}")
@@ -323,11 +374,13 @@ if operation.request_body:
 Represents a server definition.
 
 **Key Attributes:**
+
 - `url` (str): Server URL
 - `description` (str | None): Server description
 - `variables` (dict[str, ServerVariable]): Server variables for URL templating
 
 **Example:**
+
 ```python
 for server in spec.servers:
     print(f"Server: {server.url}")
@@ -343,6 +396,7 @@ for server in spec.servers:
 Represents a server URL template variable.
 
 **Key Attributes:**
+
 - `enum` (list[str] | None): Allowed values
 - `default` (str): Default value
 - `description` (str | None): Variable description
@@ -354,6 +408,7 @@ Represents a server URL template variable.
 Represents a security scheme definition.
 
 **Key Attributes:**
+
 - `type` (str): Security type (apiKey, http, oauth2, openIdConnect, mutualTLS)
 - `description` (str | None): Security scheme description
 - `name` (str | None): Parameter name (for apiKey)
@@ -364,6 +419,7 @@ Represents a security scheme definition.
 - `open_id_connect_url` (str | None): OpenID Connect URL (for openIdConnect)
 
 **Example:**
+
 ```python
 for name, scheme in spec.components.security_schemes.items():
     print(f"{name}: {scheme.type}")
@@ -384,12 +440,14 @@ for name, scheme in spec.components.security_schemes.items():
 Represents content for a specific media type.
 
 **Key Attributes:**
+
 - `schema` (Schema | None): Content schema
 - `example` (Any): Example value
 - `examples` (dict[str, Example]): Multiple examples
 - `encoding` (dict[str, Encoding]): Encoding information
 
 **Example:**
+
 ```python
 content = response.content.get("application/json")
 if content and content.schema:
@@ -401,6 +459,7 @@ if content and content.schema:
 Represents an example value.
 
 **Key Attributes:**
+
 - `summary` (str | None): Example summary
 - `description` (str | None): Example description
 - `value` (Any): The example value
@@ -413,11 +472,13 @@ Represents an example value.
 Represents a tag for grouping operations.
 
 **Key Attributes:**
+
 - `name` (str): Tag name
 - `description` (str | None): Tag description
 - `external_docs` (ExternalDocumentation | None): External documentation
 
 **Example:**
+
 ```python
 for tag in spec.tags:
     print(f"Tag: {tag.name}")
@@ -427,12 +488,14 @@ for tag in spec.tags:
 
 ### Callback
 
-Represents a callback definition (asynchronous, out-of-band requests).
+Represents a callback definition.
 
 **Key Attributes:**
+
 - `expressions` (dict[str, PathItem]): Callback expressions
 
 **Example:**
+
 ```python
 for name, callback in spec.components.callbacks.items():
     print(f"Callback: {name}")
@@ -445,12 +508,15 @@ for name, callback in spec.components.callbacks.items():
 Container for webhook definitions (OpenAPI 3.1+).
 
 **Key Attributes:**
+
 - `items` (dict[str, PathItem]): Webhook definitions
 
 **Key Methods:**
+
 - `all_operations()`: Generator yielding all webhook operations
 
 **Example:**
+
 ```python
 for webhook_name, path_item in spec.webhooks.items.items():
     print(f"Webhook: {webhook_name}")
@@ -463,11 +529,13 @@ for webhook_name, path_item in spec.webhooks.items.items():
 Represents an OpenAPI version.
 
 **Key Attributes:**
+
 - `major` (int): Major version number
 - `minor` (int): Minor version number
 - `patch` (int): Patch version number
 
 **Example:**
+
 ```python
 print(f"OpenAPI {spec.version.major}.{spec.version.minor}.{spec.version.patch}")
 
@@ -499,11 +567,12 @@ print(operation)
 ### Extra Fields
 
 All models use Pydantic's `extra="allow"` configuration to preserve:
+
 - Vendor extensions (x-* fields)
 - Future OpenAPI additions
-- Full specification data for raw access
 
 **Example:**
+
 ```python
 # Access vendor extensions
 if hasattr(spec.info, 'x_custom_field'):
@@ -516,9 +585,10 @@ custom_value = spec.raw.get('x-api-id')
 ### Type Safety
 
 All models are fully typed using Pydantic, providing:
+
 - Runtime validation
 - IDE autocomplete
-- Type checking with mypy/pyright
+- Type checking with mypy/pyright/ty
 
 ```python
 from cicerone.spec import Schema

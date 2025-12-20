@@ -6,20 +6,6 @@ OpenAPI specifications use references (`$ref`) to avoid duplication and keep sch
 
 A reference in OpenAPI uses the `$ref` keyword to point to another part of the specification. References follow the JSON Reference specification (RFC 6901) and use JSON Pointer syntax.
 
-### Reference Types
-
-Cicerone supports several types of references:
-
-1. **Local references** - Point to other parts of the same document
-   ```yaml
-   $ref: '#/components/schemas/User'
-   ```
-
-2. **External references** - Point to other files (coming in future versions)
-   ```yaml
-   $ref: './models/user.yaml#/User'
-   ```
-
 ### Reference Locations
 
 References can appear in various places in an OpenAPI specification:
@@ -217,24 +203,6 @@ node = spec.resolve_reference('#/components/schemas/Node', follow_nested=True)
 print("Node schema resolved successfully with circular handling")
 ```
 
-### Array Index References
-
-You can use array indices in reference paths:
-
-```yaml
-tags:
-  - name: users
-    description: User operations
-  - name: posts
-    description: Post operations
-```
-
-```python
-# Reference by array index
-posts_tag = spec.resolve_reference('#/tags/1')
-print(f"Tag name: {posts_tag['name']}")  # 'posts'
-```
-
 ## Reference Resolution Rules
 
 ### OAS 3.0 vs 3.1 Differences
@@ -242,11 +210,13 @@ print(f"Tag name: {posts_tag['name']}")  # 'posts'
 The behavior of references differs slightly between OpenAPI versions:
 
 **OpenAPI 3.0:**
+
 - Reference Objects can only contain `$ref`
 - Adjacent keywords are ignored
 - References fully replace the object
 
 **OpenAPI 3.1:**
+
 - Reference Objects can have `summary` and `description`
 - These fields override the target's values
 - In Schema Objects, `$ref` can coexist with other keywords (acts like `allOf`)
@@ -262,12 +232,14 @@ Cicerone handles both versions correctly, preserving the raw specification data.
 Resolve a reference to its target object as a typed Pydantic model.
 
 **Parameters:**
+
 - `ref` (str or Reference): Reference to resolve
 - `follow_nested` (bool): Whether to recursively resolve nested references
 
 **Returns:** Typed Pydantic model (Schema, Response, Parameter, etc.) when the reference points to a recognized component type. Otherwise returns raw data.
 
 **Raises:**
+
 - `ValueError`: If reference cannot be resolved
 - `RecursionError`: If circular reference detected
 
@@ -278,6 +250,7 @@ Get all references in the specification.
 **Returns:** Dictionary mapping $ref strings to Reference objects
 
 **Example:**
+
 ```python
 all_refs = spec.get_all_references()
 user_ref = all_refs.get('#/components/schemas/User')
@@ -289,6 +262,7 @@ local_refs = {k: v for k, v in all_refs.items() if v.is_local}
 Check if a reference creates a circular dependency.
 
 **Parameters:**
+
 - `ref` (str or Reference): Reference to check
 
 **Returns:** bool - True if circular

@@ -1,6 +1,8 @@
 # Parser API
 
-The parser module provides functions for loading OpenAPI specifications from various sources. All parsing functions return an `OpenAPISpec` object that you can use to explore and traverse the schema.
+The parser module provides functions for loading OpenAPI specifications from various sources. 
+
+All parsing functions return an `OpenAPISpec` object that you can use to explore and traverse the schema.
 
 ## Overview
 
@@ -25,16 +27,20 @@ from cicerone import parse as cicerone_parse
 Load an OpenAPI specification from a file. The format (JSON or YAML) is auto-detected based on the file extension.
 
 **Parameters:**
+
 - `path` (str | pathlib.Path): Path to the OpenAPI specification file
 
 **Returns:**
+
 - `OpenAPISpec`: Parsed specification object
 
 **Format Detection:**
+
 - Files with `.yaml` or `.yml` extension are parsed as YAML
 - Other files are tried as JSON first, with YAML as fallback
 
 **Example:**
+
 ```python
 from cicerone import parse as cicerone_parse
 
@@ -54,16 +60,20 @@ spec = cicerone_parse.parse_spec_from_file(Path("specs/api.yaml"))
 Load an OpenAPI specification from a URL. The format is detected from the Content-Type header.
 
 **Parameters:**
+
 - `url` (str): URL to fetch the OpenAPI specification from
 
 **Returns:**
+
 - `OpenAPISpec`: Parsed specification object
 
 **Format Detection:**
+
 - URLs returning `application/yaml` or similar are parsed as YAML
 - Other content types are tried as JSON first, with YAML as fallback
 
 **Example:**
+
 ```python
 from cicerone import parse as cicerone_parse
 
@@ -79,12 +89,15 @@ spec = cicerone_parse.parse_spec_from_url("https://raw.githubusercontent.com/exa
 Create an OpenAPI specification from a Python dictionary.
 
 **Parameters:**
+
 - `data` (Mapping[str, Any]): The OpenAPI specification as a dictionary
 
 **Returns:**
+
 - `OpenAPISpec`: Parsed specification object
 
 **Example:**
+
 ```python
 from cicerone import parse as cicerone_parse
 
@@ -119,12 +132,15 @@ print(spec.info.title)  # "My API"
 Parse an OpenAPI specification from a JSON string.
 
 **Parameters:**
+
 - `text` (str): JSON string containing the OpenAPI specification
 
 **Returns:**
+
 - `OpenAPISpec`: Parsed specification object
 
 **Example:**
+
 ```python
 from cicerone import parse as cicerone_parse
 
@@ -147,12 +163,15 @@ spec = cicerone_parse.parse_spec_from_json(json_str)
 Parse an OpenAPI specification from a YAML string.
 
 **Parameters:**
+
 - `text` (str): YAML string containing the OpenAPI specification
 
 **Returns:**
+
 - `OpenAPISpec`: Parsed specification object
 
 **Example:**
+
 ```python
 from cicerone import parse as cicerone_parse
 
@@ -173,34 +192,9 @@ spec = cicerone_parse.parse_spec_from_yaml(yaml_str)
 
 ## Working with Parsed Specs
 
-Once you've parsed a specification, you can explore it using the `OpenAPISpec` object:
+Once you've parsed a specification, you can explore it using the `OpenAPISpec` object.
 
-```python
-from cicerone import parse as cicerone_parse
-
-spec = cicerone_parse.parse_spec_from_file('openapi.yaml')
-
-# Access metadata
-print(f"API: {spec.info.title} v{spec.info.version}")
-print(f"OpenAPI version: {spec.version}")
-
-# Explore paths
-for path, path_item in spec.paths.items.items():
-    print(f"Path: {path}")
-    for method in ['get', 'post', 'put', 'delete', 'patch']:
-        operation = getattr(path_item, method, None)
-        if operation:
-            print(f"  {method.upper()}: {operation.summary}")
-
-# Find operations by ID
-operation = spec.operation_by_operation_id("listUsers")
-if operation:
-    print(f"Found: {operation.summary}")
-
-# Access components
-for schema_name, schema in spec.components.schemas.items():
-    print(f"Schema: {schema_name} ({schema.type})")
-```
+See [models](/models) for more information.
 
 ## Error Handling
 
@@ -231,13 +225,7 @@ The parser automatically detects the OpenAPI version from the `openapi` field in
 
 ## Performance Considerations
 
-The parser is designed for performance:
-
-- **Lazy evaluation**: Nested objects are only parsed when accessed
-- **Minimal overhead**: Direct dict-to-object conversion using Pydantic
-- **Memory efficient**: The raw specification is stored once and shared
-
-For large specifications (1000+ paths), parsing typically takes less than 100ms.
+The parser is designed for performance. Even for large specifications (1000+ paths), parsing typically takes less than 100ms.
 
 ## See Also
 

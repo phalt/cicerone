@@ -13,7 +13,7 @@ deploy-docs:  ## Build and deploy the documentation
 
 
 run-docs:  ## Run a local server to view the documentation
-	uv run mkdocs serve
+	uv run mkdocs serve --watch docs/
 
 release:  ## Build a new version and release it
 	uv build
