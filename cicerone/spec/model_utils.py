@@ -24,7 +24,7 @@ def truncate_text(text: str, max_len: int = 50) -> str:
     Example:
         truncate_text("A very long description...", 20)
     """
-    return f"{text[:max_len]}{'...' if len(text) > max_len else ''}"
+    return text if len(text) <= max_len else f"{text[:max_len]}..."
 
 
 def parse_nested_object(
@@ -102,6 +102,10 @@ def parse_list_or_none(
     parser_func: typing.Callable[[dict[str, typing.Any]], T],
 ) -> list[T] | None:
     """Parse a list of objects, returning None if field doesn't exist.
+
+    Note: This function filters out non-dict items before parsing, which is useful
+    for schema composition keywords that should only contain object definitions.
+    This differs from parse_list() which processes all items.
 
     Args:
         data: Source dictionary
