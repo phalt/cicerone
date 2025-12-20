@@ -2,9 +2,7 @@
 
 How to publish new versions
 
-## Regenerate test clients
-
-This will mean the example clients always show the latest version in their MANIFEST.md files.
+## Update the version value
 
 Update the `settings.py` file to make the version match the tag:
 
@@ -12,14 +10,6 @@ Update the `settings.py` file to make the version match the tag:
 # cicerone/settings.py
 VERSION = "<VERSION>"
 ```
-
-Regenerate the test clients
-
-```sh
-make generate-test-clients
-```
-
-When you type `git diff` you should now see the test clients have updated their MANIFEST.md files.
 
 ## Update the package version
 

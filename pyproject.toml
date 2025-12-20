@@ -1,7 +1,7 @@
 [project]
 name = "cicerone"
 version = "0.2.0"
-description = "Explore OpenAPI schemas, the Pythonic way"
+description = "Turn OpenAPI schemas into Pydantic models"
 authors = [{ name = "Paul Hallett", email = "paulandrewhallett@gmail.com" }]
 license = { text = "MIT" }
 readme = "README.md"
@@ -13,9 +13,6 @@ Homepage = "https://phalt.github.io/cicerone/"
 Changelog = "https://phalt.github.io/cicerone/CHANGELOG/"
 Documentation = "https://phalt.github.io/cicerone/"
 Issues = "https://github.com/phalt/cicerone/issues"
-
-[project.scripts]
-cicerone = "cicerone.cli:cli_group"
 
 [dependency-groups]
 dev = [
