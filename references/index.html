@@ -1,0 +1,1393 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://phalt.github.io/cicerone/references/">
+      
+      
+        <link rel="prev" href="../install/">
+      
+      
+        <link rel="next" href="../CHANGELOG/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Working with References - 📜 Cicerone</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#working-with-references" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="📜 Cicerone" class="md-header__button md-logo" aria-label="📜 Cicerone" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            📜 Cicerone
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Working with References
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/phalt/cicerone" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phalt/cicerone
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="📜 Cicerone" class="md-nav__button md-logo" aria-label="📜 Cicerone" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    📜 Cicerone
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/phalt/cicerone" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phalt/cicerone
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with References
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-references-in-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding References in OpenAPI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding References in OpenAPI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reference-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Locations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-reference-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Reference Navigation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Reference Navigation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolving-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolving a Reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-all-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding All References
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-with-the-reference-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working with the Reference Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Working with the Reference Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oas-31-summary-and-description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAS 3.1 Summary and Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-reference-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Reference Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Reference Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nested-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nested References
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circular-reference-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circular Reference Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#array-index-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Array Index References
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-resolution-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Resolution Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference Resolution Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oas-30-vs-31-differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAS 3.0 vs 3.1 Differences
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="API Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openapispec-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPISpec Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAPISpec Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolve_referenceref-follow_nestedtrue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolve_reference(ref, follow_nested=True)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_all_references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_all_references()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_circular_referenceref" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_circular_reference(ref)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Class
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference Class">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-references-in-openapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding References in OpenAPI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding References in OpenAPI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reference-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Locations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-reference-navigation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Reference Navigation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Reference Navigation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolving-a-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolving a Reference
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-all-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding All References
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-with-the-reference-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working with the Reference Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Working with the Reference Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oas-31-summary-and-description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAS 3.1 Summary and Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-reference-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Reference Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Reference Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nested-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nested References
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circular-reference-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circular Reference Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#array-index-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Array Index References
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-resolution-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Resolution Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference Resolution Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#oas-30-vs-31-differences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAS 3.0 vs 3.1 Differences
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="API Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openapispec-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPISpec Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAPISpec Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resolve_referenceref-follow_nestedtrue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        resolve_reference(ref, follow_nested=True)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_all_references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_all_references()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_circular_referenceref" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_circular_reference(ref)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Class
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reference Class">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="working-with-references">Working with References</h1>
+<p>OpenAPI specifications use references (<code>$ref</code>) to avoid duplication and keep schemas manageable. Cicerone provides a comprehensive API for navigating and resolving these references.</p>
+<h2 id="understanding-references-in-openapi">Understanding References in OpenAPI</h2>
+<p>A reference in OpenAPI uses the <code>$ref</code> keyword to point to another part of the specification. References follow the JSON Reference specification (RFC 6901) and use JSON Pointer syntax.</p>
+<h3 id="reference-types">Reference Types</h3>
+<p>Cicerone supports several types of references:</p>
+<ol>
+<li>
+<p><strong>Local references</strong> - Point to other parts of the same document
+   <div class="highlight"><pre><span></span><code><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/User&#39;</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>External references</strong> - Point to other files (coming in future versions)
+   <div class="highlight"><pre><span></span><code><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./models/user.yaml#/User&#39;</span>
+</code></pre></div></p>
+</li>
+</ol>
+<h3 id="reference-locations">Reference Locations</h3>
+<p>References can appear in various places in an OpenAPI specification:</p>
+<ul>
+<li><strong>Schema objects</strong> - Most common, referencing reusable schemas</li>
+<li><strong>Response objects</strong> - Referencing reusable responses</li>
+<li><strong>Parameter objects</strong> - Referencing reusable parameters</li>
+<li><strong>Request body objects</strong> - Referencing reusable request bodies</li>
+<li><strong>And more</strong> - Anywhere the spec allows a Reference Object</li>
+</ul>
+<h2 id="basic-reference-navigation">Basic Reference Navigation</h2>
+<h3 id="resolving-a-reference">Resolving a Reference</h3>
+<p>The most common operation is resolving a reference to get its target object as a typed Pydantic model:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">cicerone_parse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">Schema</span>
+
+<span class="c1"># Load your OpenAPI spec</span>
+<span class="n">spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s1">&#39;openapi.yaml&#39;</span><span class="p">)</span>
+
+<span class="c1"># Resolve a reference to a schema - returns a Schema object, not a dict</span>
+<span class="n">user_schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">user_schema</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># &lt;class &#39;cicerone.spec.schema.Schema&#39;&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User schema type: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User properties: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">user_schema</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>Example with a sample schema:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schemas</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">User</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
+<span class="w">      </span><span class="nt">required</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">username</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span>
+<span class="w">      </span><span class="nt">properties</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">id</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">        </span><span class="nt">username</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">        </span><span class="nt">email</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">          </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Resolves to a typed Schema object</span>
+<span class="n">user_schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">user_schema</span><span class="p">,</span> <span class="n">Schema</span><span class="p">)</span>
+<span class="c1"># Access properties directly as attributes</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">user_schema</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>  <span class="c1"># &#39;object&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">user_schema</span><span class="o">.</span><span class="n">required</span><span class="p">)</span>  <span class="c1"># [&#39;id&#39;, &#39;username&#39;, &#39;email&#39;]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">user_schema</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>  <span class="c1"># &#39;email&#39;</span>
+</code></pre></div>
+<h3 id="finding-all-references">Finding All References</h3>
+<p>You can discover all references in your specification as a dictionary:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Get all references as a dict mapping $ref strings to Reference objects</span>
+<span class="n">all_refs</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">get_all_references</span><span class="p">()</span>
+
+<span class="c1"># Access specific references by their $ref string</span>
+<span class="n">user_ref</span> <span class="o">=</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">user_ref</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found reference: </span><span class="si">{</span><span class="n">user_ref</span><span class="o">.</span><span class="n">ref</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Filter by type</span>
+<span class="n">local_refs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">is_local</span><span class="p">}</span>
+<span class="n">external_refs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">is_external</span><span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">all_refs</span><span class="p">)</span><span class="si">}</span><span class="s2"> total references&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Local: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">local_refs</span><span class="p">)</span><span class="si">}</span><span class="s2">, External: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">external_refs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># List all schema references</span>
+<span class="n">schema_refs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;/schemas/&#39;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">ref_str</span><span class="p">,</span> <span class="n">ref_obj</span> <span class="ow">in</span> <span class="n">schema_refs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">ref_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="working-with-the-reference-model">Working with the Reference Model</h2>
+<p>The <code>Reference</code> class provides properties to inspect and work with reference objects:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.references</span><span class="w"> </span><span class="kn">import</span> <span class="n">Reference</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">Schema</span>
+
+<span class="c1"># Create a reference object</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">Reference</span><span class="p">(</span><span class="n">ref</span><span class="o">=</span><span class="s1">&#39;#/components/schemas/Pet&#39;</span><span class="p">)</span>
+
+<span class="c1"># Check reference type</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is local: </span><span class="si">{</span><span class="n">ref</span><span class="o">.</span><span class="n">is_local</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is external: </span><span class="si">{</span><span class="n">ref</span><span class="o">.</span><span class="n">is_external</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># False</span>
+
+<span class="c1"># Get the JSON Pointer</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pointer: </span><span class="si">{</span><span class="n">ref</span><span class="o">.</span><span class="n">pointer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># /components/schemas/Pet</span>
+
+<span class="c1"># Get pointer components</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parts: </span><span class="si">{</span><span class="n">ref</span><span class="o">.</span><span class="n">pointer_parts</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># [&#39;components&#39;, &#39;schemas&#39;, &#39;Pet&#39;]</span>
+
+<span class="c1"># Resolve the reference to get the actual Schema object</span>
+<span class="n">pet_schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pet_schema</span><span class="p">,</span> <span class="n">Schema</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pet schema type: </span><span class="si">{</span><span class="n">pet_schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="oas-31-summary-and-description">OAS 3.1 Summary and Description</h3>
+<p>In OpenAPI 3.1, Reference Objects can have <code>summary</code> and <code>description</code> fields:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.references</span><span class="w"> </span><span class="kn">import</span> <span class="n">Reference</span>
+
+<span class="n">ref</span> <span class="o">=</span> <span class="n">Reference</span><span class="p">(</span><span class="n">ref</span><span class="o">=</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">,</span>
+    <span class="n">summary</span><span class="o">=</span><span class="s1">&#39;User schema&#39;</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Represents a user in the system&#39;</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reference: </span><span class="si">{</span><span class="n">ref</span><span class="o">.</span><span class="n">ref</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Summary: </span><span class="si">{</span><span class="n">ref</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Description: </span><span class="si">{</span><span class="n">ref</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="advanced-reference-operations">Advanced Reference Operations</h2>
+<h3 id="nested-references">Nested References</h3>
+<p>Cicerone can automatically follow nested references:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schemas</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">UserList</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span>
+<span class="w">      </span><span class="nt">items</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/User&#39;</span>
+<span class="w">    </span><span class="nt">User</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Person&#39;</span>
+<span class="w">    </span><span class="nt">Person</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
+<span class="w">      </span><span class="nt">properties</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># By default, follows nested references</span>
+<span class="n">person</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">)</span>
+<span class="c1"># Returns the Person schema (fully resolved)</span>
+
+<span class="c1"># Or stop at the first level</span>
+<span class="n">user_ref</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">,</span> <span class="n">follow_nested</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="circular-reference-detection">Circular Reference Detection</h3>
+<p>Some schemas have circular references (e.g., tree structures):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">components</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">schemas</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Node</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
+<span class="w">      </span><span class="nt">properties</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">        </span><span class="nt">children</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">array</span>
+<span class="w">          </span><span class="nt">items</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/Node&#39;</span><span class="w">  </span><span class="c1"># Circular!</span>
+</code></pre></div>
+<p>Cicerone detects and handles circular references:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.references</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReferenceResolver</span>
+
+<span class="c1"># Check if a reference is circular</span>
+<span class="n">resolver</span> <span class="o">=</span> <span class="n">ReferenceResolver</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<span class="n">is_circular</span> <span class="o">=</span> <span class="n">resolver</span><span class="o">.</span><span class="n">is_circular_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/Node&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Is circular: </span><span class="si">{</span><span class="n">is_circular</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># When resolving with follow_nested=True, circular references are handled</span>
+<span class="c1"># by stopping recursion - the circular reference remains as a Reference object</span>
+<span class="c1"># pointing back to create a linked-list style structure</span>
+<span class="n">node</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/Node&#39;</span><span class="p">,</span> <span class="n">follow_nested</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Node schema resolved successfully with circular handling&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="array-index-references">Array Index References</h3>
+<p>You can use array indices in reference paths:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">tags</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">users</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User operations</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">posts</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Post operations</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Reference by array index</span>
+<span class="n">posts_tag</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/tags/1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tag name: </span><span class="si">{</span><span class="n">posts_tag</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># &#39;posts&#39;</span>
+</code></pre></div>
+<h2 id="reference-resolution-rules">Reference Resolution Rules</h2>
+<h3 id="oas-30-vs-31-differences">OAS 3.0 vs 3.1 Differences</h3>
+<p>The behavior of references differs slightly between OpenAPI versions:</p>
+<p><strong>OpenAPI 3.0:</strong>
+- Reference Objects can only contain <code>$ref</code>
+- Adjacent keywords are ignored
+- References fully replace the object</p>
+<p><strong>OpenAPI 3.1:</strong>
+- Reference Objects can have <code>summary</code> and <code>description</code>
+- These fields override the target's values
+- In Schema Objects, <code>$ref</code> can coexist with other keywords (acts like <code>allOf</code>)</p>
+<p>Cicerone handles both versions correctly, preserving the raw specification data.</p>
+<h2 id="api-reference">API Reference</h2>
+<h3 id="openapispec-methods">OpenAPISpec Methods</h3>
+<h4 id="resolve_referenceref-follow_nestedtrue"><code>resolve_reference(ref, follow_nested=True)</code></h4>
+<p>Resolve a reference to its target object as a typed Pydantic model.</p>
+<p><strong>Parameters:</strong>
+- <code>ref</code> (str or Reference): Reference to resolve
+- <code>follow_nested</code> (bool): Whether to recursively resolve nested references</p>
+<p><strong>Returns:</strong> Typed Pydantic model (Schema, Response, Parameter, etc.) when the reference points to a recognized component type. Otherwise returns raw data.</p>
+<p><strong>Raises:</strong>
+- <code>ValueError</code>: If reference cannot be resolved
+- <code>RecursionError</code>: If circular reference detected</p>
+<h4 id="get_all_references"><code>get_all_references()</code></h4>
+<p>Get all references in the specification.</p>
+<p><strong>Returns:</strong> Dictionary mapping $ref strings to Reference objects</p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code><span class="n">all_refs</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">get_all_references</span><span class="p">()</span>
+<span class="n">user_ref</span> <span class="o">=</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">)</span>
+<span class="n">local_refs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">is_local</span><span class="p">}</span>
+</code></pre></div></p>
+<h4 id="is_circular_referenceref"><code>is_circular_reference(ref)</code></h4>
+<p>Check if a reference creates a circular dependency.</p>
+<p><strong>Parameters:</strong>
+- <code>ref</code> (str or Reference): Reference to check</p>
+<p><strong>Returns:</strong> bool - True if circular</p>
+<h3 id="reference-class">Reference Class</h3>
+<h4 id="properties">Properties</h4>
+<ul>
+<li><code>ref</code> (str): The reference string</li>
+<li><code>summary</code> (str | None): Summary (OAS 3.1+)</li>
+<li><code>description</code> (str | None): Description (OAS 3.1+)</li>
+<li><code>is_local</code> (bool): True if local reference (#...)</li>
+<li><code>is_external</code> (bool): True if external reference</li>
+<li><code>pointer</code> (str): JSON Pointer part (/components/schemas/User)</li>
+<li><code>document</code> (str): Document part (for external refs)</li>
+<li><code>pointer_parts</code> (list[str]): Pointer split into components</li>
+</ul>
+<h4 id="methods">Methods</h4>
+<ul>
+<li><code>from_dict(data)</code>: Create from dictionary</li>
+<li><code>is_reference(data)</code>: Check if data contains $ref</li>
+</ul>
+<h2 id="best-practices">Best Practices</h2>
+<ol>
+<li><strong>Check for references before accessing</strong>: Use <code>Reference.is_reference()</code> to check if an object is a reference</li>
+<li><strong>Handle circular references gracefully</strong>: Use <code>is_circular_reference()</code> before full resolution</li>
+<li><strong>Cache resolved references</strong>: If resolving the same reference multiple times, cache the results</li>
+<li><strong>Validate references</strong>: Check that all references in your spec can be resolved</li>
+</ol>
+<h2 id="limitations">Limitations</h2>
+<p>Current limitations (to be addressed in future versions):</p>
+<ul>
+<li>External references (file paths, URLs) are not yet supported</li>
+<li><code>operationRef</code> in Link Objects is not yet implemented</li>
+<li><code>mapping</code> in Discriminator Objects is not yet implemented</li>
+<li>Dynamic references (<code>$dynamicRef</code>) from JSON Schema 2020-12 / OAS 3.1 are not yet supported</li>
+</ul>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="https://spec.openapis.org/oas/v3.1.0#reference-object">OpenAPI Reference Object Specification</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc6901">JSON Pointer RFC 6901</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/draft-pbryan-zyp-json-ref-03">JSON Reference Draft</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

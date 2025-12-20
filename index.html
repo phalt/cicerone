@@ -383,6 +383,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#resolving-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolving References
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#accessing-raw-data" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -421,6 +432,33 @@
     
   
     Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with References
   
 
     
@@ -582,6 +620,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#resolving-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resolving References
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#accessing-raw-data" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -683,6 +732,21 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Components</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Components</span><span class="p">:</span> <span class="mi">2</span> <span class="n">schemas</span> <span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Error</span><span class="p">]</span><span class="o">&gt;</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Schema</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Schema</span><span class="p">:</span> <span class="nb">type</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span> <span class="mi">5</span> <span class="n">properties</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">]</span><span class="o">&gt;</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">User</span> <span class="n">properties</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;roles&#39;</span><span class="p">]</span>
+</code></pre></div>
+<h3 id="resolving-references">Resolving References</h3>
+<p>Resolve <code>$ref</code> references to their typed objects:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">cicerone_parse</span>
+
+<span class="n">spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s1">&#39;tests/fixtures/petstore_openapi3.yaml&#39;</span><span class="p">)</span>
+
+<span class="c1"># Resolve a reference to get a typed Schema object</span>
+<span class="c1"># Note: pass follow_nested=True to recursively resolve all nested $refs</span>
+<span class="n">user_schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">,</span> <span class="n">follow_nested</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User schema type: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required fields: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">required</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">User</span> <span class="n">schema</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">object</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Required</span> <span class="n">fields</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">]</span>
 </code></pre></div>
 <h3 id="accessing-raw-data">Accessing Raw Data</h3>
 <p>Access the original specification dictionary when needed:</p>
