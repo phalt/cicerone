@@ -10,6 +10,8 @@ repo_url: https://github.com/phalt/cicerone
 nav:
   - Home: index.md
   - Install: install.md
+  - Parser API: parser.md
+  - Spec Models: models.md
   - Working with References: references.md
   - Change log: CHANGELOG.md
 
