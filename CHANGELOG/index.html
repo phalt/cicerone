@@ -282,6 +282,60 @@
   
   
     <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parser API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../references/" class="md-nav__link">
         
   
@@ -469,18 +523,12 @@
 <h1 id="change-log">Change log</h1>
 <h2 id="020">0.2.0</h2>
 <ul>
-<li>Added the OpenAPISpec object model for traversing OpenAPI specifications to cover 100% of the OpenAPI specification.</li>
-<li>Added parser functions for loading specs from files, URLs, JSON, YAML, and dictionaries</li>
+<li>Added the OpenAPISpec object model. Traverse OpenAPI specifications as pydantic models - covers 100% of the OpenAPI specification.</li>
+<li>Added parser functions for loading specs from files, URLs, JSON, YAML, and dictionaries.</li>
 <li>Added support for OpenAPI 3.0.x and higher specifications.</li>
-<li>All OpenAPI objects represented as Pydantic-based models for type-safe schema exploration</li>
-<li>Added comprehensive tests for parsing real-world OpenAPI schemas from APIs.guru openapi-directory</li>
-<li>Added comprehensive test suite for OpenAPI example schemas covering all supported features</li>
-<li><strong>Added reference navigation API for resolving $ref references in OpenAPI specifications</strong></li>
-<li>New <code>Reference</code> model to represent OpenAPI Reference Objects</li>
-<li>New <code>ReferenceResolver</code> class for navigating and resolving references</li>
-<li><code>resolve_reference()</code> method returns typed Pydantic objects (Schema, Response, etc.) not raw dicts</li>
-<li>Added <code>get_all_references()</code> method to OpenAPISpec to find all references in the specification</li>
-<li>Support for local references (e.g., <code>#/components/schemas/User</code>)</li>
+<li>Added comprehensive tests for parsing real-world OpenAPI schemas.</li>
+<li>Added comprehensive test suite for OpenAPI example schemas.</li>
+<li>Added reference navigation API for resolving $ref references in OpenAPI specifications</li>
 <li>Full support for JSON Pointer syntax in references</li>
 </ul>
 <h2 id="010">0.1.0</h2>

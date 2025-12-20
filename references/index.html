@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://phalt.github.io/cicerone/references/">
       
       
-        <link rel="prev" href="../install/">
+        <link rel="prev" href="../parser/">
       
       
         <link rel="next" href="../CHANGELOG/">
@@ -281,6 +281,60 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parser API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -354,17 +408,6 @@
   
     <nav class="md-nav" aria-label="Understanding References in OpenAPI">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#reference-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reference Types
-      
-    </span>
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#reference-locations" class="md-nav__link">
@@ -477,17 +520,6 @@
     <span class="md-ellipsis">
       
         Circular Reference Detection
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#array-index-references" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Array Index References
       
     </span>
   </a>
@@ -740,17 +772,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#reference-types" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reference Types
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#reference-locations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -861,17 +882,6 @@
     <span class="md-ellipsis">
       
         Circular Reference Detection
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#array-index-references" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Array Index References
       
     </span>
   </a>
@@ -1074,20 +1084,6 @@
 <p>OpenAPI specifications use references (<code>$ref</code>) to avoid duplication and keep schemas manageable. Cicerone provides a comprehensive API for navigating and resolving these references.</p>
 <h2 id="understanding-references-in-openapi">Understanding References in OpenAPI</h2>
 <p>A reference in OpenAPI uses the <code>$ref</code> keyword to point to another part of the specification. References follow the JSON Reference specification (RFC 6901) and use JSON Pointer syntax.</p>
-<h3 id="reference-types">Reference Types</h3>
-<p>Cicerone supports several types of references:</p>
-<ol>
-<li>
-<p><strong>Local references</strong> - Point to other parts of the same document
-   <div class="highlight"><pre><span></span><code><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#/components/schemas/User&#39;</span>
-</code></pre></div></p>
-</li>
-<li>
-<p><strong>External references</strong> - Point to other files (coming in future versions)
-   <div class="highlight"><pre><span></span><code><span class="nt">$ref</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;./models/user.yaml#/User&#39;</span>
-</code></pre></div></p>
-</li>
-</ol>
 <h3 id="reference-locations">Reference Locations</h3>
 <p>References can appear in various places in an OpenAPI specification:</p>
 <ul>
@@ -1248,53 +1244,51 @@
 <span class="n">node</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/Node&#39;</span><span class="p">,</span> <span class="n">follow_nested</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Node schema resolved successfully with circular handling&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="array-index-references">Array Index References</h3>
-<p>You can use array indices in reference paths:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">tags</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">users</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">User operations</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">posts</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Post operations</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="c1"># Reference by array index</span>
-<span class="n">posts_tag</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/tags/1&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tag name: </span><span class="si">{</span><span class="n">posts_tag</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># &#39;posts&#39;</span>
-</code></pre></div>
 <h2 id="reference-resolution-rules">Reference Resolution Rules</h2>
 <h3 id="oas-30-vs-31-differences">OAS 3.0 vs 3.1 Differences</h3>
 <p>The behavior of references differs slightly between OpenAPI versions:</p>
-<p><strong>OpenAPI 3.0:</strong>
-- Reference Objects can only contain <code>$ref</code>
-- Adjacent keywords are ignored
-- References fully replace the object</p>
-<p><strong>OpenAPI 3.1:</strong>
-- Reference Objects can have <code>summary</code> and <code>description</code>
-- These fields override the target's values
-- In Schema Objects, <code>$ref</code> can coexist with other keywords (acts like <code>allOf</code>)</p>
+<p><strong>OpenAPI 3.0:</strong></p>
+<ul>
+<li>Reference Objects can only contain <code>$ref</code></li>
+<li>Adjacent keywords are ignored</li>
+<li>References fully replace the object</li>
+</ul>
+<p><strong>OpenAPI 3.1:</strong></p>
+<ul>
+<li>Reference Objects can have <code>summary</code> and <code>description</code></li>
+<li>These fields override the target's values</li>
+<li>In Schema Objects, <code>$ref</code> can coexist with other keywords (acts like <code>allOf</code>)</li>
+</ul>
 <p>Cicerone handles both versions correctly, preserving the raw specification data.</p>
 <h2 id="api-reference">API Reference</h2>
 <h3 id="openapispec-methods">OpenAPISpec Methods</h3>
 <h4 id="resolve_referenceref-follow_nestedtrue"><code>resolve_reference(ref, follow_nested=True)</code></h4>
 <p>Resolve a reference to its target object as a typed Pydantic model.</p>
-<p><strong>Parameters:</strong>
-- <code>ref</code> (str or Reference): Reference to resolve
-- <code>follow_nested</code> (bool): Whether to recursively resolve nested references</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>ref</code> (str or Reference): Reference to resolve</li>
+<li><code>follow_nested</code> (bool): Whether to recursively resolve nested references</li>
+</ul>
 <p><strong>Returns:</strong> Typed Pydantic model (Schema, Response, Parameter, etc.) when the reference points to a recognized component type. Otherwise returns raw data.</p>
-<p><strong>Raises:</strong>
-- <code>ValueError</code>: If reference cannot be resolved
-- <code>RecursionError</code>: If circular reference detected</p>
+<p><strong>Raises:</strong></p>
+<ul>
+<li><code>ValueError</code>: If reference cannot be resolved</li>
+<li><code>RecursionError</code>: If circular reference detected</li>
+</ul>
 <h4 id="get_all_references"><code>get_all_references()</code></h4>
 <p>Get all references in the specification.</p>
 <p><strong>Returns:</strong> Dictionary mapping $ref strings to Reference objects</p>
-<p><strong>Example:</strong>
+<p><strong>Example:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="n">all_refs</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">get_all_references</span><span class="p">()</span>
 <span class="n">user_ref</span> <span class="o">=</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">)</span>
 <span class="n">local_refs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_refs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">is_local</span><span class="p">}</span>
-</code></pre></div></p>
+</code></pre></div>
 <h4 id="is_circular_referenceref"><code>is_circular_reference(ref)</code></h4>
 <p>Check if a reference creates a circular dependency.</p>
-<p><strong>Parameters:</strong>
-- <code>ref</code> (str or Reference): Reference to check</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>ref</code> (str or Reference): Reference to check</li>
+</ul>
 <p><strong>Returns:</strong> bool - True if circular</p>
 <h3 id="reference-class">Reference Class</h3>
 <h4 id="properties">Properties</h4>

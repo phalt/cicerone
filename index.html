@@ -288,10 +288,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#explore-openapi-schemas-the-pythonic-way" class="md-nav__link">
+  <a href="#turn-openapi-schemas-into-pydantic-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Explore OpenAPI schemas, the Pythonic way
+        Turn OpenAPI schemas into Pydantic models
       
     </span>
   </a>
@@ -393,17 +393,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#accessing-raw-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Accessing Raw Data
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -432,6 +421,60 @@
     
   
     Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parser API
   
 
     
@@ -525,10 +568,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#explore-openapi-schemas-the-pythonic-way" class="md-nav__link">
+  <a href="#turn-openapi-schemas-into-pydantic-models" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Explore OpenAPI schemas, the Pythonic way
+        Turn OpenAPI schemas into Pydantic models
       
     </span>
   </a>
@@ -630,17 +673,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#accessing-raw-data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Accessing Raw Data
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -667,20 +699,20 @@
 
 
 <h1 id="cicerone">📜 Cicerone</h1>
-<h2 id="explore-openapi-schemas-the-pythonic-way">Explore OpenAPI schemas, the Pythonic way</h2>
+<h2 id="turn-openapi-schemas-into-pydantic-models">Turn OpenAPI schemas into Pydantic models</h2>
 <p><a href="https://pypi.org/project/cicerone"><img alt="Package version" src="https://img.shields.io/pypi/v/cicerone?color=%2334D058&amp;label=latest%20version" /></a>
 <a href="https://codecov.io/github/phalt/cicerone"><img alt="codecov" src="https://codecov.io/github/phalt/cicerone/graph/badge.svg?token=BAQE27Z4Y7" /></a>
 <img alt="PyPI - License" src="https://img.shields.io/pypi/l/cicerone" /></p>
-<p>Cicerone lets you parse OpenAPI schemas into Python objects for inspection, traversal, and tooling.</p>
-<p>The goal of Cicerone is to be fast, minimal, fully typed, and designed for Python developers by Python developers.</p>
+<p>Cicerone parses OpenAPI schemas into Pydantic models for introspection and traversal.</p>
+<p>Cicerone is the fastest, most minimal, fully typed, pythonic library for dealing with OpenAPI schemas.</p>
 <h2 id="features">Features</h2>
 <ul>
-<li><strong>Full support</strong>: Tested against real-world and example specifications to be 100% compliant.</li>
+<li><strong>Full support</strong>: Tested against hundreds of real schemas to ensure 100% compliance.</li>
 <li><strong>Pydantic-based models</strong>: Type-safe object models.</li>
-<li><strong>Multiple input formats</strong>: Load from files, URLs, or in-memory data</li>
+<li><strong>Multiple input formats</strong>: Load from files, URLs, or in-memory data in various formats.</li>
 <li><strong>OpenAPI 3.x support</strong>: Works with OpenAPI 3.0 and 3.1 specifications</li>
-<li><strong>Minimal dependencies</strong>: Only relies on Pydantic and yaml. The rest is core Python.</li>
-<li><strong>Simple API</strong>: Intuitive methods for common operations</li>
+<li><strong>Minimal dependencies</strong>: Only relies on Pydantic and pyyaml. The rest is core Python.</li>
+<li><strong>Simple API</strong>: Intuitive methods for common operations.</li>
 <li><strong>Modern Python</strong>: Fully typed and 100% test coverage codebase.</li>
 </ul>
 <h2 id="installation">Installation</h2>
@@ -692,10 +724,9 @@
 </code></pre></div>
 <h2 id="quick-start">Quick Start</h2>
 <h3 id="parsing-specifications">Parsing Specifications</h3>
-<p>Load OpenAPI specifications from various sources:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">cicerone_parse</span>
 
-<span class="c1"># From a file (auto-detects YAML/JSON)</span>
+<span class="c1"># From a file</span>
 <span class="n">file_spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s2">&quot;openapi.yaml&quot;</span><span class="p">)</span>
 
 <span class="c1"># From a URL</span>
@@ -711,26 +742,30 @@
 <span class="n">yaml_spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_yaml</span><span class="p">(</span><span class="s1">&#39;openapi: &quot;3.0.0&quot;</span><span class="se">\n</span><span class="s1">...&#39;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="exploring-the-schema">Exploring the schema</h3>
-<p>Once parsed, traverse the schema:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">cicerone_parse</span>
 
 <span class="n">spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s1">&#39;tests/fixtures/petstore_openapi3.yaml&#39;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenAPISpec:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">OpenAPISpec</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">OpenAPISpec</span><span class="p">:</span> <span class="s1">&#39;Test API&#39;</span> <span class="n">v3</span><span class="mf">.0.0</span><span class="p">,</span> <span class="mi">2</span> <span class="n">paths</span><span class="p">,</span> <span class="mi">2</span> <span class="n">schemas</span><span class="o">&gt;</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Paths:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Paths</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Paths</span><span class="p">:</span> <span class="mi">2</span> <span class="n">paths</span><span class="p">,</span> <span class="mi">3</span> <span class="n">operations</span> <span class="p">[</span><span class="o">/</span><span class="n">users</span><span class="p">,</span> <span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="p">{</span><span class="n">userId</span><span class="p">}]</span><span class="o">&gt;</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PathItem:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="p">[</span><span class="s2">&quot;/users&quot;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">PathItem</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">PathItem</span><span class="p">:</span> <span class="o">/</span><span class="n">users</span> <span class="p">[</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">]</span><span class="o">&gt;</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Operation:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">operation_by_operation_id</span><span class="p">(</span><span class="s2">&quot;listUsers&quot;</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Operation</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Operation</span><span class="p">:</span> <span class="n">GET</span> <span class="o">/</span><span class="n">users</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">listUsers</span><span class="p">,</span> <span class="s1">&#39;List all users&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Components:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Components</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Components</span><span class="p">:</span> <span class="mi">2</span> <span class="n">schemas</span> <span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Error</span><span class="p">]</span><span class="o">&gt;</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Schema:&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">get_schema</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Schema</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Schema</span><span class="p">:</span> <span class="nb">type</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span> <span class="mi">5</span> <span class="n">properties</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+
 <span class="n">user</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">get_schema</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User properties: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">OpenAPISpec</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">OpenAPISpec</span><span class="p">:</span> <span class="s1">&#39;Test API&#39;</span> <span class="n">v3</span><span class="mf">.0.0</span><span class="p">,</span> <span class="mi">2</span> <span class="n">paths</span><span class="p">,</span> <span class="mi">2</span> <span class="n">schemas</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Paths</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Paths</span><span class="p">:</span> <span class="mi">2</span> <span class="n">paths</span><span class="p">,</span> <span class="mi">3</span> <span class="n">operations</span> <span class="p">[</span><span class="o">/</span><span class="n">users</span><span class="p">,</span> <span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="p">{</span><span class="n">userId</span><span class="p">}]</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">PathItem</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">PathItem</span><span class="p">:</span> <span class="o">/</span><span class="n">users</span> <span class="p">[</span><span class="n">GET</span><span class="p">,</span> <span class="n">POST</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Operation</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Operation</span><span class="p">:</span> <span class="n">GET</span> <span class="o">/</span><span class="n">users</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">listUsers</span><span class="p">,</span> <span class="s1">&#39;List all users&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Components</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Components</span><span class="p">:</span> <span class="mi">2</span> <span class="n">schemas</span> <span class="p">[</span><span class="n">User</span><span class="p">,</span> <span class="n">Error</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">Schema</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">Schema</span><span class="p">:</span> <span class="nb">type</span><span class="o">=</span><span class="nb">object</span><span class="p">,</span> <span class="mi">5</span> <span class="n">properties</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">]</span><span class="o">&gt;</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">User</span> <span class="n">properties</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;roles&#39;</span><span class="p">]</span>
 </code></pre></div>
 <h3 id="resolving-references">Resolving References</h3>
@@ -740,22 +775,12 @@
 <span class="n">spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s1">&#39;tests/fixtures/petstore_openapi3.yaml&#39;</span><span class="p">)</span>
 
 <span class="c1"># Resolve a reference to get a typed Schema object</span>
-<span class="c1"># Note: pass follow_nested=True to recursively resolve all nested $refs</span>
+<span class="c1"># follow_nested=True will recursively resolve all nested $refs</span>
 <span class="n">user_schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">resolve_reference</span><span class="p">(</span><span class="s1">&#39;#/components/schemas/User&#39;</span><span class="p">,</span> <span class="n">follow_nested</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User schema type: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required fields: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">required</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
 <span class="o">&gt;&gt;&gt;</span> <span class="n">User</span> <span class="n">schema</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">object</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required fields: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">required</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Required</span> <span class="n">fields</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">]</span>
-</code></pre></div>
-<h3 id="accessing-raw-data">Accessing Raw Data</h3>
-<p>Access the original specification dictionary when needed:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Version information</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API Version: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Major: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">major</span><span class="si">}</span><span class="s2">, Minor: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">minor</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Raw spec data</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Title: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 

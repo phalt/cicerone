@@ -1,0 +1,1795 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://phalt.github.io/cicerone/models/">
+      
+      
+        <link rel="prev" href="../install/">
+      
+      
+        <link rel="next" href="../parser/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Spec Models - 📜 Cicerone</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spec-models" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="📜 Cicerone" class="md-header__button md-logo" aria-label="📜 Cicerone" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            📜 Cicerone
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Spec Models
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/phalt/cicerone" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phalt/cicerone
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="📜 Cicerone" class="md-nav__button md-logo" aria-label="📜 Cicerone" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    📜 Cicerone
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/phalt/cicerone" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phalt/cicerone
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec Models
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openapispec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPISpec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Info
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-and-operation-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path and Operation Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Path and Operation Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pathitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PathItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestbody" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RequestBody
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#server-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servervariable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ServerVariable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#securityscheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SecurityScheme
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#content-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Content Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mediatype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MediaType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Other Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Callback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#string-representations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        String Representations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extra-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parser API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openapispec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPISpec
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Info
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#path-and-operation-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Path and Operation Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Path and Operation Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paths
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pathitem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PathItem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requestbody" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RequestBody
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#server-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Server Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servervariable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ServerVariable
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Security Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#securityscheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SecurityScheme
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#content-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Content Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Content Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mediatype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MediaType
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Other Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Other Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Callback
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#string-representations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        String Representations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extra-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Safety
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="spec-models">Spec Models</h1>
+<p>Cicerone provides Pydantic-based models for all OpenAPI 3.x specification objects. These models provide type-safe access to the OpenAPI schema and make it easy to explore and traverse specifications in a pythonic way.</p>
+<h2 id="overview">Overview</h2>
+<p>All spec models are available in the <code>cicerone.spec</code> module:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.spec</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Callback</span><span class="p">,</span>
+    <span class="n">Components</span><span class="p">,</span>
+    <span class="n">Contact</span><span class="p">,</span>
+    <span class="n">Encoding</span><span class="p">,</span>
+    <span class="n">Example</span><span class="p">,</span>
+    <span class="n">ExternalDocumentation</span><span class="p">,</span>
+    <span class="n">Header</span><span class="p">,</span>
+    <span class="n">Info</span><span class="p">,</span>
+    <span class="n">License</span><span class="p">,</span>
+    <span class="n">Link</span><span class="p">,</span>
+    <span class="n">MediaType</span><span class="p">,</span>
+    <span class="n">OAuthFlow</span><span class="p">,</span>
+    <span class="n">OAuthFlows</span><span class="p">,</span>
+    <span class="n">OpenAPISpec</span><span class="p">,</span>
+    <span class="n">Operation</span><span class="p">,</span>
+    <span class="n">Parameter</span><span class="p">,</span>
+    <span class="n">PathItem</span><span class="p">,</span>
+    <span class="n">Paths</span><span class="p">,</span>
+    <span class="n">RequestBody</span><span class="p">,</span>
+    <span class="n">Response</span><span class="p">,</span>
+    <span class="n">Schema</span><span class="p">,</span>
+    <span class="n">SecurityScheme</span><span class="p">,</span>
+    <span class="n">Server</span><span class="p">,</span>
+    <span class="n">ServerVariable</span><span class="p">,</span>
+    <span class="n">Tag</span><span class="p">,</span>
+    <span class="n">Version</span><span class="p">,</span>
+    <span class="n">Webhooks</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Though we recommend importing just the <code>spec</code> module to maintain sensible namespacing:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">spec</span> <span class="k">as</span> <span class="n">cicerone_spec</span>
+
+<span class="n">cicerone_spec</span><span class="o">.</span><span class="n">OpenAPISpec</span>
+</code></pre></div>
+<h2 id="core-models">Core Models</h2>
+<h3 id="openapispec">OpenAPISpec</h3>
+<p>The top-level model representing an entire OpenAPI specification.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>version</code> (Version): OpenAPI version</li>
+<li><code>info</code> (Info): Metadata about the API</li>
+<li><code>paths</code> (Paths): Available paths and operations</li>
+<li><code>components</code> (Components): Reusable component definitions</li>
+<li><code>servers</code> (list[Server]): Server information</li>
+<li><code>security</code> (list[dict]): Global security requirements</li>
+<li><code>tags</code> (list[Tag]): Available tags for grouping operations</li>
+<li><code>webhooks</code> (Webhooks): Webhook definitions (OpenAPI 3.1+)</li>
+<li><code>external_docs</code> (ExternalDocumentation): External documentation</li>
+<li><code>raw</code> (dict): The original specification as a dictionary</li>
+</ul>
+<p><strong>Key Methods:</strong></p>
+<ul>
+<li><code>operation_by_operation_id(operation_id)</code>: Find an operation object by its operationId</li>
+<li><code>all_operations()</code>: Generator yielding all operation objects</li>
+<li><code>resolve_reference(ref)</code>: Resolve a $ref reference</li>
+<li><code>get_all_references()</code>: Get all references in the spec</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span> <span class="k">as</span> <span class="n">cicerone_parse</span>
+
+<span class="n">spec</span> <span class="o">=</span> <span class="n">cicerone_parse</span><span class="o">.</span><span class="n">parse_spec_from_file</span><span class="p">(</span><span class="s1">&#39;openapi.yaml&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>  
+<span class="o">&gt;&gt;&gt;</span> <span class="o">&lt;</span><span class="n">OpenAPISpec</span><span class="p">:</span> <span class="s1">&#39;My API&#39;</span> <span class="n">v3</span><span class="mf">.0.0</span><span class="p">,</span> <span class="mi">5</span> <span class="n">paths</span><span class="p">,</span> <span class="mi">10</span> <span class="n">schemas</span><span class="o">&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2"> v</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">API</span><span class="p">:</span> <span class="n">My</span> <span class="n">API</span> <span class="n">v3</span><span class="mf">.0.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OpenAPI version: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">OpenAPI</span> <span class="n">version</span> <span class="mf">3.1.0</span>
+
+<span class="c1"># Find operation</span>
+<span class="n">op</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">operation_by_operation_id</span><span class="p">(</span><span class="s2">&quot;createUser&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">op</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation: </span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Operation</span><span class="p">:</span> <span class="n">POST</span> <span class="o">/</span><span class="n">users</span>
+
+<span class="c1"># Iterate all operations</span>
+<span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">all_operations</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="info">Info</h3>
+<p>Metadata about the API.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>title</code> (str): API title (required)</li>
+<li><code>version</code> (str): API version (required)</li>
+<li><code>description</code> (str | None): API description</li>
+<li><code>terms_of_service</code> (str | None): Terms of service URL</li>
+<li><code>contact</code> (Contact | None): Contact information</li>
+<li><code>license</code> (License | None): License information</li>
+<li><code>summary</code> (str | None): Short summary (OpenAPI 3.1+)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2"> v</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">contact</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Contact: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="schema">Schema</h3>
+<p>Represents a JSON Schema / OpenAPI Schema object. This is one of the most commonly used models for exploring data structures.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>type</code> (str | None): Schema type (object, array, string, number, integer, boolean, null)</li>
+<li><code>title</code> (str | None): Schema title</li>
+<li><code>description</code> (str | None): Schema description</li>
+<li><code>properties</code> (dict[str, Schema]): Object properties (for type=object)</li>
+<li><code>required</code> (list[str]): Required property names</li>
+<li><code>items</code> (Schema | None): Array item schema (for type=array)</li>
+<li><code>all_of</code> (list[Schema] | None): allOf composition</li>
+<li><code>one_of</code> (list[Schema] | None): oneOf composition</li>
+<li><code>any_of</code> (list[Schema] | None): anyOf composition</li>
+<li><code>not_</code> (Schema | None): not composition</li>
+</ul>
+<p><strong>Note:</strong> Schema models allow extra fields to support the full JSON Schema vocabulary (format, enum, minimum, maximum, pattern, etc.)</p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Get a schema from components</span>
+<span class="n">user_schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">schemas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">user_schema</span><span class="p">)</span>  <span class="c1"># &lt;Schema: type=object, 5 properties, required=[&#39;id&#39;, &#39;username&#39;]&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Type: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">required</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Explore properties</span>
+<span class="k">for</span> <span class="n">prop_name</span><span class="p">,</span> <span class="n">prop_schema</span> <span class="ow">in</span> <span class="n">user_schema</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">prop_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">prop_schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prop_name</span> <span class="ow">in</span> <span class="n">user_schema</span><span class="o">.</span><span class="n">required</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    (required)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Access additional JSON Schema fields</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">user_schema</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Format: </span><span class="si">{</span><span class="n">user_schema</span><span class="o">.</span><span class="n">format</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="components">Components</h3>
+<p>Container for reusable component definitions.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>schemas</code> (dict[str, Schema]): Reusable schemas</li>
+<li><code>responses</code> (dict[str, Response]): Reusable responses</li>
+<li><code>parameters</code> (dict[str, Parameter]): Reusable parameters</li>
+<li><code>examples</code> (dict[str, Example]): Reusable examples</li>
+<li><code>request_bodies</code> (dict[str, RequestBody]): Reusable request bodies</li>
+<li><code>headers</code> (dict[str, Header]): Reusable headers</li>
+<li><code>security_schemes</code> (dict[str, SecurityScheme]): Security scheme definitions</li>
+<li><code>links</code> (dict[str, Link]): Reusable links</li>
+<li><code>callbacks</code> (dict[str, Callback]): Reusable callbacks</li>
+</ul>
+<p><strong>Key Methods:</strong></p>
+<ul>
+<li><code>get_schema(schema_name)</code>: Get a schema by name</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># List all schemas</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Schemas: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">schemas</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get a specific schema</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">get_schema</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User properties: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># List security schemes</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">scheme</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">security_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="path-and-operation-models">Path and Operation Models</h2>
+<h3 id="paths">Paths</h3>
+<p>Container for all API paths.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>items</code> (dict[str, PathItem]): Mapping of path strings to PathItem objects</li>
+</ul>
+<p><strong>Key Methods:</strong></p>
+<ul>
+<li><code>all_operations()</code>: Generator yielding all operations across all paths</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>  <span class="c1"># &lt;Paths: 5 paths, 12 operations [/users, /users/{id}, ...]&gt;</span>
+
+<span class="c1"># Iterate paths</span>
+<span class="k">for</span> <span class="n">path_str</span><span class="p">,</span> <span class="n">path_item</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Path: </span><span class="si">{</span><span class="n">path_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get all operations</span>
+<span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">all_operations</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="pathitem">PathItem</h3>
+<p>Represents a single path and its operations.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>path</code> (str): The path string (e.g., "/users/{id}")</li>
+<li><code>summary</code> (str | None): Path summary</li>
+<li><code>description</code> (str | None): Path description</li>
+<li><code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>head</code>, <code>options</code>, <code>trace</code> (Operation | None): HTTP method operations</li>
+<li><code>parameters</code> (list[Parameter]): Parameters applicable to all operations in this path</li>
+<li><code>servers</code> (list[Server]): Server overrides for this path</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">users_path</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="s2">&quot;/users&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">users_path</span><span class="p">)</span>  <span class="c1"># &lt;PathItem: /users [GET, POST]&gt;</span>
+
+<span class="k">if</span> <span class="n">users_path</span><span class="o">.</span><span class="n">get</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GET: </span><span class="si">{</span><span class="n">users_path</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">users_path</span><span class="o">.</span><span class="n">post</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POST: </span><span class="si">{</span><span class="n">users_path</span><span class="o">.</span><span class="n">post</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="operation">Operation</h3>
+<p>Represents a single API operation (HTTP method on a path).</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>method</code> (str): HTTP method (get, post, put, delete, etc.)</li>
+<li><code>path</code> (str): The path this operation belongs to</li>
+<li><code>operation_id</code> (str | None): Unique operation identifier</li>
+<li><code>summary</code> (str | None): Short summary</li>
+<li><code>description</code> (str | None): Detailed description</li>
+<li><code>tags</code> (list[str]): Tags for grouping</li>
+<li><code>parameters</code> (list[Parameter]): Operation parameters</li>
+<li><code>request_body</code> (RequestBody | None): Request body definition</li>
+<li><code>responses</code> (dict[str, Response]): Response definitions by status code</li>
+<li><code>callbacks</code> (dict[str, Callback]): Callback definitions</li>
+<li><code>security</code> (list[dict]): Security requirements</li>
+<li><code>deprecated</code> (bool): Whether the operation is deprecated</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">op</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">operation_by_operation_id</span><span class="p">(</span><span class="s2">&quot;createUser&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>  <span class="c1"># &lt;Operation: POST /users, id=createUser, &#39;Create a new user&#39;, tags=[&#39;users&#39;]&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Method: </span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Path: </span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Summary: </span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tags: </span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">tags</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check parameters</span>
+<span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter: </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">in_</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check request body</span>
+<span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">request_body</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Request body required: </span><span class="si">{</span><span class="n">op</span><span class="o">.</span><span class="n">request_body</span><span class="o">.</span><span class="n">required</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check responses</span>
+<span class="k">for</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">op</span><span class="o">.</span><span class="n">responses</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Response </span><span class="si">{</span><span class="n">status_code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parameter">Parameter</h3>
+<p>Represents a parameter (query, path, header, or cookie).</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>name</code> (str): Parameter name</li>
+<li><code>in_</code> (str): Parameter location (query, path, header, cookie)</li>
+<li><code>description</code> (str | None): Parameter description</li>
+<li><code>required</code> (bool): Whether required</li>
+<li><code>deprecated</code> (bool): Whether deprecated</li>
+<li><code>schema</code> (Schema | None): Parameter schema</li>
+<li><code>style</code> (str | None): Serialization style</li>
+<li><code>explode</code> (bool | None): Explode option</li>
+<li><code>example</code> (Any): Example value</li>
+<li><code>examples</code> (dict[str, Example]): Multiple examples</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">operation</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+    <span class="n">req_str</span> <span class="o">=</span> <span class="s2">&quot;required&quot;</span> <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">required</span> <span class="k">else</span> <span class="s2">&quot;optional&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">in_</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">req_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Type: </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="response">Response</h3>
+<p>Represents an operation response.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>description</code> (str): Response description (required)</li>
+<li><code>headers</code> (dict[str, Header]): Response headers</li>
+<li><code>content</code> (dict[str, MediaType]): Response content by media type</li>
+<li><code>links</code> (dict[str, Link]): Response links</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">success_response</span> <span class="o">=</span> <span class="n">operation</span><span class="o">.</span><span class="n">responses</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;200&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">success_response</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Description: </span><span class="si">{</span><span class="n">success_response</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check content types</span>
+    <span class="k">for</span> <span class="n">media_type</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">success_response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Media type: </span><span class="si">{</span><span class="n">media_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">content</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Schema: </span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="requestbody">RequestBody</h3>
+<p>Represents a request body definition.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>description</code> (str | None): Request body description</li>
+<li><code>content</code> (dict[str, MediaType]): Content by media type</li>
+<li><code>required</code> (bool): Whether required</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">operation</span><span class="o">.</span><span class="n">request_body</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Required: </span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">request_body</span><span class="o">.</span><span class="n">required</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">media_type</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">operation</span><span class="o">.</span><span class="n">request_body</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Content type: </span><span class="si">{</span><span class="n">media_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">content</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Schema: </span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">schema</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="server-models">Server Models</h2>
+<h3 id="server">Server</h3>
+<p>Represents a server definition.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>url</code> (str): Server URL</li>
+<li><code>description</code> (str | None): Server description</li>
+<li><code>variables</code> (dict[str, ServerVariable]): Server variables for URL templating</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">servers</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Server: </span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">server</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">server</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">var_name</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Variable </span><span class="si">{</span><span class="n">var_name</span><span class="si">}</span><span class="s2">: default=</span><span class="si">{</span><span class="n">var</span><span class="o">.</span><span class="n">default</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="servervariable">ServerVariable</h3>
+<p>Represents a server URL template variable.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>enum</code> (list[str] | None): Allowed values</li>
+<li><code>default</code> (str): Default value</li>
+<li><code>description</code> (str | None): Variable description</li>
+</ul>
+<h2 id="security-models">Security Models</h2>
+<h3 id="securityscheme">SecurityScheme</h3>
+<p>Represents a security scheme definition.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>type</code> (str): Security type (apiKey, http, oauth2, openIdConnect, mutualTLS)</li>
+<li><code>description</code> (str | None): Security scheme description</li>
+<li><code>name</code> (str | None): Parameter name (for apiKey)</li>
+<li><code>in_</code> (str | None): Parameter location (for apiKey)</li>
+<li><code>scheme</code> (str | None): HTTP authorization scheme (for http)</li>
+<li><code>bearer_format</code> (str | None): Bearer token format (for http bearer)</li>
+<li><code>flows</code> (OAuthFlows | None): OAuth flow definitions (for oauth2)</li>
+<li><code>open_id_connect_url</code> (str | None): OpenID Connect URL (for openIdConnect)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">scheme</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">security_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">scheme</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;http&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Scheme: </span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">scheme</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;apiKey&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  In: </span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">in_</span><span class="si">}</span><span class="s2">, Name: </span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">scheme</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;oauth2&quot;</span> <span class="ow">and</span> <span class="n">scheme</span><span class="o">.</span><span class="n">flows</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">scheme</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">authorization_code</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Auth URL: </span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">flows</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="content-models">Content Models</h2>
+<h3 id="mediatype">MediaType</h3>
+<p>Represents content for a specific media type.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>schema</code> (Schema | None): Content schema</li>
+<li><code>example</code> (Any): Example value</li>
+<li><code>examples</code> (dict[str, Example]): Multiple examples</li>
+<li><code>encoding</code> (dict[str, Encoding]): Encoding information</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;application/json&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">content</span> <span class="ow">and</span> <span class="n">content</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Schema: </span><span class="si">{</span><span class="n">content</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="example">Example</h3>
+<p>Represents an example value.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>summary</code> (str | None): Example summary</li>
+<li><code>description</code> (str | None): Example description</li>
+<li><code>value</code> (Any): The example value</li>
+<li><code>external_value</code> (str | None): URL to external example</li>
+</ul>
+<h2 id="other-models">Other Models</h2>
+<h3 id="tag">Tag</h3>
+<p>Represents a tag for grouping operations.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>name</code> (str): Tag name</li>
+<li><code>description</code> (str | None): Tag description</li>
+<li><code>external_docs</code> (ExternalDocumentation | None): External documentation</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tag: </span><span class="si">{</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">tag</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="callback">Callback</h3>
+<p>Represents a callback definition.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>expressions</code> (dict[str, PathItem]): Callback expressions</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Callback: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">expr</span><span class="p">,</span> <span class="n">path_item</span> <span class="ow">in</span> <span class="n">callback</span><span class="o">.</span><span class="n">expressions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Expression: </span><span class="si">{</span><span class="n">expr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="webhooks">Webhooks</h3>
+<p>Container for webhook definitions (OpenAPI 3.1+).</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>items</code> (dict[str, PathItem]): Webhook definitions</li>
+</ul>
+<p><strong>Key Methods:</strong></p>
+<ul>
+<li><code>all_operations()</code>: Generator yielding all webhook operations</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">webhook_name</span><span class="p">,</span> <span class="n">path_item</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">webhooks</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Webhook: </span><span class="si">{</span><span class="n">webhook_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">path_item</span><span class="o">.</span><span class="n">all_operations</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">operation</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="version">Version</h3>
+<p>Represents an OpenAPI version.</p>
+<p><strong>Key Attributes:</strong></p>
+<ul>
+<li><code>major</code> (int): Major version number</li>
+<li><code>minor</code> (int): Minor version number</li>
+<li><code>patch</code> (int): Patch version number</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;OpenAPI </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">major</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">minor</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">patch</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">spec</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">minor</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;OpenAPI 3.1+ features available&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="model-features">Model Features</h2>
+<h3 id="string-representations">String Representations</h3>
+<p>All models provide helpful string representations:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+<span class="c1"># &lt;OpenAPISpec: &#39;My API&#39; v3.0.0, 5 paths, 10 schemas&gt;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">paths</span><span class="p">)</span>
+<span class="c1"># &lt;Paths: 5 paths, 12 operations [/users, /users/{id}, ...]&gt;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="p">)</span>
+<span class="c1"># &lt;Components: 10 schemas, 5 responses, 3 parameters&gt;</span>
+
+<span class="n">operation</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">operation_by_operation_id</span><span class="p">(</span><span class="s2">&quot;listUsers&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+<span class="c1"># &lt;Operation: GET /users, id=listUsers, &#39;List all users&#39;, tags=[&#39;users&#39;]&gt;</span>
+</code></pre></div>
+<h3 id="extra-fields">Extra Fields</h3>
+<p>All models use Pydantic's <code>extra="allow"</code> configuration to preserve:</p>
+<ul>
+<li>Vendor extensions (x-* fields)</li>
+<li>Future OpenAPI additions</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Access vendor extensions</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="s1">&#39;x_custom_field&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Custom: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">x_custom_field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Access via raw dict</span>
+<span class="n">custom_value</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x-api-id&#39;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="type-safety">Type Safety</h3>
+<p>All models are fully typed using Pydantic, providing:</p>
+<ul>
+<li>Runtime validation</li>
+<li>IDE autocomplete</li>
+<li>Type checking with mypy/pyright/ty</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">Schema</span>
+
+<span class="c1"># Type hints work</span>
+<span class="n">schema</span><span class="p">:</span> <span class="n">Schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">schemas</span><span class="p">[</span><span class="s2">&quot;User&quot;</span><span class="p">]</span>
+
+<span class="c1"># IDE knows what properties are available</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>  <span class="c1"># ✓ IDE autocomplete</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>  <span class="c1"># ✓ IDE autocomplete</span>
+</code></pre></div>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="../parser/">Parser API</a> - Loading specifications</li>
+<li><a href="../references/">Working with References</a> - Resolving $ref references</li>
+<li><a href="https://spec.openapis.org/oas/v3.1.0">OpenAPI Specification</a> - Official spec</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
