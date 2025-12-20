@@ -64,7 +64,7 @@ Push the tag to remote:
 git push origin --tags
 ```
 
-Go to https://github.com/phalt/cicerone/tags and create a new release from the tag.
+Go to [https://github.com/phalt/cicerone/tags](https://github.com/phalt/cicerone/tags) and create a new release from the tag.
 
 Copy and paste the correct version contents from CHANGELOG.md.
 
@@ -87,7 +87,3 @@ This requires pypi login details.
 ```sh
 $UV_PUBLISH_TOKEN=<TOKEN> make release
 ```
-
-## Release to homebrew
-
-TODO
