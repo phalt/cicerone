@@ -37,7 +37,7 @@ def parse_nested_object(
     Args:
         data: Source dictionary
         field_name: Name of field containing nested object
-        parser: Function to parse the nested object (usually Class.from_dict)
+        parser_func: Function to parse the nested object (usually Class.from_dict)
 
     Returns:
         Parsed object or None if field doesn't exist
@@ -60,7 +60,7 @@ def parse_collection(
     Args:
         data: Source dictionary
         field_name: Name of field containing the collection
-        parser: Function to parse each item (usually Class.from_dict)
+        parser_func: Function to parse each item (usually Class.from_dict)
 
     Returns:
         Dictionary mapping names to parsed objects, empty dict if field doesn't exist
@@ -83,7 +83,7 @@ def parse_list(
     Args:
         data: Source dictionary
         field_name: Name of field containing the list
-        parser: Function to parse each item (usually Class.from_dict)
+        parser_func: Function to parse each item (usually Class.from_dict)
 
     Returns:
         List of parsed objects, empty list if field doesn't exist
@@ -106,7 +106,7 @@ def parse_list_or_none(
     Args:
         data: Source dictionary
         field_name: Name of field containing the list
-        parser: Function to parse each item (usually Class.from_dict)
+        parser_func: Function to parse each item (usually Class.from_dict)
 
     Returns:
         List of parsed objects, or None if field doesn't exist
