@@ -11,6 +11,8 @@ import typing
 
 import pydantic
 
+from cicerone.spec import model_utils
+
 
 class Reference(pydantic.BaseModel):
     """Represents an OpenAPI Reference Object containing a $ref keyword.
@@ -57,9 +59,9 @@ class Reference(pydantic.BaseModel):
         """Return a readable string representation of the reference."""
         parts = [f"ref='{self.ref}'"]
         if self.summary:
-            parts.append(f"summary='{self.summary[:50]}{'...' if len(self.summary) > 50 else ''}'")
+            parts.append(f"summary='{model_utils.truncate_text(self.summary)}'")
         if self.description:
-            parts.append(f"description='{self.description[:50]}{'...' if len(self.description) > 50 else ''}'")
+            parts.append(f"description='{model_utils.truncate_text(self.description)}'")
         return f"<Reference: {', '.join(parts)}>"
 
     @property

@@ -47,8 +47,7 @@ class Tag(pydantic.BaseModel):
         """Return a readable string representation of the tag."""
         parts = [f"name='{self.name}'"]
         if self.description:
-            desc_preview = self.description[:30] + "..." if len(self.description) > 30 else self.description
-            parts.append(f"desc='{desc_preview}'")
+            parts.append(f"desc='{model_utils.truncate_text(self.description, 30)}'")
         return f"<Tag: {', '.join(parts)}>"
 
     @classmethod

@@ -11,6 +11,22 @@ import typing
 T = typing.TypeVar("T")
 
 
+def truncate_text(text: str, max_len: int = 50) -> str:
+    """Truncate text with ellipsis if it exceeds max length.
+
+    Args:
+        text: Text to truncate
+        max_len: Maximum length before truncation
+
+    Returns:
+        Truncated text with '...' appended if needed
+
+    Example:
+        truncate_text("A very long description...", 20)
+    """
+    return f"{text[:max_len]}{'...' if len(text) > max_len else ''}"
+
+
 def parse_nested_object(
     data: typing.Mapping[str, typing.Any],
     field_name: str,
