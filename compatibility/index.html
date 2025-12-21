@@ -1,0 +1,1040 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://phalt.github.io/cicerone/compatibility/">
+      
+      
+        <link rel="prev" href="../references/">
+      
+      
+        <link rel="next" href="../CHANGELOG/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Compatibility & Testing - 📜 Cicerone</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#compatibility-testing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="📜 Cicerone" class="md-header__button md-logo" aria-label="📜 Cicerone" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            📜 Cicerone
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Compatibility & Testing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/phalt/cicerone" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phalt/cicerone
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="📜 Cicerone" class="md-nav__button md-logo" aria-label="📜 Cicerone" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    📜 Cicerone
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/phalt/cicerone" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    phalt/cicerone
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parser API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with References
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compatibility & Testing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compatibility & Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#testing-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unit Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-world-schema-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Schema Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openapi-directory-compatibility-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI Directory Compatibility Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAPI Directory Compatibility Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-compatibility-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running Compatibility Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#current-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openapi-version-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI Version Support
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAPI Version Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openapi-30x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI 3.0.x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openapi-31x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI 3.1.x
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known Limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Known Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#invalid-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Invalid Schemas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-improvement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Improvement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CHANGELOG/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#testing-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unit Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-world-schema-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Schema Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openapi-directory-compatibility-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI Directory Compatibility Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAPI Directory Compatibility Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-compatibility-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running Compatibility Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#current-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openapi-version-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI Version Support
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="OpenAPI Version Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openapi-30x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI 3.0.x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openapi-31x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenAPI 3.1.x
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known Limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Known Limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#invalid-schemas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Invalid Schemas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-improvement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Continuous Improvement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See Also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="compatibility-testing">Compatibility &amp; Testing</h1>
+<p>Cicerone is rigorously tested to ensure it works with real-world OpenAPI schemas. </p>
+<p>We use multiple layers of testing to validate compatibility across a wide range of specifications.</p>
+<h2 id="testing-strategy">Testing Strategy</h2>
+<p>Our testing approach combines unit tests, integration tests, and large-scale compatibility testing to ensure Cicerone works reliably with any OpenAPI schema you throw at it.</p>
+<h3 id="unit-tests">Unit Tests</h3>
+<p>The test suite includes comprehensive unit tests for individual components:</p>
+<ul>
+<li><strong>Parser functions</strong>: Testing all input formats (files, URLs, dicts, JSON, YAML)</li>
+<li><strong>Schema models</strong>: Validating Pydantic model behavior and field handling</li>
+<li><strong>References</strong>: Testing <code>$ref</code> resolution and circular reference handling</li>
+<li><strong>Components</strong>: Verifying proper parsing of schemas, parameters, responses, etc.</li>
+<li><strong>OpenAPI features</strong>: Testing callbacks, webhooks, security schemes, and extensions</li>
+</ul>
+<p>These tests ensure that each piece of Cicerone works correctly in isolation.</p>
+<h3 id="real-world-schema-tests">Real-World Schema Tests</h3>
+<p>We maintain a collection of real-world OpenAPI schemas from popular APIs to test against:</p>
+<ul>
+<li><strong>Ably</strong> - Event streaming API (OpenAPI 3.0.1)</li>
+<li><strong>Twilio</strong> - Communications API (OpenAPI 3.0.1)</li>
+<li><strong>1Password</strong> - Security and secrets management (OpenAPI 3.0.0)</li>
+<li><strong>Google</strong> - Cloud services APIs (OpenAPI 3.0.0)</li>
+<li><strong>SpaceTraders</strong> - Game API (OpenAPI 3.0.0)</li>
+<li><strong>Adyen</strong> - Payment platform with OpenAPI 3.1 features (OpenAPI 3.1.0)</li>
+</ul>
+<p>These schemas cover a wide range of features and edge cases found in production APIs.</p>
+<h3 id="openapi-directory-compatibility-testing">OpenAPI Directory Compatibility Testing</h3>
+<p>To ensure maximum compatibility, Cicerone is tested against the entire <a href="https://github.com/APIs-guru/openapi-directory">APIs.guru OpenAPI Directory</a> - a massive collection of 4000+ real-world OpenAPI schemas from hundreds of different APIs.</p>
+<p>This testing happens automatically:</p>
+<ul>
+<li><strong>Weekly CI runs</strong>: Every Monday, GitHub Actions runs the test suite against all schemas</li>
+<li><strong>Manual testing</strong>: Developers can run compatibility tests locally</li>
+<li><strong>Continuous monitoring</strong>: The test results are tracked to catch regressions</li>
+</ul>
+<h4 id="running-compatibility-tests">Running Compatibility Tests</h4>
+<p>You can run the compatibility tests yourself:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Test against all schemas (takes several minutes)</span>
+make<span class="w"> </span>test-openapi-directory
+
+<span class="c1"># Test a limited subset for quick feedback</span>
+python3<span class="w"> </span>test_openapi_directory.py<span class="w"> </span>--limit<span class="w"> </span><span class="m">100</span>
+
+<span class="c1"># Stop on first failure for debugging</span>
+python3<span class="w"> </span>test_openapi_directory.py<span class="w"> </span>-x
+
+<span class="c1"># Keep the cloned repository for inspection</span>
+python3<span class="w"> </span>test_openapi_directory.py<span class="w"> </span>--keep-repo
+</code></pre></div>
+<h4 id="current-results">Current Results</h4>
+<p>As of the latest test run, Cicerone successfully parses <strong>98.72%</strong> of schemas in the OpenAPI Directory:</p>
+<div class="highlight"><pre><span></span><code><span class="o">================================================================================</span>
+<span class="nv">SUMMARY</span>
+<span class="o">================================================================================</span>
+Total<span class="w"> </span>schemas<span class="w"> </span>tested:<span class="w"> </span><span class="m">4138</span>
+Successful:<span class="w"> </span><span class="m">4085</span>
+Failed:<span class="w"> </span><span class="m">53</span>
+Success<span class="w"> </span>rate:<span class="w"> </span><span class="m">98</span>.72%
+
+<span class="m">53</span><span class="w"> </span>schemas<span class="w"> </span>failed<span class="w"> </span>to<span class="w"> </span>parse:
+<span class="w">  </span>-<span class="w"> </span>APIs/akeneo.com/1.0.0/swagger.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/apidapp.com/2019-02-14T164701Z/openapi.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/atlassian.com/jira/1001.0.0-SNAPSHOT/openapi.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/azure.com/cognitiveservices-LUIS-Authoring/2.0/swagger.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/azure.com/cognitiveservices-LUIS-Authoring/3.0-preview/swagger.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/azure.com/cognitiveservices-LUIS-Programmatic/v2.0/swagger.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/azure.com/network-applicationGateway/2015-06-15/swagger.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/azure.com/network-applicationGateway/2016-09-01/swagger.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/azure.com/network-applicationGateway/2016-12-01/swagger.yaml
+<span class="w">  </span>-<span class="w"> </span>APIs/azure.com/network-applicationGateway/2017-03-01/swagger.yaml
+<span class="w">  </span>...<span class="w"> </span>and<span class="w"> </span><span class="m">43</span><span class="w"> </span>more
+</code></pre></div>
+<p><strong>Note</strong>: A large majority of these failures are due to malformed content in the schemas file itself.</p>
+<h2 id="openapi-version-support">OpenAPI Version Support</h2>
+<p>Cicerone fully supports both major OpenAPI 3.x versions:</p>
+<h3 id="openapi-30x">OpenAPI 3.0.x</h3>
+<p>Full support for all OpenAPI 3.0 features:</p>
+<ul>
+<li>✅ Path operations (GET, POST, PUT, DELETE, etc.)</li>
+<li>✅ Request and response schemas</li>
+<li>✅ Parameters (path, query, header, cookie)</li>
+<li>✅ Components (schemas, parameters, responses, examples, etc.)</li>
+<li>✅ Security schemes (apiKey, http, oauth2, openIdConnect)</li>
+<li>✅ Callbacks</li>
+<li>✅ Server variables</li>
+<li>✅ Extensions (x-* fields)</li>
+</ul>
+<h3 id="openapi-31x">OpenAPI 3.1.x</h3>
+<p>Full support for OpenAPI 3.1 additions:</p>
+<ul>
+<li>✅ Webhooks</li>
+<li>✅ JSON Schema 2020-12 compatibility</li>
+<li>✅ Nullable types via array syntax: <code>type: ['string', 'null']</code></li>
+<li>✅ <code>jsonSchemaDialect</code> field</li>
+<li>✅ Updated schema vocabulary</li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<p>Cicerone is designed to parse and represent OpenAPI schemas, not validate them. Here are some edge cases to be aware of:</p>
+<h3 id="invalid-schemas">Invalid Schemas</h3>
+<p>Cicerone will attempt to parse malformed schemas but may fail on:</p>
+<ul>
+<li><strong>Malformed YAML/JSON</strong>: Syntax errors in the underlying format</li>
+<li><strong>Invalid timestamps</strong>: Non-standard date/time values in the schema metadata</li>
+<li><strong>Circular references</strong>: Some deeply nested circular <code>$ref</code> patterns may cause issues</li>
+</ul>
+<h3 id="validation">Validation</h3>
+<p>Cicerone parses schemas into Python objects but doesn't validate that they conform to the OpenAPI specification. If you need strict validation, use a dedicated OpenAPI validator before parsing with Cicerone.</p>
+<h2 id="continuous-improvement">Continuous Improvement</h2>
+<p>We're constantly improving compatibility:</p>
+<ul>
+<li><strong>New schemas</strong>: As we discover edge cases, we add them to our test fixtures</li>
+<li><strong>Bug fixes</strong>: GitHub Issues and PRs help us identify and fix compatibility problems</li>
+<li><strong>Feature requests</strong>: We track OpenAPI specification updates and add support for new features</li>
+</ul>
+<p>If you encounter a schema that Cicerone can't parse, please <a href="https://github.com/phalt/cicerone/issues">open an issue</a> with the schema or a link to it.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="../parser/">Parser API</a> - Loading specifications from different sources</li>
+<li><a href="../references/">Working with References</a> - Resolving <code>$ref</code> references</li>
+<li><a href="../models/">Models</a> - Understanding the OpenAPI object models</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
