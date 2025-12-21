@@ -31,21 +31,23 @@ class PathItem(pydantic.BaseModel):
         operations = {}
         http_methods = ["get", "post", "put", "patch", "delete", "options", "head", "trace"]
 
-        # Extract path-level parameters if they exist (only if data is actually a Mapping)
-        # Some edge cases pass non-dict data, so we handle that gracefully
+        # Extract path-level parameters if they exist
+        # Note: We check isinstance as a defensive measure because some callers
+        # (like callbacks with invalid test data) may pass non-Mapping types
         path_level_parameters = data.get("parameters", []) if isinstance(data, typing.Mapping) else []
 
         for method in http_methods:
             if method in data:
-                operation_data = dict(data[method])  # Make a copy to avoid modifying original
-                
-                # Merge path-level parameters with operation-level parameters
-                # Path-level parameters come first, operation-level parameters come after
-                operation_params = operation_data.get("parameters", [])
+                # Only create a copy if we need to merge path-level parameters
                 if path_level_parameters:
-                    # Combine path-level and operation-level parameters
-                    operation_data["parameters"] = list(path_level_parameters) + list(operation_params)
-                
-                operations[method] = spec_operation.Operation.from_dict(method.upper(), path, operation_data)
+                    operation_data = dict(data[method])
+                    # Merge path-level parameters with operation-level parameters
+                    # Path-level parameters come first, operation-level parameters come after
+                    operation_params = operation_data.get("parameters", [])
+                    operation_data["parameters"] = path_level_parameters + operation_params
+                    operations[method] = spec_operation.Operation.from_dict(method.upper(), path, operation_data)
+                else:
+                    # No path-level parameters, use operation data as-is
+                    operations[method] = spec_operation.Operation.from_dict(method.upper(), path, data[method])
 
         return cls(path=path, operations=operations)
