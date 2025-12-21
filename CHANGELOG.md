@@ -1,5 +1,9 @@
 # Change log
 
+## 0.3.0
+
+- Fixed path-level parameters not being merged into operation parameters.
+
 ## 0.2.0
 
 - Added the OpenAPISpec object model. Traverse OpenAPI specifications as pydantic models - covers 100% of the OpenAPI specification.
