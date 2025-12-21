@@ -95,7 +95,7 @@ for ref_str, ref_obj in schema_refs.items():
 
 ## Working with the Reference Model
 
-The `Reference` class provides properties to inspect and work with reference objects:
+The `Reference` class has properties for inspecting reference objects:
 
 ```python
 from cicerone.references import Reference

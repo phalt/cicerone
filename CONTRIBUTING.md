@@ -86,7 +86,7 @@ You can also test cicerone against all schemas from the APIs-guru/openapi-direct
 make test-openapi-directory
 ```
 
-This command clones the openapi-directory, tests parsing all schemas, and reports results. This is useful for ensuring cicerone works with real-world OpenAPI schemas.
+This clones the openapi-directory, tests parsing all schemas, and reports results. Useful for checking compatibility with real-world OpenAPI schemas.
 
 Check your `git diff` to see if anything unexpected changed. If something changed that you didn't expect, something went wrong. We want to avoid unintended changes to the codebase.
 

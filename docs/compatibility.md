@@ -10,13 +10,13 @@ Our testing combines unit tests, integration tests, and large-scale compatibilit
 
 ### Unit Tests
 
-The test suite includes comprehensive unit tests for individual components:
+The test suite includes unit tests for individual components:
 
-- **Parser functions**: Testing all input formats (files, URLs, dicts, JSON, YAML)
-- **Schema models**: Validating Pydantic model behavior and field handling
-- **References**: Testing `$ref` resolution and circular reference handling
-- **Components**: Verifying proper parsing of schemas, parameters, responses, etc.
-- **OpenAPI features**: Testing callbacks, webhooks, security schemes, and extensions
+- **Parser functions**: All input formats (files, URLs, dicts, JSON, YAML)
+- **Schema models**: Pydantic model behavior and field handling
+- **References**: `$ref` resolution and circular reference handling
+- **Components**: Parsing of schemas, parameters, responses, etc.
+- **OpenAPI features**: Callbacks, webhooks, security schemes, and extensions
 
 These tests ensure that each piece of Cicerone works correctly in isolation.
 
@@ -37,11 +37,11 @@ These schemas cover a wide range of features and edge cases found in production 
 
 To ensure broad compatibility, Cicerone is tested against the entire [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory)—a massive collection of 4000+ real-world OpenAPI schemas from hundreds of APIs.
 
-This testing happens automatically:
+This happens automatically:
 
-- **Weekly CI runs**: Every Monday, GitHub Actions runs the test suite against all schemas
-- **Manual testing**: Developers can run compatibility tests locally
-- **Continuous monitoring**: The test results are tracked to catch regressions
+- **Weekly CI runs**: Every Monday, GitHub Actions tests all schemas
+- **Manual testing**: Run compatibility tests locally
+- **Continuous monitoring**: Track test results to catch regressions
 
 #### Running Compatibility Tests
 
@@ -133,15 +133,15 @@ Cicerone will attempt to parse malformed schemas but may fail on:
 
 Cicerone parses schemas into Python objects but doesn't validate that they conform to the OpenAPI specification. If you need strict validation, use a dedicated OpenAPI validator before using Cicerone.
 
-## Continuous Improvement
+## Improving Compatibility
 
-We're constantly improving compatibility:
+We're always working to support more schemas:
 
-- **New schemas**: As we discover edge cases, we add them to our test fixtures
-- **Bug fixes**: GitHub Issues and PRs help us identify and fix compatibility problems
-- **Feature requests**: We track OpenAPI specification updates and add support for new features
+- **New schemas**: When we find edge cases, we add them to our test fixtures
+- **Bug fixes**: Issues and PRs help us identify and fix problems
+- **Feature requests**: We track OpenAPI spec updates and add support for new features
 
-If you encounter a schema that Cicerone can't parse, please [open an issue](https://github.com/phalt/cicerone/issues) with the schema or a link to it.
+If you find a schema that Cicerone can't parse, please [open an issue](https://github.com/phalt/cicerone/issues) with the schema or a link to it.
 
 ## See Also
 

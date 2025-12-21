@@ -2,7 +2,7 @@
 
 The parser module loads OpenAPI specifications from various sources. 
 
-All parsing functions return an `OpenAPISpec` object that you can use to explore and traverse the schema.
+All parsing functions return an `OpenAPISpec` object you can use to explore and traverse the schema.
 
 ## Overview
 
