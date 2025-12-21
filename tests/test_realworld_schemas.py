@@ -112,3 +112,23 @@ class TestRealWorldSchemas:
         assert "x-serviceName" in info
         assert "x-logo" in info
         assert "x-apisguru-categories" in info
+
+    def test_parse_adyen_nullable_types(self, fixtures_dir: pathlib.Path) -> None:
+        """Test parsing Adyen schema with nullable types (OpenAPI 3.1 array types)."""
+        spec = cicerone_parse.parse_spec_from_file(fixtures_dir / "adyen_nullable.yaml")
+        assert spec is not None
+        assert spec.version.major == 3
+        assert spec.version.minor == 1
+        assert spec.raw["info"]["title"] == "Configuration webhooks"
+        assert len(spec.components.schemas) > 0
+
+        # Verify that schemas with array types are parsed correctly
+        # In OpenAPI 3.1, type can be an array like ['string', 'null']
+        iban_schema = spec.components.get_schema("IbanAccountIdentification")
+        assert iban_schema is not None
+        assert "formFactor" in iban_schema.properties
+        form_factor = iban_schema.properties["formFactor"]
+        # The type should be parsed as a list
+        assert isinstance(form_factor.type, list)
+        assert "string" in form_factor.type
+        assert "null" in form_factor.type

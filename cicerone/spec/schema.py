@@ -21,7 +21,7 @@ class Schema(pydantic.BaseModel):
     model_config = {"extra": "allow"}
 
     title: str | None = None
-    type: str | None = None
+    type: str | list[str] | None = None
     description: str | None = None
     properties: dict[str, Schema] = pydantic.Field(default_factory=dict)
     required: list[str] = pydantic.Field(default_factory=list)
