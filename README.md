@@ -5,6 +5,7 @@
 [![Package version](https://img.shields.io/pypi/v/cicerone?color=%2334D058&label=latest%20version)](https://pypi.org/project/cicerone)
 [![codecov](https://codecov.io/github/phalt/cicerone/graph/badge.svg?token=BAQE27Z4Y7)](https://codecov.io/github/phalt/cicerone)
 ![PyPI - License](https://img.shields.io/pypi/l/cicerone)
+[![OpenAPI Directory](https://github.com/phalt/cicerone/actions/workflows/test-openapi-directory.yml/badge.svg)](https://github.com/phalt/cicerone/actions/workflows/test-openapi-directory.yml)
 
 Cicerone parses OpenAPI schemas into Pydantic models for introspection and traversal.
 
@@ -12,7 +13,7 @@ Cicerone is the fastest, most minimal, fully typed, pythonic library for dealing
 
 ## Features
 
-- **Full support**: Tested against hundreds of real schemas to ensure 100% compliance.
+- **Full support**: Tested against 4000+ real schemas from [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory) to ensure broad compatibility.
 - **Pydantic-based models**: Type-safe object models.
 - **Multiple input formats**: Load from files, URLs, or in-memory data in various formats.
 - **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
