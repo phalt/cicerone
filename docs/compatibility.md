@@ -1,6 +1,8 @@
 # Compatibility & Testing
 
-Cicerone is rigorously tested to ensure it works with real-world OpenAPI schemas. We use multiple layers of testing to validate compatibility across a wide range of specifications.
+Cicerone is rigorously tested to ensure it works with real-world OpenAPI schemas. 
+
+We use multiple layers of testing to validate compatibility across a wide range of specifications.
 
 ## Testing Strategy
 
@@ -61,22 +63,32 @@ python3 test_openapi_directory.py --keep-repo
 
 #### Current Results
 
-As of the latest test run, Cicerone successfully parses **99.8%** of schemas in the OpenAPI Directory:
+As of the latest test run, Cicerone successfully parses **98.72%** of schemas in the OpenAPI Directory:
 
-```
+```sh
 ================================================================================
 SUMMARY
 ================================================================================
-Total schemas tested: 500
-Successful: 499
-Failed: 1
-Success rate: 99.8%
+Total schemas tested: 4138
+Successful: 4085
+Failed: 53
+Success rate: 98.72%
 
-1 schemas failed to parse:
+53 schemas failed to parse:
   - APIs/akeneo.com/1.0.0/swagger.yaml
+  - APIs/apidapp.com/2019-02-14T164701Z/openapi.yaml
+  - APIs/atlassian.com/jira/1001.0.0-SNAPSHOT/openapi.yaml
+  - APIs/azure.com/cognitiveservices-LUIS-Authoring/2.0/swagger.yaml
+  - APIs/azure.com/cognitiveservices-LUIS-Authoring/3.0-preview/swagger.yaml
+  - APIs/azure.com/cognitiveservices-LUIS-Programmatic/v2.0/swagger.yaml
+  - APIs/azure.com/network-applicationGateway/2015-06-15/swagger.yaml
+  - APIs/azure.com/network-applicationGateway/2016-09-01/swagger.yaml
+  - APIs/azure.com/network-applicationGateway/2016-12-01/swagger.yaml
+  - APIs/azure.com/network-applicationGateway/2017-03-01/swagger.yaml
+  ... and 43 more
 ```
 
-**Note**: The single failure (akeneo.com) is due to a malformed timestamp in the schema file itself (60 seconds), not a Cicerone limitation.
+**Note**: A large majority of these failures are due to malformed content in the schemas file itself.
 
 ## OpenAPI Version Support
 
