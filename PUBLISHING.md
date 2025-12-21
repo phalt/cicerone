@@ -4,7 +4,7 @@ How to publish new versions
 
 ## Update the version value
 
-Update the `settings.py` file to make the version match the tag:
+Update `settings.py` to match the tag:
 
 ```python
 # cicerone/settings.py
@@ -13,7 +13,7 @@ VERSION = "<VERSION>"
 
 ## Update the package version
 
-This updates the project to be a new version:
+Update the version in `pyproject.toml`:
 
 ```toml
 # pyproject.toml
@@ -28,9 +28,9 @@ make install
 
 The `uv.lock` file should update to the new version.
 
-## Commit all the changes together
+## Commit all changes
 
-Put all these changes into a single commit, then push to main:
+Commit everything together, then push to main:
 
 ```sh
 git add .
@@ -70,9 +70,9 @@ Copy and paste the correct version contents from CHANGELOG.md.
 
 Mark as the latest release.
 
-## Pubish documentation
+## Publish documentation
 
-Nice and easy
+Easy:
 
 ```sh
 make deploy-docs

@@ -8,17 +8,17 @@
 
 Cicerone parses OpenAPI schemas into Pydantic models for introspection and traversal.
 
-Cicerone is the fastest, most minimal, fully typed, pythonic library for dealing with OpenAPI schemas.
+It's fast, minimal, fully typed, and pythonic.
 
 ## Features
 
-- **Full support**: Tested against 4000+ real schemas from [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory) to ensure broad compatibility.
-- **Pydantic-based models**: Type-safe object models.
-- **Multiple input formats**: Load from files, URLs, or in-memory data in various formats.
-- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
-- **Minimal dependencies**: Only relies on Pydantic and pyyaml. The rest is core Python.
-- **Simple API**: Intuitive methods for common operations.
-- **Modern Python**: Fully typed and 100% test coverage codebase.
+- **Tested at scale**: We run tests against 4000+ real schemas from [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory).
+- **Pydantic models**: All models are type-safe.
+- **Multiple input formats**: Files, URLs, or in-memory data.
+- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications.
+- **Minimal dependencies**: Just Pydantic and pyyaml. Everything else is stdlib.
+- **Simple API**: Easy to use, hard to misuse.
+- **Modern Python**: Fully typed with 100% test coverage.
 
 ## Installation
 

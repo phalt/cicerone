@@ -1,12 +1,12 @@
 # Compatibility & Testing
 
-Cicerone is rigorously tested to ensure it works with real-world OpenAPI schemas. 
+Cicerone is rigorously tested to work with real-world OpenAPI schemas. 
 
 We use multiple layers of testing to validate compatibility across a wide range of specifications.
 
 ## Testing Strategy
 
-Our testing approach combines unit tests, integration tests, and large-scale compatibility testing to ensure Cicerone works reliably with any OpenAPI schema you throw at it.
+Our testing combines unit tests, integration tests, and large-scale compatibility testing.
 
 ### Unit Tests
 
@@ -35,7 +35,7 @@ These schemas cover a wide range of features and edge cases found in production 
 
 ### OpenAPI Directory Compatibility Testing
 
-To ensure maximum compatibility, Cicerone is tested against the entire [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory) - a massive collection of 4000+ real-world OpenAPI schemas from hundreds of different APIs.
+To ensure broad compatibility, Cicerone is tested against the entire [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory)—a massive collection of 4000+ real-world OpenAPI schemas from hundreds of APIs.
 
 This testing happens automatically:
 
@@ -88,7 +88,7 @@ Success rate: 98.72%
   ... and 43 more
 ```
 
-**Note**: A large majority of these failures are due to malformed content in the schemas file itself.
+**Note**: Most of these failures are due to malformed content in the schema files themselves.
 
 ## OpenAPI Version Support
 
@@ -131,7 +131,7 @@ Cicerone will attempt to parse malformed schemas but may fail on:
 
 ### Validation
 
-Cicerone parses schemas into Python objects but doesn't validate that they conform to the OpenAPI specification. If you need strict validation, use a dedicated OpenAPI validator before parsing with Cicerone.
+Cicerone parses schemas into Python objects but doesn't validate that they conform to the OpenAPI specification. If you need strict validation, use a dedicated OpenAPI validator before using Cicerone.
 
 ## Continuous Improvement
 

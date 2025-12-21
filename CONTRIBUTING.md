@@ -1,14 +1,14 @@
 # Contributing
 
-First things first: thank you for contributing! This project will be succesful thanks to everyone who contributes, and we're happy to have you.
+Thanks for contributing! This project succeeds because of people like you.
 
 ## Bug or issue?
 
-To raise a bug or issue please use [our GitHub](https://github.com/phalt/cicerone/issues).
+To raise a bug or issue, please use [our GitHub](https://github.com/phalt/cicerone/issues).
 
-Please check the issue has not be raised before by using the search feature.
+Check if the issue already exists by using the search feature.
 
-When submitting an issue or bug, please make sure you provide thorough detail on:
+When submitting an issue or bug, please include:
 
 1. The version of cicerone you are using
 2. Any errors or outputs you see in your terminal
@@ -25,13 +25,13 @@ If you want to directly contribute you can do so in two ways:
 
 We use [mkdocs](https://www.mkdocs.org/) and [GitHub pages](https://pages.github.com/) to deploy our docs.
 
-Fixing grammar, spelling mistakes, or expanding the documentation to cover features that are not yet documented, are all valuable contributions.
+Fixing grammar, spelling mistakes, or expanding the documentation to cover undocumented features are all valuable contributions.
 
 Please see the **Set up** instructions below to run the docs locally on your computer.
 
 ### Code
 
-Contribution by writing code for new features, or fixing bugs, is a great way to contribute to the project.
+Writing code for new features or fixing bugs is a great way to contribute.
 
 #### Set up
 
@@ -64,9 +64,9 @@ Install all the dependencies:
 make install
 ```
 
-This will use UV to create a virtual environment and install all dependencies. UV handles the virtual environment automatically, so you don't need to manually activate it.
+This will use UV to create a virtual environment and install all dependencies. UV handles the virtual environment automatically—no need to activate it manually.
 
-To make sure you have things set up correctly, please run the tests:
+To make sure you have things set up correctly, run the tests:
 
 ```sh
 make test
@@ -88,7 +88,7 @@ make test-openapi-directory
 
 This command clones the openapi-directory, tests parsing all schemas, and reports results. This is useful for ensuring cicerone works with real-world OpenAPI schemas.
 
-Check your `git diff` to see if anything drastic has changed. If changes happen that you did not expect, something has gone wrong. We want to make sure the clients do not change drastically when adding new features unless it is intended.
+Check your `git diff` to see if anything unexpected changed. If something changed that you didn't expect, something went wrong. We want to avoid unintended changes to the codebase.
 
 Format and lint the code:
 
@@ -96,7 +96,7 @@ Format and lint the code:
 make format
 ```
 
-The generated code is automatically formatted with Ruff, which provides both code formatting and linting fixes.
+The generated code is automatically formatted with Ruff for both style and linting.
 
 Make sure you add to `CHANGELOG.md` and `docs/CHANGELOG.md` what changes you have made.
 
@@ -104,9 +104,9 @@ Make sure you add your name to `CONTRIBUTORS.md` as well!
 
 ### Making a pull request
 
-Please push your changes up to a feature branch and make a new [pull request](https://github.com/phalt/cicerone/compare) on GitHub.
+Please push your changes to a feature branch and make a new [pull request](https://github.com/phalt/cicerone/compare) on GitHub.
 
-Please add a description to the PR and some information about why the change is being made.
+Please add a description to the PR explaining what changed and why.
 
 After a review you might need to make more changes.
 
