@@ -1,0 +1,138 @@
+# Compatibility & Testing
+
+Cicerone is rigorously tested to ensure it works with real-world OpenAPI schemas. We use multiple layers of testing to validate compatibility across a wide range of specifications.
+
+## Testing Strategy
+
+Our testing approach combines unit tests, integration tests, and large-scale compatibility testing to ensure Cicerone works reliably with any OpenAPI schema you throw at it.
+
+### Unit Tests
+
+The test suite includes comprehensive unit tests for individual components:
+
+- **Parser functions**: Testing all input formats (files, URLs, dicts, JSON, YAML)
+- **Schema models**: Validating Pydantic model behavior and field handling
+- **References**: Testing `$ref` resolution and circular reference handling
+- **Components**: Verifying proper parsing of schemas, parameters, responses, etc.
+- **OpenAPI features**: Testing callbacks, webhooks, security schemes, and extensions
+
+These tests ensure that each piece of Cicerone works correctly in isolation.
+
+### Real-World Schema Tests
+
+We maintain a collection of real-world OpenAPI schemas from popular APIs to test against:
+
+- **Ably** - Event streaming API (OpenAPI 3.0.1)
+- **Twilio** - Communications API (OpenAPI 3.0.1)
+- **1Password** - Security and secrets management (OpenAPI 3.0.0)
+- **Google** - Cloud services APIs (OpenAPI 3.0.0)
+- **SpaceTraders** - Game API (OpenAPI 3.0.0)
+- **Adyen** - Payment platform with OpenAPI 3.1 features (OpenAPI 3.1.0)
+
+These schemas cover a wide range of features and edge cases found in production APIs.
+
+### OpenAPI Directory Compatibility Testing
+
+To ensure maximum compatibility, Cicerone is tested against the entire [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory) - a massive collection of 4000+ real-world OpenAPI schemas from hundreds of different APIs.
+
+This testing happens automatically:
+
+- **Weekly CI runs**: Every Monday, GitHub Actions runs the test suite against all schemas
+- **Manual testing**: Developers can run compatibility tests locally
+- **Continuous monitoring**: The test results are tracked to catch regressions
+
+#### Running Compatibility Tests
+
+You can run the compatibility tests yourself:
+
+```bash
+# Test against all schemas (takes several minutes)
+make test-openapi-directory
+
+# Test a limited subset for quick feedback
+python3 test_openapi_directory.py --limit 100
+
+# Stop on first failure for debugging
+python3 test_openapi_directory.py -x
+
+# Keep the cloned repository for inspection
+python3 test_openapi_directory.py --keep-repo
+```
+
+#### Current Results
+
+As of the latest test run, Cicerone successfully parses **99.8%** of schemas in the OpenAPI Directory:
+
+```
+================================================================================
+SUMMARY
+================================================================================
+Total schemas tested: 500
+Successful: 499
+Failed: 1
+Success rate: 99.8%
+
+1 schemas failed to parse:
+  - APIs/akeneo.com/1.0.0/swagger.yaml
+```
+
+**Note**: The single failure (akeneo.com) is due to a malformed timestamp in the schema file itself (60 seconds), not a Cicerone limitation.
+
+## OpenAPI Version Support
+
+Cicerone fully supports both major OpenAPI 3.x versions:
+
+### OpenAPI 3.0.x
+
+Full support for all OpenAPI 3.0 features:
+
+- ✅ Path operations (GET, POST, PUT, DELETE, etc.)
+- ✅ Request and response schemas
+- ✅ Parameters (path, query, header, cookie)
+- ✅ Components (schemas, parameters, responses, examples, etc.)
+- ✅ Security schemes (apiKey, http, oauth2, openIdConnect)
+- ✅ Callbacks
+- ✅ Server variables
+- ✅ Extensions (x-* fields)
+
+### OpenAPI 3.1.x
+
+Full support for OpenAPI 3.1 additions:
+
+- ✅ Webhooks
+- ✅ JSON Schema 2020-12 compatibility
+- ✅ Nullable types via array syntax: `type: ['string', 'null']`
+- ✅ `jsonSchemaDialect` field
+- ✅ Updated schema vocabulary
+
+## Known Limitations
+
+Cicerone is designed to parse and represent OpenAPI schemas, not validate them. Here are some edge cases to be aware of:
+
+### Invalid Schemas
+
+Cicerone will attempt to parse malformed schemas but may fail on:
+
+- **Malformed YAML/JSON**: Syntax errors in the underlying format
+- **Invalid timestamps**: Non-standard date/time values in the schema metadata
+- **Circular references**: Some deeply nested circular `$ref` patterns may cause issues
+
+### Validation
+
+Cicerone parses schemas into Python objects but doesn't validate that they conform to the OpenAPI specification. If you need strict validation, use a dedicated OpenAPI validator before parsing with Cicerone.
+
+## Continuous Improvement
+
+We're constantly improving compatibility:
+
+- **New schemas**: As we discover edge cases, we add them to our test fixtures
+- **Bug fixes**: GitHub Issues and PRs help us identify and fix compatibility problems
+- **Feature requests**: We track OpenAPI specification updates and add support for new features
+
+If you encounter a schema that Cicerone can't parse, please [open an issue](https://github.com/phalt/cicerone/issues) with the schema or a link to it.
+
+## See Also
+
+- [Parser API](parser.md) - Loading specifications from different sources
+- [Working with References](references.md) - Resolving `$ref` references
+- [Models](models.md) - Understanding the OpenAPI object models

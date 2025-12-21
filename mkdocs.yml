@@ -13,6 +13,7 @@ nav:
   - Spec Models: models.md
   - Parser API: parser.md
   - Working with References: references.md
+  - Compatibility & Testing: compatibility.md
   - Change log: CHANGELOG.md
 
 markdown_extensions:

@@ -38,10 +38,7 @@ class Schema(pydantic.BaseModel):
         if self.title:
             parts.append(f"'{self.title}'")
         if self.type:
-            if isinstance(self.type, list):
-                parts.append(f"type={self.type}")
-            else:
-                parts.append(f"type={self.type}")
+            parts.append(f"type={self.type}")
         if self.properties:
             parts.append(f"{len(self.properties)} properties")
         if self.required:
