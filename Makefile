@@ -36,6 +36,7 @@ clean:  ## Clear any cache files and test files
 	rm -rf **/__pycache__
 	rm -rf **/*.pyc
 	rm -rf .coverage
+	rm -rf htmlcov/
 
 test:  ## Run tests
 	uv run pytest -vvv
