@@ -21,7 +21,7 @@ class Schema(pydantic.BaseModel):
     model_config = {"extra": "allow"}
 
     title: str | None = None
-    type: str | None = None
+    type: str | list[str] | None = None
     description: str | None = None
     properties: dict[str, Schema] = pydantic.Field(default_factory=dict)
     required: list[str] = pydantic.Field(default_factory=list)
@@ -38,7 +38,10 @@ class Schema(pydantic.BaseModel):
         if self.title:
             parts.append(f"'{self.title}'")
         if self.type:
-            parts.append(f"type={self.type}")
+            if isinstance(self.type, list):
+                parts.append(f"type={self.type}")
+            else:
+                parts.append(f"type={self.type}")
         if self.properties:
             parts.append(f"{len(self.properties)} properties")
         if self.required:

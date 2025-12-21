@@ -46,25 +46,25 @@ def find_schema_files(base_dir: pathlib.Path) -> List[pathlib.Path]:
     return sorted(schema_files)
 
 
-def test_schema_file(schema_path: pathlib.Path) -> Tuple[bool, str]:
+def test_schema_file(schema_path: pathlib.Path) -> Tuple[bool, str, Exception | None]:
     """Test parsing a single schema file.
 
     Returns:
-        Tuple of (success: bool, error_message: str)
+        Tuple of (success: bool, error_message: str, exception: Exception | None)
     """
     try:
         spec = cicerone_parse.parse_spec_from_file(schema_path)
         # Basic validation - ensure we got a spec with some content
         if spec is None:
-            return False, "Parsed spec is None"
-        return True, ""
+            return False, "Parsed spec is None", None
+        return True, "", None
     except Exception as e:
-        return False, f"{type(e).__name__}: {str(e)}"
+        return False, f"{type(e).__name__}: {str(e)}", e
 
 
 def test_all_schemas(
-    schema_files: List[pathlib.Path], base_dir: pathlib.Path, verbose: bool = False
-) -> Tuple[int, int, List[Tuple[pathlib.Path, str]]]:
+    schema_files: List[pathlib.Path], base_dir: pathlib.Path, verbose: bool = False, fail_fast: bool = False
+) -> Tuple[int, int, List[Tuple[pathlib.Path, str, Exception | None]]]:
     """Test parsing all schema files.
 
     Returns:
@@ -78,15 +78,29 @@ def test_all_schemas(
         if verbose or i % 100 == 0:
             print(f"Progress: {i}/{len(schema_files)} ({successes} successful, {len(failures)} failed)")
 
-        success, error = test_schema_file(schema_path)
+        success, error, exception = test_schema_file(schema_path)
         if success:
             successes += 1
             if verbose:
                 print(f"  ✓ {schema_path.relative_to(base_dir)}")
         else:
-            failures.append((schema_path, error))
+            failures.append((schema_path, error, exception))
             if verbose:
                 print(f"  ✗ {schema_path.relative_to(base_dir)}: {error}")
+
+            if fail_fast:
+                print(f"\n{'=' * 80}")
+                print("FAIL FAST MODE - Stopping on first error")
+                print(f"{'=' * 80}")
+                print(f"Failed schema: {schema_path.relative_to(base_dir)}")
+                print(f"Error: {error}")
+                if exception:
+                    print("\nFull error details:")
+                    import traceback
+
+                    traceback.print_exception(type(exception), exception, exception.__traceback__)
+                print(f"\nSchema location: {schema_path}")
+                break
 
     return successes, len(failures), failures
 
@@ -103,6 +117,9 @@ def main() -> int:
         help="Directory to clone the repository into",
     )
     parser.add_argument("--limit", type=int, help="Limit number of schemas to test (for quick testing)")
+    parser.add_argument(
+        "-x", "--fail-fast", action="store_true", help="Stop on first failure and print detailed error info"
+    )
     args = parser.parse_args()
 
     repo_dir = args.repo_dir
@@ -123,7 +140,9 @@ def main() -> int:
             schema_files = schema_files[: args.limit]
 
         # Test all schemas
-        successes, failures_count, failures = test_all_schemas(schema_files, repo_dir, verbose=args.verbose)
+        successes, failures_count, failures = test_all_schemas(
+            schema_files, repo_dir, verbose=args.verbose, fail_fast=args.fail_fast
+        )
 
         # Print summary
         print("\n" + "=" * 80)
@@ -136,7 +155,7 @@ def main() -> int:
 
         if failures:
             print(f"\n{len(failures)} schemas failed to parse:")
-            for schema_path, error in failures[:10]:  # Show first 10 failures
+            for schema_path, error, _ in failures[:10]:  # Show first 10 failures
                 rel_path = schema_path.relative_to(repo_dir)
                 print(f"  - {rel_path}")
                 if args.verbose:
