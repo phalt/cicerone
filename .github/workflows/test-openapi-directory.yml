@@ -9,6 +9,8 @@ on:
 jobs:
   test-openapi-directory:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
