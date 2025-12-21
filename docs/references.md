@@ -1,6 +1,6 @@
 # Working with References
 
-OpenAPI specifications use references (`$ref`) to avoid duplication and keep schemas manageable. Cicerone provides a comprehensive API for navigating and resolving these references.
+OpenAPI specifications use references (`$ref`) to avoid duplication. Cicerone provides a comprehensive API for navigating and resolving these references.
 
 ## Understanding References in OpenAPI
 
@@ -95,7 +95,7 @@ for ref_str, ref_obj in schema_refs.items():
 
 ## Working with the Reference Model
 
-The `Reference` class provides properties to inspect and work with reference objects:
+The `Reference` class has properties for inspecting reference objects:
 
 ```python
 from cicerone.references import Reference
@@ -287,14 +287,14 @@ Check if a reference creates a circular dependency.
 
 ## Best Practices
 
-1. **Check for references before accessing**: Use `Reference.is_reference()` to check if an object is a reference
-2. **Handle circular references gracefully**: Use `is_circular_reference()` before full resolution
+1. **Check for references before accessing**: Use `Reference.is_reference()` to check if data contains a $ref
+2. **Handle circular references**: Use `is_circular_reference()` before full resolution
 3. **Cache resolved references**: If resolving the same reference multiple times, cache the results
-4. **Validate references**: Check that all references in your spec can be resolved
+4. **Validate references**: Verify that all references in your spec can be resolved
 
 ## Limitations
 
-Current limitations (to be addressed in future versions):
+Current limitations (we'll address these in future versions):
 
 - External references (file paths, URLs) are not yet supported
 - `operationRef` in Link Objects is not yet implemented

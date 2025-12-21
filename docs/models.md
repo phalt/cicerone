@@ -1,6 +1,6 @@
 # Spec Models
 
-Cicerone provides Pydantic-based models for all OpenAPI 3.x specification objects. These models provide type-safe access to the OpenAPI schema and make it easy to explore and traverse specifications in a pythonic way.
+Cicerone provides Pydantic models for all OpenAPI 3.x specification objects. These models make it easy to explore and traverse specifications in a type-safe, pythonic way.
 
 ## Overview
 
@@ -38,7 +38,7 @@ from cicerone.spec import (
 )
 ```
 
-Though we recommend importing just the `spec` module to maintain sensible namespacing:
+Though we recommend importing just the `spec` module for cleaner namespacing:
 
 ```python
 from cicerone import spec as cicerone_spec
@@ -123,7 +123,7 @@ if spec.info.contact:
 
 ### Schema
 
-Represents a JSON Schema / OpenAPI Schema object. This is one of the most commonly used models for exploring data structures.
+Represents a JSON Schema / OpenAPI Schema object. This is one of the most commonly used models.
 
 **Key Attributes:**
 
@@ -138,7 +138,7 @@ Represents a JSON Schema / OpenAPI Schema object. This is one of the most common
 - `any_of` (list[Schema] | None): anyOf composition
 - `not_` (Schema | None): not composition
 
-**Note:** Schema models allow extra fields to support the full JSON Schema vocabulary (format, enum, minimum, maximum, pattern, etc.)
+**Note:** Schema models allow extra fields to support the full JSON Schema vocabulary (like format, enum, minimum, maximum, pattern, etc.)
 
 **Example:**
 
@@ -566,7 +566,7 @@ print(operation)
 
 ### Extra Fields
 
-All models use Pydantic's `extra="allow"` configuration to preserve:
+All models use Pydantic's `extra="allow"` to preserve:
 
 - Vendor extensions (x-* fields)
 - Future OpenAPI additions
@@ -584,7 +584,7 @@ custom_value = spec.raw.get('x-api-id')
 
 ### Type Safety
 
-All models are fully typed using Pydantic, providing:
+All models are fully typed using Pydantic, which gives you:
 
 - Runtime validation
 - IDE autocomplete

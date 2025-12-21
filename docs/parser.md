@@ -1,8 +1,8 @@
 # Parser API
 
-The parser module provides functions for loading OpenAPI specifications from various sources. 
+The parser module loads OpenAPI specifications from various sources. 
 
-All parsing functions return an `OpenAPISpec` object that you can use to explore and traverse the schema.
+All parsing functions return an `OpenAPISpec` object you can use to explore and traverse the schema.
 
 ## Overview
 
@@ -24,7 +24,7 @@ from cicerone import parse as cicerone_parse
 
 ### `parse_spec_from_file(path)`
 
-Load an OpenAPI specification from a file. The format (JSON or YAML) is auto-detected based on the file extension.
+Load an OpenAPI specification from a file. The format (JSON or YAML) is auto-detected from the file extension.
 
 **Parameters:**
 
@@ -223,9 +223,9 @@ Cicerone supports OpenAPI 3.0.x and 3.1.x specifications:
 
 The parser automatically detects the OpenAPI version from the `openapi` field in the specification.
 
-## Performance Considerations
+## Performance
 
-The parser is designed for performance. Even for large specifications (1000+ paths), parsing typically takes less than 100ms.
+The parser is fast. Even for large specifications (1000+ paths), parsing typically takes under 100ms.
 
 ## See Also
 
