@@ -80,6 +80,14 @@ See if tests pass:
 make test
 ```
 
+You can also test cicerone against all schemas from the APIs-guru/openapi-directory repository (4000+ schemas):
+
+```sh
+make test-openapi-directory
+```
+
+This command clones the openapi-directory, tests parsing all schemas, and reports results. This is useful for ensuring cicerone works with real-world OpenAPI schemas.
+
 Check your `git diff` to see if anything drastic has changed. If changes happen that you did not expect, something has gone wrong. We want to make sure the clients do not change drastically when adding new features unless it is intended.
 
 Format and lint the code:
