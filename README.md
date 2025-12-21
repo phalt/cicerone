@@ -5,7 +5,6 @@
 [![Package version](https://img.shields.io/pypi/v/cicerone?color=%2334D058&label=latest%20version)](https://pypi.org/project/cicerone)
 [![codecov](https://codecov.io/github/phalt/cicerone/graph/badge.svg?token=BAQE27Z4Y7)](https://codecov.io/github/phalt/cicerone)
 ![PyPI - License](https://img.shields.io/pypi/l/cicerone)
-[![OpenAPI Directory](https://github.com/phalt/cicerone/actions/workflows/test-openapi-directory.yml/badge.svg)](https://github.com/phalt/cicerone/actions/workflows/test-openapi-directory.yml)
 
 Cicerone parses OpenAPI schemas into Pydantic models for introspection and traversal.
 

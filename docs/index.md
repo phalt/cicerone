@@ -12,7 +12,7 @@ Cicerone is the fastest, most minimal, fully typed, pythonic library for dealing
 
 ## Features
 
-- **Full support**: Tested against hundreds of real schemas to ensure 100% compliance.
+- **Full support**: Tested against 4000+ real schemas from [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory) to ensure broad compatibility.
 - **Pydantic-based models**: Type-safe object models.
 - **Multiple input formats**: Load from files, URLs, or in-memory data in various formats.
 - **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications
