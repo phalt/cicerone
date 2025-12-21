@@ -1272,7 +1272,7 @@
 
 
 <h1 id="spec-models">Spec Models</h1>
-<p>Cicerone provides Pydantic-based models for all OpenAPI 3.x specification objects. These models provide type-safe access to the OpenAPI schema and make it easy to explore and traverse specifications in a pythonic way.</p>
+<p>Cicerone provides Pydantic models for all OpenAPI 3.x specification objects. These models make it easy to explore and traverse specifications in a type-safe, pythonic way.</p>
 <h2 id="overview">Overview</h2>
 <p>All spec models are available in the <code>cicerone.spec</code> module:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.spec</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -1305,7 +1305,7 @@
     <span class="n">Webhooks</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
-<p>Though we recommend importing just the <code>spec</code> module to maintain sensible namespacing:</p>
+<p>Though we recommend importing just the <code>spec</code> module for cleaner namespacing:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone</span><span class="w"> </span><span class="kn">import</span> <span class="n">spec</span> <span class="k">as</span> <span class="n">cicerone_spec</span>
 
 <span class="n">cicerone_spec</span><span class="o">.</span><span class="n">OpenAPISpec</span>
@@ -1375,7 +1375,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Contact: </span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">contact</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="schema">Schema</h3>
-<p>Represents a JSON Schema / OpenAPI Schema object. This is one of the most commonly used models for exploring data structures.</p>
+<p>Represents a JSON Schema / OpenAPI Schema object. This is one of the most commonly used models.</p>
 <p><strong>Key Attributes:</strong></p>
 <ul>
 <li><code>type</code> (str | None): Schema type (object, array, string, number, integer, boolean, null)</li>
@@ -1389,7 +1389,7 @@
 <li><code>any_of</code> (list[Schema] | None): anyOf composition</li>
 <li><code>not_</code> (Schema | None): not composition</li>
 </ul>
-<p><strong>Note:</strong> Schema models allow extra fields to support the full JSON Schema vocabulary (format, enum, minimum, maximum, pattern, etc.)</p>
+<p><strong>Note:</strong> Schema models allow extra fields to support the full JSON Schema vocabulary (like format, enum, minimum, maximum, pattern, etc.)</p>
 <p><strong>Example:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Get a schema from components</span>
 <span class="n">user_schema</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">components</span><span class="o">.</span><span class="n">schemas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">)</span>
@@ -1728,7 +1728,7 @@
 <span class="c1"># &lt;Operation: GET /users, id=listUsers, &#39;List all users&#39;, tags=[&#39;users&#39;]&gt;</span>
 </code></pre></div>
 <h3 id="extra-fields">Extra Fields</h3>
-<p>All models use Pydantic's <code>extra="allow"</code> configuration to preserve:</p>
+<p>All models use Pydantic's <code>extra="allow"</code> to preserve:</p>
 <ul>
 <li>Vendor extensions (x-* fields)</li>
 <li>Future OpenAPI additions</li>
@@ -1742,7 +1742,7 @@
 <span class="n">custom_value</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x-api-id&#39;</span><span class="p">)</span>
 </code></pre></div>
 <h3 id="type-safety">Type Safety</h3>
-<p>All models are fully typed using Pydantic, providing:</p>
+<p>All models are fully typed using Pydantic, which gives you:</p>
 <ul>
 <li>Runtime validation</li>
 <li>IDE autocomplete</li>

@@ -1108,7 +1108,7 @@
 
 
 <h1 id="working-with-references">Working with References</h1>
-<p>OpenAPI specifications use references (<code>$ref</code>) to avoid duplication and keep schemas manageable. Cicerone provides a comprehensive API for navigating and resolving these references.</p>
+<p>OpenAPI specifications use references (<code>$ref</code>) to avoid duplication. Cicerone provides a comprehensive API for navigating and resolving these references.</p>
 <h2 id="understanding-references-in-openapi">Understanding References in OpenAPI</h2>
 <p>A reference in OpenAPI uses the <code>$ref</code> keyword to point to another part of the specification. References follow the JSON Reference specification (RFC 6901) and use JSON Pointer syntax.</p>
 <h3 id="reference-locations">Reference Locations</h3>
@@ -1184,7 +1184,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">ref_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="working-with-the-reference-model">Working with the Reference Model</h2>
-<p>The <code>Reference</code> class provides properties to inspect and work with reference objects:</p>
+<p>The <code>Reference</code> class has properties for inspecting reference objects:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.references</span><span class="w"> </span><span class="kn">import</span> <span class="n">Reference</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cicerone.spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">Schema</span>
 
@@ -1336,13 +1336,13 @@
 </ul>
 <h2 id="best-practices">Best Practices</h2>
 <ol>
-<li><strong>Check for references before accessing</strong>: Use <code>Reference.is_reference()</code> to check if an object is a reference</li>
-<li><strong>Handle circular references gracefully</strong>: Use <code>is_circular_reference()</code> before full resolution</li>
+<li><strong>Check for references before accessing</strong>: Use <code>Reference.is_reference()</code> to check if data contains a $ref</li>
+<li><strong>Handle circular references</strong>: Use <code>is_circular_reference()</code> before full resolution</li>
 <li><strong>Cache resolved references</strong>: If resolving the same reference multiple times, cache the results</li>
-<li><strong>Validate references</strong>: Check that all references in your spec can be resolved</li>
+<li><strong>Validate references</strong>: Verify that all references in your spec can be resolved</li>
 </ol>
 <h2 id="limitations">Limitations</h2>
-<p>Current limitations (to be addressed in future versions):</p>
+<p>Current limitations (we'll address these in future versions):</p>
 <ul>
 <li>External references (file paths, URLs) are not yet supported</li>
 <li><code>operationRef</code> in Link Objects is not yet implemented</li>

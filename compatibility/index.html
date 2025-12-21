@@ -581,10 +581,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#continuous-improvement" class="md-nav__link">
+  <a href="#improving-compatibility" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Continuous Improvement
+        Improving Compatibility
       
     </span>
   </a>
@@ -820,10 +820,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#continuous-improvement" class="md-nav__link">
+  <a href="#improving-compatibility" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Continuous Improvement
+        Improving Compatibility
       
     </span>
   </a>
@@ -862,18 +862,18 @@
 
 
 <h1 id="compatibility-testing">Compatibility &amp; Testing</h1>
-<p>Cicerone is rigorously tested to ensure it works with real-world OpenAPI schemas. </p>
+<p>Cicerone is rigorously tested to work with real-world OpenAPI schemas. </p>
 <p>We use multiple layers of testing to validate compatibility across a wide range of specifications.</p>
 <h2 id="testing-strategy">Testing Strategy</h2>
-<p>Our testing approach combines unit tests, integration tests, and large-scale compatibility testing to ensure Cicerone works reliably with any OpenAPI schema you throw at it.</p>
+<p>Our testing combines unit tests, integration tests, and large-scale compatibility testing.</p>
 <h3 id="unit-tests">Unit Tests</h3>
-<p>The test suite includes comprehensive unit tests for individual components:</p>
+<p>The test suite includes unit tests for individual components:</p>
 <ul>
-<li><strong>Parser functions</strong>: Testing all input formats (files, URLs, dicts, JSON, YAML)</li>
-<li><strong>Schema models</strong>: Validating Pydantic model behavior and field handling</li>
-<li><strong>References</strong>: Testing <code>$ref</code> resolution and circular reference handling</li>
-<li><strong>Components</strong>: Verifying proper parsing of schemas, parameters, responses, etc.</li>
-<li><strong>OpenAPI features</strong>: Testing callbacks, webhooks, security schemes, and extensions</li>
+<li><strong>Parser functions</strong>: All input formats (files, URLs, dicts, JSON, YAML)</li>
+<li><strong>Schema models</strong>: Pydantic model behavior and field handling</li>
+<li><strong>References</strong>: <code>$ref</code> resolution and circular reference handling</li>
+<li><strong>Components</strong>: Parsing of schemas, parameters, responses, etc.</li>
+<li><strong>OpenAPI features</strong>: Callbacks, webhooks, security schemes, and extensions</li>
 </ul>
 <p>These tests ensure that each piece of Cicerone works correctly in isolation.</p>
 <h3 id="real-world-schema-tests">Real-World Schema Tests</h3>
@@ -888,12 +888,12 @@
 </ul>
 <p>These schemas cover a wide range of features and edge cases found in production APIs.</p>
 <h3 id="openapi-directory-compatibility-testing">OpenAPI Directory Compatibility Testing</h3>
-<p>To ensure maximum compatibility, Cicerone is tested against the entire <a href="https://github.com/APIs-guru/openapi-directory">APIs.guru OpenAPI Directory</a> - a massive collection of 4000+ real-world OpenAPI schemas from hundreds of different APIs.</p>
-<p>This testing happens automatically:</p>
+<p>To ensure broad compatibility, Cicerone is tested against the entire <a href="https://github.com/APIs-guru/openapi-directory">APIs.guru OpenAPI Directory</a>—a massive collection of 4000+ real-world OpenAPI schemas from hundreds of APIs.</p>
+<p>This happens automatically:</p>
 <ul>
-<li><strong>Weekly CI runs</strong>: Every Monday, GitHub Actions runs the test suite against all schemas</li>
-<li><strong>Manual testing</strong>: Developers can run compatibility tests locally</li>
-<li><strong>Continuous monitoring</strong>: The test results are tracked to catch regressions</li>
+<li><strong>Weekly CI runs</strong>: Every Monday, GitHub Actions tests all schemas</li>
+<li><strong>Manual testing</strong>: Run compatibility tests locally</li>
+<li><strong>Continuous monitoring</strong>: Track test results to catch regressions</li>
 </ul>
 <h4 id="running-compatibility-tests">Running Compatibility Tests</h4>
 <p>You can run the compatibility tests yourself:</p>
@@ -932,7 +932,7 @@ Success<span class="w"> </span>rate:<span class="w"> </span><span class="m">98</
 <span class="w">  </span>-<span class="w"> </span>APIs/azure.com/network-applicationGateway/2017-03-01/swagger.yaml
 <span class="w">  </span>...<span class="w"> </span>and<span class="w"> </span><span class="m">43</span><span class="w"> </span>more
 </code></pre></div>
-<p><strong>Note</strong>: A large majority of these failures are due to malformed content in the schemas file itself.</p>
+<p><strong>Note</strong>: Most of these failures are due to malformed content in the schema files themselves.</p>
 <h2 id="openapi-version-support">OpenAPI Version Support</h2>
 <p>Cicerone fully supports both major OpenAPI 3.x versions:</p>
 <h3 id="openapi-30x">OpenAPI 3.0.x</h3>
@@ -966,15 +966,15 @@ Success<span class="w"> </span>rate:<span class="w"> </span><span class="m">98</
 <li><strong>Circular references</strong>: Some deeply nested circular <code>$ref</code> patterns may cause issues</li>
 </ul>
 <h3 id="validation">Validation</h3>
-<p>Cicerone parses schemas into Python objects but doesn't validate that they conform to the OpenAPI specification. If you need strict validation, use a dedicated OpenAPI validator before parsing with Cicerone.</p>
-<h2 id="continuous-improvement">Continuous Improvement</h2>
-<p>We're constantly improving compatibility:</p>
+<p>Cicerone parses schemas into Python objects but doesn't validate that they conform to the OpenAPI specification. If you need strict validation, use a dedicated OpenAPI validator before using Cicerone.</p>
+<h2 id="improving-compatibility">Improving Compatibility</h2>
+<p>We're always working to support more schemas:</p>
 <ul>
-<li><strong>New schemas</strong>: As we discover edge cases, we add them to our test fixtures</li>
-<li><strong>Bug fixes</strong>: GitHub Issues and PRs help us identify and fix compatibility problems</li>
-<li><strong>Feature requests</strong>: We track OpenAPI specification updates and add support for new features</li>
+<li><strong>New schemas</strong>: When we find edge cases, we add them to our test fixtures</li>
+<li><strong>Bug fixes</strong>: Issues and PRs help us identify and fix problems</li>
+<li><strong>Feature requests</strong>: We track OpenAPI spec updates and add support for new features</li>
 </ul>
-<p>If you encounter a schema that Cicerone can't parse, please <a href="https://github.com/phalt/cicerone/issues">open an issue</a> with the schema or a link to it.</p>
+<p>If you find a schema that Cicerone can't parse, please <a href="https://github.com/phalt/cicerone/issues">open an issue</a> with the schema or a link to it.</p>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li><a href="../parser/">Parser API</a> - Loading specifications from different sources</li>
