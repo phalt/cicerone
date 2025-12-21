@@ -63,7 +63,7 @@ def test_schema_file(schema_path: pathlib.Path) -> Tuple[bool, str]:
 
 
 def test_all_schemas(
-    schema_files: List[pathlib.Path], verbose: bool = False
+    schema_files: List[pathlib.Path], base_dir: pathlib.Path, verbose: bool = False
 ) -> Tuple[int, int, List[Tuple[pathlib.Path, str]]]:
     """Test parsing all schema files.
 
@@ -82,11 +82,11 @@ def test_all_schemas(
         if success:
             successes += 1
             if verbose:
-                print(f"  ✓ {schema_path.relative_to(schema_path.parents[3])}")
+                print(f"  ✓ {schema_path.relative_to(base_dir)}")
         else:
             failures.append((schema_path, error))
             if verbose:
-                print(f"  ✗ {schema_path.relative_to(schema_path.parents[3])}: {error}")
+                print(f"  ✗ {schema_path.relative_to(base_dir)}: {error}")
 
     return successes, len(failures), failures
 
@@ -123,7 +123,7 @@ def main() -> int:
             schema_files = schema_files[: args.limit]
 
         # Test all schemas
-        successes, failures_count, failures = test_all_schemas(schema_files, verbose=args.verbose)
+        successes, failures_count, failures = test_all_schemas(schema_files, repo_dir, verbose=args.verbose)
 
         # Print summary
         print("\n" + "=" * 80)

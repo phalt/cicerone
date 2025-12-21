@@ -47,4 +47,4 @@ shell:  ## Run an ipython shell
 	uv run ipython
 
 test-openapi-directory:  ## Test cicerone against all schemas from APIs-guru/openapi-directory
-	python3 test_openapi_directory.py
+	uv run python3 test_openapi_directory.py
