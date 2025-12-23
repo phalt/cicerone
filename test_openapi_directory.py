@@ -58,7 +58,7 @@ def test_schema_file(schema_path: pathlib.Path) -> Tuple[str, str, Exception | N
         # Basic validation - ensure we got a spec with some content
         if spec is None:
             return "failed", "Parsed spec is None", None
-        
+
         # Check if this is a Swagger 2.x file (even if cicerone auto-converts it)
         # Cicerone preserves the original format in spec.raw
         if "swagger" in spec.raw:
@@ -72,7 +72,7 @@ def test_schema_file(schema_path: pathlib.Path) -> Tuple[str, str, Exception | N
                     return "skipped", f"Swagger {version_str} (not supported, cicerone requires OpenAPI 3.x)", None
             except (IndexError, ValueError):
                 pass  # If we can't parse version, continue with normal processing
-        
+
         return "success", "", None
     except Exception as e:
         return "failed", f"{type(e).__name__}: {str(e)}", e
@@ -181,9 +181,7 @@ def main() -> int:
         testable_count = len(schema_files) - skipped_count
         if testable_count > 0:
             success_rate = successes / testable_count * 100
-            print(
-                f"Success rate: {success_rate:.2f}% ({successes}/{testable_count} testable schemas)"
-            )
+            print(f"Success rate: {success_rate:.2f}% ({successes}/{testable_count} testable schemas)")
         else:
             # Output 0.00% for consistency with badge extraction
             print("Success rate: 0.00% (no testable schemas)")
