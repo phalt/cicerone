@@ -62,11 +62,13 @@ def test_schema_file(schema_path: pathlib.Path) -> Tuple[str, str, Exception | N
         # Check if this is a Swagger 2.x file (even if cicerone auto-converts it)
         # Cicerone preserves the original format in spec.raw
         if "swagger" in spec.raw:
-            swagger_version = str(spec.raw["swagger"])
+            swagger_version = spec.raw["swagger"]
             # Check if it's Swagger 2.x (2.0, 2.1, etc.)
             try:
-                if swagger_version.split(".")[0] == "2":
-                    return "skipped", f"Swagger {swagger_version} (not supported, cicerone requires OpenAPI 3.x)", None
+                # Handle both string and numeric versions
+                version_str = str(swagger_version)
+                if version_str.split(".")[0] == "2":
+                    return "skipped", f"Swagger {version_str} (not supported, cicerone requires OpenAPI 3.x)", None
             except (IndexError, ValueError):
                 pass  # If we can't parse version, continue with normal processing
         
