@@ -46,44 +46,65 @@ def find_schema_files(base_dir: pathlib.Path) -> List[pathlib.Path]:
     return sorted(schema_files)
 
 
-def test_schema_file(schema_path: pathlib.Path) -> Tuple[bool, str, Exception | None]:
+def test_schema_file(schema_path: pathlib.Path) -> Tuple[str, str, Exception | None]:
     """Test parsing a single schema file.
 
     Returns:
-        Tuple of (success: bool, error_message: str, exception: Exception | None)
+        Tuple of (status: str, error_message: str, exception: Exception | None)
+        where status is one of: "success", "skipped", "failed"
     """
     try:
         spec = cicerone_parse.parse_spec_from_file(schema_path)
         # Basic validation - ensure we got a spec with some content
         if spec is None:
-            return False, "Parsed spec is None", None
-        return True, "", None
+            return "failed", "Parsed spec is None", None
+        
+        # Check if this is a Swagger 2.x file (even if cicerone auto-converts it)
+        # Cicerone preserves the original format in spec.raw
+        if "swagger" in spec.raw:
+            swagger_version = str(spec.raw["swagger"])
+            # Check if it's Swagger 2.x (2.0, 2.1, etc.)
+            try:
+                if swagger_version.split(".")[0] == "2":
+                    return "skipped", f"Swagger {swagger_version} (not supported, cicerone requires OpenAPI 3.x)", None
+            except (IndexError, ValueError):
+                pass  # If we can't parse version, continue with normal processing
+        
+        return "success", "", None
     except Exception as e:
-        return False, f"{type(e).__name__}: {str(e)}", e
+        return "failed", f"{type(e).__name__}: {str(e)}", e
 
 
 def test_all_schemas(
     schema_files: List[pathlib.Path], base_dir: pathlib.Path, verbose: bool = False, fail_fast: bool = False
-) -> Tuple[int, int, List[Tuple[pathlib.Path, str, Exception | None]]]:
+) -> Tuple[int, int, int, List[Tuple[pathlib.Path, str, Exception | None]], List[Tuple[pathlib.Path, str]]]:
     """Test parsing all schema files.
 
     Returns:
-        Tuple of (success_count, failure_count, failures_list)
+        Tuple of (success_count, skipped_count, failure_count, failures_list, skipped_list)
     """
     print(f"\nTesting {len(schema_files)} schemas...")
     successes = 0
+    skipped = []
     failures = []
 
     for i, schema_path in enumerate(schema_files, 1):
         if verbose or i % 100 == 0:
-            print(f"Progress: {i}/{len(schema_files)} ({successes} successful, {len(failures)} failed)")
+            print(
+                f"Progress: {i}/{len(schema_files)} ({successes} successful, "
+                f"{len(skipped)} skipped, {len(failures)} failed)"
+            )
 
-        success, error, exception = test_schema_file(schema_path)
-        if success:
+        status, error, exception = test_schema_file(schema_path)
+        if status == "success":
             successes += 1
             if verbose:
                 print(f"  ✓ {schema_path.relative_to(base_dir)}")
-        else:
+        elif status == "skipped":
+            skipped.append((schema_path, error))
+            if verbose:
+                print(f"  ⊘ {schema_path.relative_to(base_dir)}: {error}")
+        else:  # failed
             failures.append((schema_path, error, exception))
             if verbose:
                 print(f"  ✗ {schema_path.relative_to(base_dir)}: {error}")
@@ -102,7 +123,7 @@ def test_all_schemas(
                 print(f"\nSchema location: {schema_path}")
                 break
 
-    return successes, len(failures), failures
+    return successes, len(skipped), len(failures), failures, skipped
 
 
 def main() -> int:
@@ -140,7 +161,7 @@ def main() -> int:
             schema_files = schema_files[: args.limit]
 
         # Test all schemas
-        successes, failures_count, failures = test_all_schemas(
+        successes, skipped_count, failures_count, failures, skipped = test_all_schemas(
             schema_files, repo_dir, verbose=args.verbose, fail_fast=args.fail_fast
         )
 
@@ -148,10 +169,30 @@ def main() -> int:
         print("\n" + "=" * 80)
         print("SUMMARY")
         print("=" * 80)
-        print(f"Total schemas tested: {len(schema_files)}")
+        print(f"Total schemas found: {len(schema_files)}")
         print(f"Successful: {successes}")
+        print(f"Skipped (version incompatible): {skipped_count}")
         print(f"Failed: {failures_count}")
-        print(f"Success rate: {successes / len(schema_files) * 100:.2f}%")
+
+        # Calculate success rate excluding skipped schemas
+        testable_count = len(schema_files) - skipped_count
+        if testable_count > 0:
+            print(
+                f"Success rate: {successes / testable_count * 100:.2f}% ({successes}/{testable_count} testable schemas)"
+            )
+        else:
+            print("Success rate: N/A (no testable schemas)")
+
+        if skipped:
+            print(f"\n{len(skipped)} schemas skipped due to version incompatibility:")
+            for schema_path, reason in skipped[:5]:  # Show first 5 skipped
+                rel_path = schema_path.relative_to(repo_dir)
+                print(f"  - {rel_path}")
+                if args.verbose:
+                    print(f"    Reason: {reason}")
+
+            if len(skipped) > 5:
+                print(f"  ... and {len(skipped) - 5} more")
 
         if failures:
             print(f"\n{len(failures)} schemas failed to parse:")
