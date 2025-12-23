@@ -67,7 +67,8 @@ def test_schema_file(schema_path: pathlib.Path) -> Tuple[str, str, Exception | N
             try:
                 # Handle both string and numeric versions
                 version_str = str(swagger_version)
-                if version_str.split(".")[0] == "2":
+                # Ensure version_str is not empty and has at least one part
+                if version_str and version_str.split(".")[0] == "2":
                     return "skipped", f"Swagger {version_str} (not supported, cicerone requires OpenAPI 3.x)", None
             except (IndexError, ValueError):
                 pass  # If we can't parse version, continue with normal processing
@@ -179,11 +180,13 @@ def main() -> int:
         # Calculate success rate excluding skipped schemas
         testable_count = len(schema_files) - skipped_count
         if testable_count > 0:
+            success_rate = successes / testable_count * 100
             print(
-                f"Success rate: {successes / testable_count * 100:.2f}% ({successes}/{testable_count} testable schemas)"
+                f"Success rate: {success_rate:.2f}% ({successes}/{testable_count} testable schemas)"
             )
         else:
-            print("Success rate: N/A (no testable schemas)")
+            # Output 0.00% for consistency with badge extraction
+            print("Success rate: 0.00% (no testable schemas)")
 
         if skipped:
             print(f"\n{len(skipped)} schemas skipped due to version incompatibility:")
