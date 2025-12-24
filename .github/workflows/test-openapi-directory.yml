@@ -1,6 +1,10 @@
 name: Test OpenAPI Directory
 
 # Run weekly on Mondays at 00:00 UTC, and allow manual triggering
+# 
+# Note: This workflow requires a PAT_TOKEN secret to be configured.
+# The token needs to have permission to push to protected branches.
+# See the setup instructions below for how to configure this.
 on:
   schedule:
     - cron: '0 0 * * 1'  # Weekly on Mondays at midnight UTC
@@ -15,8 +19,11 @@ jobs:
       #----------------------------------------------
       #       check-out repo and set-up python
       #----------------------------------------------
+      # Uses PAT_TOKEN to allow pushing to protected branches
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
       
       - name: Set up python
         id: setup-python
@@ -73,9 +80,10 @@ jobs:
           echo "Extracted compatibility: ${PERCENTAGE}%"
       
       #----------------------------------------------
-      # Commit and push the badge data
+      # Commit and push the badge data (only on main branch)
       #----------------------------------------------
       - name: Commit compatibility data
+        if: github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
