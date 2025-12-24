@@ -80,9 +80,10 @@ jobs:
           echo "Extracted compatibility: ${PERCENTAGE}%"
       
       #----------------------------------------------
-      # Commit and push the badge data
+      # Commit and push the badge data (only on main branch)
       #----------------------------------------------
       - name: Commit compatibility data
+        if: github.ref == 'refs/heads/main'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
