@@ -15,7 +15,16 @@ from cicerone.spec import model_utils
 
 
 class Schema(pydantic.BaseModel):
-    """Represents a JSON Schema / OpenAPI Schema object."""
+    """Represents a JSON Schema / OpenAPI Schema object.
+
+    This model supports the full JSON Schema and OpenAPI Schema vocabulary, including:
+    - Standard fields: type, properties, required, items, title, description
+    - Composition keywords: allOf, oneOf, anyOf, not
+    - Extra fields via Pydantic's extra="allow" for: $ref, enum, format, nullable,
+      default, example, and vendor extensions (x-*)
+
+    Use from_dict() to parse a schema dictionary and to_dict() to convert back to dict.
+    """
 
     # Allow extra fields to support full JSON Schema vocabulary and vendor extensions
     model_config = {"extra": "allow"}

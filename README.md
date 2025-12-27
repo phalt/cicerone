@@ -105,3 +105,32 @@ print(f"User schema type: {user_schema.type}")
 print(f"Required fields: {user_schema.required}")
 >>> Required fields: ['id', 'username', 'email']
 ```
+
+### Converting Models to Dictionaries
+
+All cicerone models can be converted back to dictionaries using the `to_dict()` method:
+
+```python
+from cicerone import parse as cicerone_parse
+
+spec = cicerone_parse.parse_spec_from_file('tests/fixtures/petstore_openapi3.yaml')
+
+# Get a schema and convert it to a dict
+user_schema = spec.components.get_schema("User")
+schema_dict = user_schema.to_dict()
+print(schema_dict)
+>>> {'type': 'object', 'properties': {...}, 'required': ['id', 'username', 'email']}
+
+# Works with all models: Schema, Parameter, Operation, Response, etc.
+operation = spec.operation_by_operation_id("listUsers")
+operation_dict = operation.to_dict()
+print(operation_dict)
+>>> {'operationId': 'listUsers', 'summary': 'List all users', 'parameters': [...], 'responses': {...}}
+```
+
+This is useful for:
+- Code generation with template engines
+- Serializing parsed specs to JSON/YAML
+- Accessing Pydantic extra fields like `$ref`, `enum`, `format`, `nullable`
+- Integration with tools expecting dict structures
+```
