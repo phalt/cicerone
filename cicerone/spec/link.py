@@ -27,3 +27,37 @@ class Link(pydantic.BaseModel):
         """Create a Link from a dictionary."""
         # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the Link to a dictionary representation.
+
+        Returns:
+            Dictionary representation of the link
+        """
+        result: dict[str, typing.Any] = {}
+
+        if self.operationRef is not None:
+            result["operationRef"] = self.operationRef
+
+        if self.operationId is not None:
+            result["operationId"] = self.operationId
+
+        if self.parameters:
+            result["parameters"] = self.parameters
+
+        if self.requestBody is not None:
+            result["requestBody"] = self.requestBody
+
+        if self.description is not None:
+            result["description"] = self.description
+
+        if self.server is not None:
+            result["server"] = self.server
+
+        # Handle extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:
+                    result[key] = value
+
+        return result

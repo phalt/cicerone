@@ -61,3 +61,48 @@ class Operation(pydantic.BaseModel):
             responses=data.get("responses", {}),
             **{k: v for k, v in data.items() if k not in cls.EXPLICITLY_MAPPED_FIELDS},
         )
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the Operation to a dictionary representation.
+
+        This method converts the Operation object back to a dict format that matches
+        the original OpenAPI specification. Note that method and path are not included
+        in the output as they are context fields used for organization.
+
+        Returns:
+            Dictionary representation of the operation
+        """
+        result: dict[str, typing.Any] = {}
+
+        if self.operation_id is not None:
+            result["operationId"] = self.operation_id
+
+        if self.summary is not None:
+            result["summary"] = self.summary
+
+        if self.description is not None:
+            result["description"] = self.description
+
+        if self.tags:
+            result["tags"] = self.tags
+
+        if self.parameters:
+            result["parameters"] = [p.to_dict() if hasattr(p, "to_dict") else p for p in self.parameters]
+
+        if self.responses:
+            result["responses"] = {
+                status: (resp.to_dict() if hasattr(resp, "to_dict") else resp)
+                for status, resp in self.responses.items()
+            }
+
+        # Handle extra fields (requestBody, deprecated, etc.)
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:
+                    # Handle requestBody specially if it's an object
+                    if key == "requestBody" and hasattr(value, "to_dict"):
+                        result[key] = value.to_dict()
+                    else:
+                        result[key] = value
+
+        return result

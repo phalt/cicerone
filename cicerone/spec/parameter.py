@@ -58,3 +58,55 @@ class Parameter(pydantic.BaseModel):
             examples=model_utils.parse_collection(data, "examples", spec_example.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the Parameter to a dictionary representation.
+
+        This method converts the Parameter object back to a dict format that matches
+        the original OpenAPI specification.
+
+        Returns:
+            Dictionary representation of the parameter
+        """
+        result: dict[str, typing.Any] = {}
+
+        # Handle $ref from extra fields - when present, return early
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__ and "$ref" in self.__pydantic_extra__:
+            result["$ref"] = self.__pydantic_extra__["$ref"]
+            return result
+
+        # Handle standard fields
+        if self.name is not None:
+            result["name"] = self.name
+
+        if self.in_ is not None:
+            result["in"] = self.in_
+
+        if self.description is not None:
+            result["description"] = self.description
+
+        # Always include required field as it has a default
+        result["required"] = self.required
+
+        if self.schema_ is not None:
+            result["schema"] = self.schema_.to_dict()
+
+        if self.style is not None:
+            result["style"] = self.style
+
+        if self.explode is not None:
+            result["explode"] = self.explode
+
+        if self.example is not None:
+            result["example"] = self.example
+
+        if self.examples:
+            result["examples"] = {k: v.to_dict() if hasattr(v, "to_dict") else v for k, v in self.examples.items()}
+
+        # Handle extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:
+                    result[key] = value
+
+        return result

@@ -25,3 +25,31 @@ class Example(pydantic.BaseModel):
         """Create an Example from a dictionary."""
         # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the Example to a dictionary representation.
+
+        Returns:
+            Dictionary representation of the example
+        """
+        result: dict[str, typing.Any] = {}
+
+        if self.summary is not None:
+            result["summary"] = self.summary
+
+        if self.description is not None:
+            result["description"] = self.description
+
+        if self.value is not None:
+            result["value"] = self.value
+
+        if self.externalValue is not None:
+            result["externalValue"] = self.externalValue
+
+        # Handle extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:
+                    result[key] = value
+
+        return result

@@ -36,3 +36,31 @@ class MediaType(pydantic.BaseModel):
             encoding=model_utils.parse_collection(data, "encoding", spec_encoding.Encoding.from_dict),
             **{k: v for k, v in data.items() if k not in {"schema", "example", "examples", "encoding"}},
         )
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the MediaType to a dictionary representation.
+
+        Returns:
+            Dictionary representation of the media type
+        """
+        result: dict[str, typing.Any] = {}
+
+        if self.schema_ is not None:
+            result["schema"] = self.schema_
+
+        if self.example is not None:
+            result["example"] = self.example
+
+        if self.examples:
+            result["examples"] = {k: v.to_dict() for k, v in self.examples.items()}
+
+        if self.encoding:
+            result["encoding"] = {k: v.to_dict() if hasattr(v, "to_dict") else v for k, v in self.encoding.items()}
+
+        # Handle extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:
+                    result[key] = value
+
+        return result

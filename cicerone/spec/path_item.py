@@ -50,4 +50,38 @@ class PathItem(pydantic.BaseModel):
                     # No path-level parameters, use operation data as-is
                     operations[method] = spec_operation.Operation.from_dict(method.upper(), path, data[method])
 
-        return cls(path=path, operations=operations)
+        # Store path-level parameters and other non-operation fields in extra
+        # Only do this if data is actually a Mapping
+        if isinstance(data, typing.Mapping):
+            extra_fields = {k: v for k, v in data.items() if k not in http_methods}
+            return cls(path=path, operations=operations, **extra_fields)
+        else:
+            return cls(path=path, operations=operations)
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the PathItem to a dictionary representation.
+
+        This method converts the PathItem object back to a dict format that matches
+        the original OpenAPI specification. The path itself is not included in the
+        output as it's used as a key in the paths object.
+
+        Returns:
+            Dictionary mapping HTTP methods to operation dicts
+        """
+        result: dict[str, typing.Any] = {}
+
+        # Convert each operation
+        for method, operation in self.operations.items():
+            result[method] = operation.to_dict()
+
+        # Handle path-level parameters from extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            if "parameters" in self.__pydantic_extra__:
+                params = self.__pydantic_extra__["parameters"]
+                result["parameters"] = [p.to_dict() if hasattr(p, "to_dict") else p for p in params]
+            # Add other extra fields
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result and key != "parameters":
+                    result[key] = value
+
+        return result

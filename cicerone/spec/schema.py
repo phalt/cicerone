@@ -79,3 +79,61 @@ class Schema(pydantic.BaseModel):
             **{"not": model_utils.parse_nested_object(data, "not", cls.from_dict)} if "not" in data else {},
             **{k: v for k, v in data.items() if k not in excluded},
         )
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the Schema to a dictionary representation.
+
+        This method converts the Schema object back to a dict format that matches
+        the original OpenAPI/JSON Schema specification. It handles nested schemas,
+        composition keywords (allOf, oneOf, anyOf), and Pydantic extra fields like
+        $ref, enum, format, and nullable.
+
+        Returns:
+            Dictionary representation of the schema
+        """
+        result: dict[str, typing.Any] = {}
+
+        # Handle $ref - when present, return early as other fields are not relevant per JSON Schema spec
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__ and "$ref" in self.__pydantic_extra__:
+            result["$ref"] = self.__pydantic_extra__["$ref"]
+            return result
+
+        # Handle standard fields
+        if self.title is not None:
+            result["title"] = self.title
+
+        if self.type is not None:
+            result["type"] = self.type
+
+        if self.description is not None:
+            result["description"] = self.description
+
+        if self.properties:
+            result["properties"] = {k: v.to_dict() for k, v in self.properties.items()}
+
+        if self.required:
+            result["required"] = self.required
+
+        if self.items is not None:
+            result["items"] = self.items.to_dict()
+
+        # Handle composition keywords
+        if self.all_of is not None:
+            result["allOf"] = [s.to_dict() for s in self.all_of]
+
+        if self.one_of is not None:
+            result["oneOf"] = [s.to_dict() for s in self.one_of]
+
+        if self.any_of is not None:
+            result["anyOf"] = [s.to_dict() for s in self.any_of]
+
+        if self.not_ is not None:
+            result["not"] = self.not_.to_dict()
+
+        # Handle extra fields (format, enum, nullable, etc.)
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:  # Don't override already set fields
+                    result[key] = value
+
+        return result

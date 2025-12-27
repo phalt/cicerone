@@ -41,3 +41,51 @@ class Response(pydantic.BaseModel):
             examples=model_utils.parse_collection(data, "examples", spec_example.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the Response to a dictionary representation.
+
+        This method converts the Response object back to a dict format that matches
+        the original OpenAPI specification.
+
+        Returns:
+            Dictionary representation of the response
+        """
+        result: dict[str, typing.Any] = {}
+
+        # Handle $ref from extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__ and "$ref" in self.__pydantic_extra__:
+            result["$ref"] = self.__pydantic_extra__["$ref"]
+            return result
+
+        if self.description is not None:
+            result["description"] = self.description
+
+        if self.content:
+            result["content"] = {}
+            for media_type, media_type_obj in self.content.items():
+                if hasattr(media_type_obj, "to_dict"):
+                    result["content"][media_type] = media_type_obj.to_dict()
+                else:
+                    # MediaType stores schema as dict
+                    result["content"][media_type] = {
+                        "schema": media_type_obj.schema_,
+                        **({"example": media_type_obj.example} if media_type_obj.example is not None else {}),
+                    }
+
+        if self.headers:
+            result["headers"] = {k: v.to_dict() if hasattr(v, "to_dict") else v for k, v in self.headers.items()}
+
+        if self.links:
+            result["links"] = {k: v.to_dict() if hasattr(v, "to_dict") else v for k, v in self.links.items()}
+
+        if self.examples:
+            result["examples"] = {k: v.to_dict() if hasattr(v, "to_dict") else v for k, v in self.examples.items()}
+
+        # Handle extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:
+                    result[key] = value
+
+        return result

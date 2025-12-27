@@ -31,3 +31,32 @@ class Encoding(pydantic.BaseModel):
         """Create an Encoding from a dictionary."""
         # Simple passthrough - pydantic handles all fields with extra="allow"
         return cls(**data)
+
+    def to_dict(self) -> dict[str, typing.Any]:
+        """Convert the Encoding to a dictionary representation.
+
+        Returns:
+            Dictionary representation of the encoding
+        """
+        result: dict[str, typing.Any] = {}
+
+        if self.contentType is not None:
+            result["contentType"] = self.contentType
+
+        if self.headers:
+            result["headers"] = self.headers
+
+        if self.style is not None:
+            result["style"] = self.style
+
+        # Always include explode and allowReserved as they have defaults
+        result["explode"] = self.explode
+        result["allowReserved"] = self.allowReserved
+
+        # Handle extra fields
+        if hasattr(self, "__pydantic_extra__") and self.__pydantic_extra__:
+            for key, value in self.__pydantic_extra__.items():
+                if key not in result:
+                    result[key] = value
+
+        return result
