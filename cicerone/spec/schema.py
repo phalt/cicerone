@@ -26,6 +26,7 @@ class Schema(pydantic.BaseModel):
     properties: dict[str, Schema] = pydantic.Field(default_factory=dict)
     required: list[str] = pydantic.Field(default_factory=list)
     items: Schema | None = None
+    prefix_items: tuple[Schema, ...] | None = pydantic.Field(None, alias="prefixItems")
     # Composition keywords
     all_of: list[Schema] | None = pydantic.Field(None, alias="allOf")
     one_of: list[Schema] | None = pydantic.Field(None, alias="oneOf")
@@ -45,6 +46,8 @@ class Schema(pydantic.BaseModel):
             parts.append(f"required={self.required}")
         if self.items:
             parts.append(f"items={self.items.type or 'object'}")
+        if self.prefix_items:
+            parts.append(f"prefixItems=({', '.join(item.type or 'object' for item in self.prefix_items)})")
 
         content = ", ".join(parts) if parts else "empty schema"
         return f"<Schema: {content}>"
@@ -59,6 +62,7 @@ class Schema(pydantic.BaseModel):
             "required",
             "properties",
             "items",
+            "prefixItems",
             "allOf",
             "oneOf",
             "anyOf",
@@ -72,6 +76,7 @@ class Schema(pydantic.BaseModel):
             required=data.get("required", []),
             properties=model_utils.parse_collection(data, "properties", cls.from_dict),
             items=model_utils.parse_nested_object(data, "items", cls.from_dict),
+            prefixItems=model_utils.parse_list_or_none(data, "prefixItems", cls.from_dict),
             allOf=model_utils.parse_list_or_none(data, "allOf", cls.from_dict),
             oneOf=model_utils.parse_list_or_none(data, "oneOf", cls.from_dict),
             anyOf=model_utils.parse_list_or_none(data, "anyOf", cls.from_dict),
