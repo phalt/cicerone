@@ -55,6 +55,15 @@ class TestSchema:
         assert schema.items is not None
         assert schema.items.type == "string"
 
+    def test_array_schema_tuples(self):
+        """Test creating a schema with tuple-like array items."""
+        data = {"type": "array", "prefixItems": [{"type": "string"}, {"type": "integer"}]}
+        schema = cicerone_spec.Schema.from_dict(data)
+        assert schema.type == "array"
+        assert schema.prefix_items is not None
+        assert schema.prefix_items[0].type == "string"
+        assert schema.prefix_items[1].type == "integer"
+
     def test_schema_str_representation(self):
         """Test __str__ method of Schema."""
         data = {
