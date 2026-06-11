@@ -19,12 +19,19 @@ class Parameter(pydantic.BaseModel):
     """Represents an OpenAPI parameter object."""
 
     # Allow extra fields to support vendor extensions and future spec additions
-    model_config = {"extra": "allow"}
+    model_config = {"extra": "allow", "populate_by_name": True}
 
+    # Keys promoted to typed fields in 0.4.0 that are still mirrored into
+    # model_extra for backwards compatibility (removed in 0.5.0)
+    MIRRORED_EXTRA_KEYS: typing.ClassVar[tuple[str, ...]] = ("$ref", "deprecated", "allowEmptyValue")
+
+    ref: str | None = pydantic.Field(None, alias="$ref")
     name: str | None = None
     in_: str | None = pydantic.Field(None, alias="in")
     description: str | None = None
     required: bool = False
+    deprecated: bool = False
+    allow_empty_value: bool | None = pydantic.Field(None, alias="allowEmptyValue")
     schema_: spec_schema.Schema | None = pydantic.Field(None, alias="schema")
     # OpenAPI 3.x fields
     style: str | None = None
@@ -46,7 +53,7 @@ class Parameter(pydantic.BaseModel):
             "example",
             "examples",
         }
-        return cls(
+        parameter = cls(
             name=data.get("name"),
             **{"in": data.get("in")},
             description=data.get("description"),
@@ -58,3 +65,5 @@ class Parameter(pydantic.BaseModel):
             examples=model_utils.parse_collection(data, "examples", spec_example.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )
+        model_utils.mirror_extras(parameter, data, cls.MIRRORED_EXTRA_KEYS)
+        return parameter

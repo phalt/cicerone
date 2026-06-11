@@ -18,8 +18,13 @@ class RequestBody(pydantic.BaseModel):
     """Represents an OpenAPI request body object."""
 
     # Allow extra fields to support vendor extensions and future spec additions
-    model_config = {"extra": "allow"}
+    model_config = {"extra": "allow", "populate_by_name": True}
 
+    # Keys promoted to typed fields in 0.4.0 that are still mirrored into
+    # model_extra for backwards compatibility (removed in 0.5.0)
+    MIRRORED_EXTRA_KEYS: typing.ClassVar[tuple[str, ...]] = ("$ref",)
+
+    ref: str | None = pydantic.Field(None, alias="$ref")
     description: str | None = None
     content: dict[str, spec_media_type.MediaType] = pydantic.Field(default_factory=dict)
     required: bool = False
@@ -27,9 +32,11 @@ class RequestBody(pydantic.BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, typing.Any]) -> "RequestBody":
         """Create a RequestBody from a dictionary."""
-        return cls(
+        request_body = cls(
             description=data.get("description"),
             content=model_utils.parse_collection(data, "content", spec_media_type.MediaType.from_dict),
             required=data.get("required", False),
             **{k: v for k, v in data.items() if k not in {"description", "content", "required"}},
         )
+        model_utils.mirror_extras(request_body, data, cls.MIRRORED_EXTRA_KEYS)
+        return request_body

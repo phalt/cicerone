@@ -10,8 +10,6 @@ import typing
 
 import pydantic
 
-from cicerone.spec import path_item as spec_path_item
-
 
 class Callback(pydantic.BaseModel):
     """Represents an OpenAPI Callback Object.
@@ -53,3 +51,10 @@ class Callback(pydantic.BaseModel):
             PathItem if found, None otherwise
         """
         return self.expressions.get(expression)
+
+
+# Imported after the class definition to break the import cycle:
+# callback -> path_item -> operation -> callback
+from cicerone.spec import path_item as spec_path_item  # noqa: E402
+
+Callback.model_rebuild(raise_errors=False)

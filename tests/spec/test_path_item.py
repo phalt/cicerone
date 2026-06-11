@@ -63,16 +63,21 @@ class TestPathItem:
         get_params = path_item.operations["get"].parameters
         assert len(get_params) == 3
         # Path-level parameters should come first
-        assert get_params[0]["name"] == "request-id"
-        assert get_params[1]["$ref"] == "#/components/parameters/api-version"
+        assert get_params[0].name == "request-id"
+        assert get_params[1].ref == "#/components/parameters/api-version"
         # Operation-level parameters should come after
-        assert get_params[2]["name"] == "x-customer-ip"
+        assert get_params[2].name == "x-customer-ip"
 
         # POST operation should have only path-level parameters
         post_params = path_item.operations["post"].parameters
         assert len(post_params) == 2
-        assert post_params[0]["name"] == "request-id"
-        assert post_params[1]["$ref"] == "#/components/parameters/api-version"
+        assert post_params[0].name == "request-id"
+        assert post_params[1].ref == "#/components/parameters/api-version"
+
+        # Path-level parameters are also available as typed objects on the PathItem
+        assert len(path_item.parameters) == 2
+        assert path_item.parameters[0].name == "request-id"
+        assert path_item.parameters[1].ref == "#/components/parameters/api-version"
 
     def test_path_level_parameters_with_no_operations_parameters(self):
         """Test path-level parameters when operations don't define their own."""
@@ -85,9 +90,9 @@ class TestPathItem:
 
         # Both operations should have the path-level parameter
         assert len(path_item.operations["get"].parameters) == 1
-        assert path_item.operations["get"].parameters[0]["name"] == "api-key"
+        assert path_item.operations["get"].parameters[0].name == "api-key"
         assert len(path_item.operations["post"].parameters) == 1
-        assert path_item.operations["post"].parameters[0]["name"] == "api-key"
+        assert path_item.operations["post"].parameters[0].name == "api-key"
 
     def test_operations_without_path_level_parameters(self):
         """Test that operations without path-level parameters work normally."""
@@ -101,4 +106,4 @@ class TestPathItem:
 
         # Operation should only have its own parameter
         assert len(path_item.operations["get"].parameters) == 1
-        assert path_item.operations["get"].parameters[0]["name"] == "user-id"
+        assert path_item.operations["get"].parameters[0].name == "user-id"

@@ -21,8 +21,13 @@ class Response(pydantic.BaseModel):
     """Represents an OpenAPI response object."""
 
     # Allow extra fields to support vendor extensions and future spec additions
-    model_config = {"extra": "allow"}
+    model_config = {"extra": "allow", "populate_by_name": True}
 
+    # Keys promoted to typed fields in 0.4.0 that are still mirrored into
+    # model_extra for backwards compatibility (removed in 0.5.0)
+    MIRRORED_EXTRA_KEYS: typing.ClassVar[tuple[str, ...]] = ("$ref",)
+
+    ref: str | None = pydantic.Field(None, alias="$ref")
     description: str | None = None
     content: dict[str, spec_media_type.MediaType] = pydantic.Field(default_factory=dict)
     headers: dict[str, spec_header.Header] = pydantic.Field(default_factory=dict)
@@ -33,7 +38,7 @@ class Response(pydantic.BaseModel):
     def from_dict(cls, data: dict[str, typing.Any]) -> Response:
         """Create a Response from a dictionary."""
         excluded = {"description", "content", "headers", "links", "examples"}
-        return cls(
+        response = cls(
             description=data.get("description"),
             content=model_utils.parse_collection(data, "content", spec_media_type.MediaType.from_dict),
             headers=model_utils.parse_collection(data, "headers", spec_header.Header.from_dict),
@@ -41,3 +46,5 @@ class Response(pydantic.BaseModel):
             examples=model_utils.parse_collection(data, "examples", spec_example.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )
+        model_utils.mirror_extras(response, data, cls.MIRRORED_EXTRA_KEYS)
+        return response

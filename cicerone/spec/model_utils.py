@@ -8,7 +8,40 @@ from __future__ import annotations
 
 import typing
 
+if typing.TYPE_CHECKING:
+    import pydantic
+
 T = typing.TypeVar("T")
+
+
+def mirror_extras(
+    obj: pydantic.BaseModel,
+    data: typing.Mapping[str, typing.Any],
+    keys: typing.Iterable[str],
+) -> None:
+    """Mirror raw source values into a model's ``__pydantic_extra__``.
+
+    .. deprecated:: 0.4.0
+        This is a compatibility shim for consumers that accessed spec fields via
+        ``model_extra`` before they were promoted to typed model fields in 0.4.0.
+        The mirrored copies will be removed in 0.5.0 - use the typed fields instead.
+
+    Once a key is declared as a typed field, Pydantic routes it to the field and it
+    no longer appears in ``__pydantic_extra__``. This helper re-injects the raw
+    source values (not the parsed models) so that pre-0.4.0 access patterns like
+    ``schema.model_extra.get("enum")`` keep returning the same data.
+
+    Args:
+        obj: The freshly constructed model to mirror values onto
+        data: The raw source dictionary the model was parsed from
+        keys: The wire-format keys (e.g. "$ref", "requestBody") to mirror
+    """
+    extra = obj.__pydantic_extra__
+    if extra is None:
+        return
+    for key in keys:
+        if key in data and key not in extra:
+            extra[key] = data[key]
 
 
 def truncate_text(text: str, max_len: int = 50) -> str:

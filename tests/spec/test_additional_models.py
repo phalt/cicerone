@@ -15,7 +15,9 @@ class TestMediaType:
             "example": {"id": "123"},
         }
         media_type = cicerone_spec.MediaType.from_dict(data)
-        assert media_type.schema_ == {"type": "object", "properties": {"id": {"type": "string"}}}
+        assert isinstance(media_type.schema_, cicerone_spec.Schema)
+        assert media_type.schema_.type == "object"
+        assert media_type.schema_.properties["id"].type == "string"
         assert media_type.example == {"id": "123"}
 
     def test_media_type_with_examples(self):
