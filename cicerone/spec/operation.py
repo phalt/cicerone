@@ -110,7 +110,7 @@ class Operation(pydantic.BaseModel):
                 if isinstance(p, dict)
             ],
             responses={
-                status: spec_response.Response.from_dict(response_data)
+                (status if isinstance(status, str) else str(status)): spec_response.Response.from_dict(response_data)
                 for status, response_data in (
                     responses_data.items() if isinstance(responses_data, typing.Mapping) else []
                 )

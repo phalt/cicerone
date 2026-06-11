@@ -70,6 +70,30 @@ class TestOperationLenientParsing:
 
 
 class TestCollectionGuards:
+    def test_non_string_property_keys_coerced(self):
+        # YAML parses unquoted `no:` as boolean False; coerce keys to str
+        schema = cicerone_spec.Schema.from_dict(
+            {"type": "object", "properties": {False: {"type": "string"}, "name": {"type": "string"}}}
+        )
+        assert "False" in schema.properties
+        assert "name" in schema.properties
+
+    def test_boolean_properties_value_skipped(self):
+        schema = cicerone_spec.Schema.from_dict({"type": "object", "properties": True})
+        assert schema.properties == {}
+
+    def test_non_string_header_keys_coerced(self):
+        response = cicerone_spec.Response.from_dict(
+            {"description": "OK", "headers": {False: {"schema": {"type": "string"}}}}
+        )
+        assert "False" in response.headers
+
+    def test_malformed_example_summary(self):
+        # Seen in the wild: YAML bool or date where a summary string belongs
+        example = cicerone_spec.Example.from_dict({"summary": False, "value": 1})
+        assert example.summary is None
+        assert example.value == 1
+
     def test_non_dict_collection_items_skipped(self):
         # A malformed header entry must not crash parsing of the response
         response = cicerone_spec.Response.from_dict(
