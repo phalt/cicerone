@@ -43,6 +43,38 @@ def mirror_extras(
             extra[key] = data[key]
 
 
+def lenient_validator(*field_names: str) -> typing.Any:
+    """Create a wrap validator that falls back to the field default on bad input.
+
+    Real-world specs frequently contain malformed scalar values (e.g. YAML
+    parsing ``pattern: 0.0`` as a float, or Swagger-2-style ``required: true``
+    on a property schema). Rejecting the whole document for one bad keyword
+    would make cicerone unusable at scale, so the listed optional fields fall
+    back to their default instead. The raw value is still available via
+    ``model_extra`` (where mirrored) and ``OpenAPISpec.raw``.
+
+    Args:
+        field_names: Names of the optional fields to validate leniently
+
+    Returns:
+        A pydantic wrap validator to assign in the model class body
+    """
+
+    def _lenient(
+        cls: type[pydantic.BaseModel],
+        value: typing.Any,
+        handler: typing.Callable[[typing.Any], typing.Any],
+        info: pydantic.ValidationInfo,
+    ) -> typing.Any:
+        try:
+            return handler(value)
+        except pydantic.ValidationError:
+            assert info.field_name is not None
+            return cls.model_fields[info.field_name].get_default(call_default_factory=True)
+
+    return pydantic.field_validator(*field_names, mode="wrap")(classmethod(_lenient))
+
+
 class NestedField(typing.NamedTuple):
     """Declares how a nested wire-format key is parsed by SpecModel.from_dict.
 
@@ -87,7 +119,9 @@ class SpecModel(pydantic.BaseModel):
                         kwargs[wire_name] = nested.parser(value)
                 case "collection":
                     if isinstance(value, dict):
-                        kwargs[wire_name] = {name: nested.parser(item) for name, item in value.items()}
+                        kwargs[wire_name] = {
+                            name: nested.parser(item) for name, item in value.items() if isinstance(item, dict)
+                        }
                 case "list":
                     if isinstance(value, list):
                         kwargs[wire_name] = [nested.parser(item) for item in value if isinstance(item, dict)]

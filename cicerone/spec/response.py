@@ -37,3 +37,7 @@ class Response(model_utils.SpecModel):
     headers: dict[str, spec_header.Header] = pydantic.Field(default_factory=dict)
     links: dict[str, spec_link.Link] = pydantic.Field(default_factory=dict)
     examples: dict[str, spec_example.Example] = pydantic.Field(default_factory=dict)
+
+    # Malformed scalar values fall back to the field default instead of
+    # rejecting the whole document
+    _lenient_scalars = model_utils.lenient_validator("ref", "description")

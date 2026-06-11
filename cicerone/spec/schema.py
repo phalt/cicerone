@@ -27,6 +27,7 @@ class Schema(model_utils.SpecModel):
     NESTED_SCHEMA_KEYS: typing.ClassVar[set[str]] = {
         "properties",
         "items",
+        "prefixItems",
         "allOf",
         "oneOf",
         "anyOf",
@@ -49,6 +50,7 @@ class Schema(model_utils.SpecModel):
         "writeOnly",
         "discriminator",
         "additionalProperties",
+        "prefixItems",
         "example",
         "examples",
         "minimum",
@@ -74,6 +76,8 @@ class Schema(model_utils.SpecModel):
     properties: dict[str, Schema] = pydantic.Field(default_factory=dict)
     required: list[str] = pydantic.Field(default_factory=list)
     items: Schema | None = None
+    # JSON Schema tuple validation (OpenAPI 3.1)
+    prefix_items: list[Schema] | None = pydantic.Field(None, alias="prefixItems")
     # Value keywords
     enum: list[typing.Any] | None = None
     default: typing.Any = None
@@ -111,6 +115,37 @@ class Schema(model_utils.SpecModel):
     min_properties: int | None = pydantic.Field(None, alias="minProperties")
     max_properties: int | None = pydantic.Field(None, alias="maxProperties")
 
+    # Malformed scalar values in real-world specs fall back to the field
+    # default instead of rejecting the whole document (raw value stays
+    # available via model_extra and OpenAPISpec.raw)
+    _lenient_scalars = model_utils.lenient_validator(
+        "ref",
+        "title",
+        "type",
+        "format",
+        "description",
+        "required",
+        "enum",
+        "examples",
+        "deprecated",
+        "nullable",
+        "read_only",
+        "write_only",
+        "minimum",
+        "maximum",
+        "exclusive_minimum",
+        "exclusive_maximum",
+        "multiple_of",
+        "min_length",
+        "max_length",
+        "pattern",
+        "min_items",
+        "max_items",
+        "unique_items",
+        "min_properties",
+        "max_properties",
+    )
+
     def __str__(self) -> str:
         """Return a readable string representation of the schema."""
         parts = []
@@ -128,6 +163,8 @@ class Schema(model_utils.SpecModel):
             parts.append(f"required={self.required}")
         if self.items:
             parts.append(f"items={self.items.type or 'object'}")
+        if self.prefix_items:
+            parts.append(f"prefixItems=({', '.join(str(item.type or 'object') for item in self.prefix_items)})")
 
         content = ", ".join(parts) if parts else "empty schema"
         return f"<Schema: {content}>"
@@ -190,7 +227,7 @@ class Schema(model_utils.SpecModel):
         items = data.get("items")
         if isinstance(items, dict):
             kwargs["items"] = cls.from_dict(items)
-        for key in ("allOf", "oneOf", "anyOf"):
+        for key in ("prefixItems", "allOf", "oneOf", "anyOf"):
             parsed = model_utils.parse_list_or_none(data, key, cls.from_dict)
             if parsed is not None:
                 kwargs[key] = parsed

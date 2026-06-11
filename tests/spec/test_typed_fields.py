@@ -131,6 +131,21 @@ class TestSchemaTypedFields:
         schema = cicerone_spec.Schema.from_dict({"type": "object"})
         assert schema.additional_properties is None
 
+    def test_prefix_items_tuples(self):
+        # JSON Schema tuple validation (OpenAPI 3.1), see PR #30
+        schema = cicerone_spec.Schema.from_dict(
+            {"type": "array", "prefixItems": [{"type": "string"}, {"type": "integer"}]}
+        )
+        assert schema.prefix_items is not None
+        assert schema.prefix_items[0].type == "string"
+        assert schema.prefix_items[1].type == "integer"
+        assert schema.model_extra is not None
+        assert schema.model_extra["prefixItems"] == [{"type": "string"}, {"type": "integer"}]
+
+    def test_prefix_items_absent(self):
+        schema = cicerone_spec.Schema.from_dict({"type": "array", "items": {"type": "string"}})
+        assert schema.prefix_items is None
+
     def test_boolean_items_does_not_crash(self):
         # JSON Schema allows boolean schemas; cicerone skips them rather than crashing
         schema = cicerone_spec.Schema.from_dict({"type": "array", "items": True})

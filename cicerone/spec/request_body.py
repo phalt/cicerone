@@ -29,3 +29,7 @@ class RequestBody(model_utils.SpecModel):
     description: str | None = None
     content: dict[str, spec_media_type.MediaType] = pydantic.Field(default_factory=dict)
     required: bool = False
+
+    # Malformed scalar values fall back to the field default instead of
+    # rejecting the whole document
+    _lenient_scalars = model_utils.lenient_validator("ref", "description", "required")
