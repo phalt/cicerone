@@ -10,6 +10,9 @@ import typing
 
 import pydantic
 
+from cicerone.spec import header as spec_header
+from cicerone.spec import model_utils
+
 
 class Encoding(pydantic.BaseModel):
     """Represents an OpenAPI Encoding Object.
@@ -18,10 +21,10 @@ class Encoding(pydantic.BaseModel):
     """
 
     # Allow extra fields to support vendor extensions
-    model_config = {"extra": "allow"}
+    model_config = {"extra": "allow", "populate_by_name": True}
 
     contentType: str | None = None
-    headers: dict[str, typing.Any] = pydantic.Field(default_factory=dict)  # Header objects
+    headers: dict[str, spec_header.Header] = pydantic.Field(default_factory=dict)
     style: str | None = None
     explode: bool = False
     allowReserved: bool = False
@@ -29,5 +32,7 @@ class Encoding(pydantic.BaseModel):
     @classmethod
     def from_dict(cls, data: dict[str, typing.Any]) -> Encoding:
         """Create an Encoding from a dictionary."""
-        # Simple passthrough - pydantic handles all fields with extra="allow"
-        return cls(**data)
+        return cls(
+            headers=model_utils.parse_collection(data, "headers", spec_header.Header.from_dict),
+            **{k: v for k, v in data.items() if k != "headers"},
+        )

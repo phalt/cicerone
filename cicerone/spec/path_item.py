@@ -9,16 +9,24 @@ import typing
 import pydantic
 
 from cicerone.spec import operation as spec_operation
+from cicerone.spec import parameter as spec_parameter
+
+HTTP_METHODS = ["get", "post", "put", "patch", "delete", "options", "head", "trace"]
 
 
 class PathItem(pydantic.BaseModel):
     """Represents a path item with its operations."""
 
     # Allow extra fields to support vendor extensions and path-level parameters
-    model_config = {"extra": "allow"}
+    model_config = {"extra": "allow", "populate_by_name": True}
 
     path: str
+    ref: str | None = pydantic.Field(None, alias="$ref")
+    summary: str | None = None
+    description: str | None = None
     operations: dict[str, spec_operation.Operation] = pydantic.Field(default_factory=dict)
+    # Path-level parameters, also merged into each operation's parameters below
+    parameters: list[spec_parameter.Parameter] = pydantic.Field(default_factory=list)
 
     def __str__(self) -> str:
         """Return a readable string representation of the path item."""
@@ -29,14 +37,18 @@ class PathItem(pydantic.BaseModel):
     def from_dict(cls, path: str, data: typing.Mapping[str, typing.Any]) -> "PathItem":
         """Create a PathItem from a dictionary."""
         operations = {}
-        http_methods = ["get", "post", "put", "patch", "delete", "options", "head", "trace"]
 
-        # Extract path-level parameters if they exist
         # Note: We check isinstance as a defensive measure because some callers
         # (like callbacks with invalid test data) may pass non-Mapping types
-        path_level_parameters = data.get("parameters", []) if isinstance(data, typing.Mapping) else []
+        if not isinstance(data, typing.Mapping):
+            return cls(path=path)
 
-        for method in http_methods:
+        # Extract path-level parameters if they exist
+        path_level_parameters = data.get("parameters", [])
+        if not isinstance(path_level_parameters, list):
+            path_level_parameters = []
+
+        for method in HTTP_METHODS:
             if method in data:
                 # Only create a copy if we need to merge path-level parameters
                 if path_level_parameters:
@@ -50,4 +62,13 @@ class PathItem(pydantic.BaseModel):
                     # No path-level parameters, use operation data as-is
                     operations[method] = spec_operation.Operation.from_dict(method.upper(), path, data[method])
 
-        return cls(path=path, operations=operations)
+        excluded = set(HTTP_METHODS) | {"parameters", "summary", "description", "$ref"}
+        return cls(
+            path=path,
+            operations=operations,
+            summary=data.get("summary"),
+            description=data.get("description"),
+            parameters=[spec_parameter.Parameter.from_dict(p) for p in path_level_parameters if isinstance(p, dict)],
+            **{"$ref": data.get("$ref")} if "$ref" in data else {},
+            **{k: v for k, v in data.items() if k not in excluded},
+        )

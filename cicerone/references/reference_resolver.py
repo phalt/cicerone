@@ -210,7 +210,10 @@ class ReferenceResolver:
         return obj
 
     def _get_ref_from_model(self, model: pydantic.BaseModel) -> str | None:
-        """Extract $ref from a Pydantic model's extra fields if present.
+        """Extract $ref from a Pydantic model if present.
+
+        Checks the typed ``ref`` field first (Schema, Parameter, Response, etc.),
+        then falls back to extra fields for models without a typed field.
 
         Args:
             model: Pydantic model to check
@@ -218,7 +221,12 @@ class ReferenceResolver:
         Returns:
             The $ref string if found, None otherwise
         """
-        return getattr(model, "__pydantic_extra__", {}).get("$ref")
+        if "ref" in type(model).model_fields:
+            ref = getattr(model, "ref", None)
+            if isinstance(ref, str) and ref:
+                return ref
+        extra = getattr(model, "__pydantic_extra__", None) or {}
+        return extra.get("$ref")
 
     def _try_resolve_ref(self, ref: str) -> typing.Any | None:
         """Attempt to resolve a reference, returning None on failure.

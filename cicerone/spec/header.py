@@ -19,10 +19,16 @@ class Header(pydantic.BaseModel):
     """Represents an OpenAPI header object."""
 
     # Allow extra fields to support vendor extensions and future spec additions
-    model_config = {"extra": "allow"}
+    model_config = {"extra": "allow", "populate_by_name": True}
 
+    # Keys promoted to typed fields in 0.4.0 that are still mirrored into
+    # model_extra for backwards compatibility (removed in 0.5.0)
+    MIRRORED_EXTRA_KEYS: typing.ClassVar[tuple[str, ...]] = ("$ref", "deprecated")
+
+    ref: str | None = pydantic.Field(None, alias="$ref")
     description: str | None = None
     required: bool = False
+    deprecated: bool = False
     schema_: spec_schema.Schema | None = pydantic.Field(None, alias="schema")
     style: str | None = None
     explode: bool | None = None
@@ -33,7 +39,7 @@ class Header(pydantic.BaseModel):
     def from_dict(cls, data: dict[str, typing.Any]) -> Header:
         """Create a Header from a dictionary."""
         excluded = {"description", "required", "schema", "style", "explode", "example", "examples"}
-        return cls(
+        header = cls(
             description=data.get("description"),
             required=data.get("required", False),
             schema=model_utils.parse_nested_object(data, "schema", spec_schema.Schema.from_dict),
@@ -43,3 +49,5 @@ class Header(pydantic.BaseModel):
             examples=model_utils.parse_collection(data, "examples", spec_example.Example.from_dict),
             **{k: v for k, v in data.items() if k not in excluded},
         )
+        model_utils.mirror_extras(header, data, cls.MIRRORED_EXTRA_KEYS)
+        return header

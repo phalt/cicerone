@@ -2,6 +2,7 @@
 
 from cicerone.spec.callback import Callback
 from cicerone.spec.components import Components
+from cicerone.spec.discriminator import Discriminator
 from cicerone.spec.encoding import Encoding
 from cicerone.spec.example import Example
 from cicerone.spec.header import Header
@@ -27,12 +28,16 @@ Header.model_rebuild()
 Parameter.model_rebuild()
 Response.model_rebuild()
 Components.model_rebuild()
+Operation.model_rebuild()
+PathItem.model_rebuild()
+Callback.model_rebuild()
 
 __all__ = [
     "Callback",
     "Components",
     "Contact",
     "Contact",
+    "Discriminator",
     "Encoding",
     "Example",
     "ExternalDocumentation",
