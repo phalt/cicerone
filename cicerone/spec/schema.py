@@ -132,6 +132,42 @@ class Schema(pydantic.BaseModel):
         return f"<Schema: {content}>"
 
     @property
+    def types(self) -> list[str]:
+        """Always-a-list view of the ``type`` keyword.
+
+        OpenAPI 3.1 allows type arrays (``type: ["string", "null"]``) while 3.0
+        only allows a single string. This property unifies both forms; it returns
+        an empty list when ``type`` is unset.
+        """
+        if self.type is None:
+            return []
+        if isinstance(self.type, str):
+            return [self.type]
+        return list(self.type)
+
+    @property
+    def primary_type(self) -> str | None:
+        """The first non-``"null"`` type, or None if there isn't one."""
+        return next((t for t in self.types if t != "null"), None)
+
+    @property
+    def is_nullable(self) -> bool:
+        """True if the schema accepts null values.
+
+        Unifies the OpenAPI 3.0 ``nullable`` keyword, OpenAPI 3.1 type arrays
+        containing ``"null"``, and anyOf/oneOf compositions with a
+        ``{"type": "null"}`` member.
+        """
+        if self.nullable:
+            return True
+        if "null" in self.types:
+            return True
+        for members in (self.any_of, self.one_of):
+            if members and any("null" in member.types for member in members):
+                return True
+        return False
+
+    @property
     def has_default(self) -> bool:
         """True if the schema explicitly declares a default (including ``default: null``)."""
         return "default" in self.model_fields_set

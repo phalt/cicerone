@@ -11,6 +11,7 @@ References:
 
 from __future__ import annotations
 
+import difflib
 import typing
 
 import pydantic
@@ -57,6 +58,8 @@ class ReferenceResolver:
         """
         self.spec = spec
         self._resolution_stack: list[str] = []
+        # Cache of fully resolved references, keyed by (ref string, follow_nested)
+        self._cache: dict[tuple[str, bool], typing.Any] = {}
 
     def resolve_reference(
         self,
@@ -90,6 +93,11 @@ class ReferenceResolver:
         if ref.ref in self._resolution_stack:
             raise RecursionError(f"Circular reference detected: {' -> '.join(self._resolution_stack + [ref.ref])}")
 
+        # Return cached results for references that aren't currently in flight
+        cache_key = (ref.ref, follow_nested)
+        if cache_key in self._cache:
+            return self._cache[cache_key]
+
         # Add to resolution stack for circular reference detection
         self._resolution_stack.append(ref.ref)
 
@@ -104,12 +112,12 @@ class ReferenceResolver:
             # If the target is itself a reference and we should follow it
             if follow_nested and spec_reference.Reference.is_reference(target):
                 nested_ref = spec_reference.Reference.from_dict(target)
-                return self.resolve_reference(nested_ref, follow_nested=True)
-
+                target = self.resolve_reference(nested_ref, follow_nested=True)
             # If follow_nested is True and target is a typed object, resolve nested $refs
-            if follow_nested and not isinstance(target, dict):
+            elif follow_nested and not isinstance(target, dict):
                 target = self._resolve_nested_references(target)
 
+            self._cache[cache_key] = target
             return target
 
         finally:
@@ -142,7 +150,15 @@ class ReferenceResolver:
             try:
                 current = current[int(part)] if isinstance(current, list) else current[part]
             except (KeyError, IndexError, ValueError) as e:
-                raise ValueError(f"Reference path not found: {ref.ref} (failed at {path_so_far})") from e
+                message = f"Reference path not found: {ref.ref} (failed at {path_so_far})"
+                if isinstance(current, dict):
+                    available = sorted(str(key) for key in current.keys())
+                    if close_matches := difflib.get_close_matches(part, available, n=1):
+                        message += f". Did you mean '{close_matches[0]}'?"
+                    preview = ", ".join(available[:20])
+                    suffix = ", ..." if len(available) > 20 else ""
+                    message += f" Available keys: {preview}{suffix}"
+                raise ValueError(message) from e
             except TypeError as e:
                 raise ValueError(
                     f"Cannot navigate through non-dict/list object: {ref.ref} (failed at {path_so_far})"

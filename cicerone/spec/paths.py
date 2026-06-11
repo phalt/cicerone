@@ -39,6 +39,19 @@ class Paths(pydantic.BaseModel):
         """Check if a path exists."""
         return path in self.items
 
+    def __iter__(self) -> typing.Iterator[tuple[str, spec_path_item.PathItem]]:  # type: ignore[override]
+        """Iterate over (path, PathItem) pairs.
+
+        Note: this intentionally overrides Pydantic's default model iteration
+        (which yields (field_name, value) pairs) so that consumers can write
+        ``for path, path_item in spec.paths:`` directly.
+        """
+        yield from self.items.items()
+
+    def __len__(self) -> int:
+        """Return the number of paths."""
+        return len(self.items)
+
     def all_operations(self) -> typing.Generator[spec_operation.Operation, None, None]:
         """Yield all operations across all paths."""
         for path_item in self.items.values():
