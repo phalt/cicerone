@@ -92,7 +92,7 @@ class TestLink:
             "description": "Link to user",
         }
         link = cicerone_spec.Link.from_dict(data)
-        assert link.operationId == "getUser"
+        assert link.operation_id == "getUser"
         assert link.description == "Link to user"
         assert "userId" in link.parameters
 

@@ -17,11 +17,15 @@ from cicerone.spec import media_type as spec_media_type
 from cicerone.spec import model_utils
 
 
-class Response(pydantic.BaseModel):
+class Response(model_utils.SpecModel):
     """Represents an OpenAPI response object."""
 
-    # Allow extra fields to support vendor extensions and future spec additions
-    model_config = {"extra": "allow", "populate_by_name": True}
+    NESTED_FIELDS: typing.ClassVar[dict[str, model_utils.NestedField]] = {
+        "content": model_utils.NestedField("collection", spec_media_type.MediaType.from_dict),
+        "headers": model_utils.NestedField("collection", spec_header.Header.from_dict),
+        "links": model_utils.NestedField("collection", spec_link.Link.from_dict),
+        "examples": model_utils.NestedField("collection", spec_example.Example.from_dict),
+    }
 
     # Keys promoted to typed fields in 0.4.0 that are still mirrored into
     # model_extra for backwards compatibility (removed in 0.5.0)
@@ -33,18 +37,3 @@ class Response(pydantic.BaseModel):
     headers: dict[str, spec_header.Header] = pydantic.Field(default_factory=dict)
     links: dict[str, spec_link.Link] = pydantic.Field(default_factory=dict)
     examples: dict[str, spec_example.Example] = pydantic.Field(default_factory=dict)
-
-    @classmethod
-    def from_dict(cls, data: dict[str, typing.Any]) -> Response:
-        """Create a Response from a dictionary."""
-        excluded = {"description", "content", "headers", "links", "examples"}
-        response = cls(
-            description=data.get("description"),
-            content=model_utils.parse_collection(data, "content", spec_media_type.MediaType.from_dict),
-            headers=model_utils.parse_collection(data, "headers", spec_header.Header.from_dict),
-            links=model_utils.parse_collection(data, "links", spec_link.Link.from_dict),
-            examples=model_utils.parse_collection(data, "examples", spec_example.Example.from_dict),
-            **{k: v for k, v in data.items() if k not in excluded},
-        )
-        model_utils.mirror_extras(response, data, cls.MIRRORED_EXTRA_KEYS)
-        return response

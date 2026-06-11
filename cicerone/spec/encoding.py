@@ -14,25 +14,18 @@ from cicerone.spec import header as spec_header
 from cicerone.spec import model_utils
 
 
-class Encoding(pydantic.BaseModel):
+class Encoding(model_utils.SpecModel):
     """Represents an OpenAPI Encoding Object.
 
     An encoding definition applied to a single schema property.
     """
 
-    # Allow extra fields to support vendor extensions
-    model_config = {"extra": "allow", "populate_by_name": True}
+    NESTED_FIELDS: typing.ClassVar[dict[str, model_utils.NestedField]] = {
+        "headers": model_utils.NestedField("collection", spec_header.Header.from_dict),
+    }
 
     contentType: str | None = None
     headers: dict[str, spec_header.Header] = pydantic.Field(default_factory=dict)
     style: str | None = None
     explode: bool = False
     allowReserved: bool = False
-
-    @classmethod
-    def from_dict(cls, data: dict[str, typing.Any]) -> Encoding:
-        """Create an Encoding from a dictionary."""
-        return cls(
-            headers=model_utils.parse_collection(data, "headers", spec_header.Header.from_dict),
-            **{k: v for k, v in data.items() if k != "headers"},
-        )

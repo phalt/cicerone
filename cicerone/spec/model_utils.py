@@ -8,8 +8,7 @@ from __future__ import annotations
 
 import typing
 
-if typing.TYPE_CHECKING:
-    import pydantic
+import pydantic
 
 T = typing.TypeVar("T")
 
@@ -42,6 +41,59 @@ def mirror_extras(
     for key in keys:
         if key in data and key not in extra:
             extra[key] = data[key]
+
+
+class NestedField(typing.NamedTuple):
+    """Declares how a nested wire-format key is parsed by SpecModel.from_dict.
+
+    Attributes:
+        kind: One of "object" (single nested object), "collection" (dict of
+            name -> object), or "list" (list of objects, non-dict items skipped)
+        parser: Function to parse each nested value (usually Class.from_dict)
+    """
+
+    kind: typing.Literal["object", "collection", "list"]
+    parser: typing.Callable[[dict[str, typing.Any]], typing.Any]
+
+
+class SpecModel(pydantic.BaseModel):
+    """Base class for OpenAPI spec models with a declarative from_dict.
+
+    Subclasses declare nested wire-format keys in ``NESTED_FIELDS``; all other
+    keys are passed straight to Pydantic, which resolves field aliases and
+    routes unknown keys into ``model_extra``. Keys listed in
+    ``MIRRORED_EXTRA_KEYS`` additionally have their raw values mirrored into
+    ``model_extra`` for backwards compatibility (deprecated, removed in 0.5.0).
+    """
+
+    # extra="allow" supports vendor extensions and future spec additions;
+    # populate_by_name allows programmatic construction with field names
+    model_config = {"extra": "allow", "populate_by_name": True}
+
+    NESTED_FIELDS: typing.ClassVar[dict[str, NestedField]] = {}
+    MIRRORED_EXTRA_KEYS: typing.ClassVar[tuple[str, ...]] = ()
+
+    @classmethod
+    def from_dict(cls, data: dict[str, typing.Any]) -> typing.Self:
+        """Create a model instance from a raw spec dictionary."""
+        kwargs: dict[str, typing.Any] = {k: v for k, v in data.items() if k not in cls.NESTED_FIELDS}
+        for wire_name, nested in cls.NESTED_FIELDS.items():
+            value = data.get(wire_name)
+            # Malformed values of the wrong shape are skipped so the field
+            # falls back to its default instead of crashing the parse
+            match nested.kind:
+                case "object":
+                    if isinstance(value, dict):
+                        kwargs[wire_name] = nested.parser(value)
+                case "collection":
+                    if isinstance(value, dict):
+                        kwargs[wire_name] = {name: nested.parser(item) for name, item in value.items()}
+                case "list":
+                    if isinstance(value, list):
+                        kwargs[wire_name] = [nested.parser(item) for item in value if isinstance(item, dict)]
+        obj = cls(**kwargs)
+        mirror_extras(obj, data, cls.MIRRORED_EXTRA_KEYS)
+        return obj
 
 
 def truncate_text(text: str, max_len: int = 50) -> str:

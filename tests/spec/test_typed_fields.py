@@ -138,7 +138,7 @@ class TestSchemaTypedFields:
 
     def test_construction_by_field_name(self):
         # populate_by_name allows programmatic construction with snake_case names
-        schema = cicerone_spec.Schema(ref="#/components/schemas/User", min_length=3)
+        schema = cicerone_spec.Schema(ref="#/components/schemas/User", min_length=3)  # ty: ignore[unknown-argument]
         assert schema.ref == "#/components/schemas/User"
         assert schema.min_length == 3
 
@@ -157,6 +157,7 @@ class TestSchemaExtrasMirroring:
         }
         schema = cicerone_spec.Schema.from_dict(data)
         extra = schema.model_extra
+        assert extra is not None
         assert extra["$ref"] == "#/components/schemas/User"
         assert extra["enum"] == ["a", "b"]
         assert extra["default"] == "a"
@@ -167,17 +168,23 @@ class TestSchemaExtrasMirroring:
     def test_mirrored_values_are_raw_not_models(self):
         data = {"discriminator": {"propertyName": "petType"}, "additionalProperties": {"type": "string"}}
         schema = cicerone_spec.Schema.from_dict(data)
-        assert schema.model_extra["discriminator"] == {"propertyName": "petType"}
-        assert schema.model_extra["additionalProperties"] == {"type": "string"}
+        extra = schema.model_extra
+        assert extra is not None
+        assert extra["discriminator"] == {"propertyName": "petType"}
+        assert extra["additionalProperties"] == {"type": "string"}
 
     def test_absent_keys_not_mirrored(self):
         schema = cicerone_spec.Schema.from_dict({"type": "string"})
-        assert "enum" not in schema.model_extra
-        assert "$ref" not in schema.model_extra
+        extra = schema.model_extra
+        assert extra is not None
+        assert "enum" not in extra
+        assert "$ref" not in extra
 
     def test_vendor_extensions_still_in_extras(self):
         schema = cicerone_spec.Schema.from_dict({"type": "string", "x-internal": True})
-        assert schema.model_extra["x-internal"] is True
+        extra = schema.model_extra
+        assert extra is not None
+        assert extra["x-internal"] is True
 
 
 class TestOperationTypedFields:
@@ -291,9 +298,11 @@ class TestOperationTypedFields:
         }
         operation = cicerone_spec.Operation.from_dict("POST", "/users", data)
         # Raw values mirrored for pre-0.4.0 consumers (removed in 0.5.0)
-        assert operation.model_extra["requestBody"] == data["requestBody"]
-        assert operation.model_extra["security"] == [{"apiKey": []}]
-        assert operation.model_extra["deprecated"] is True
+        extra = operation.model_extra
+        assert extra is not None
+        assert extra["requestBody"] == data["requestBody"]
+        assert extra["security"] == [{"apiKey": []}]
+        assert extra["deprecated"] is True
 
 
 class TestMediaTypeTypedSchema:
@@ -319,7 +328,9 @@ class TestParameterTypedFields:
     def test_ref_field(self):
         parameter = cicerone_spec.Parameter.from_dict({"$ref": "#/components/parameters/PageSize"})
         assert parameter.ref == "#/components/parameters/PageSize"
-        assert parameter.model_extra["$ref"] == "#/components/parameters/PageSize"
+        extra = parameter.model_extra
+        assert extra is not None
+        assert extra["$ref"] == "#/components/parameters/PageSize"
 
     def test_deprecated_and_allow_empty_value(self):
         parameter = cicerone_spec.Parameter.from_dict(
@@ -379,7 +390,7 @@ class TestLinkTypedFields:
     def test_old_camel_case_access_still_works_via_extras(self):
         link = cicerone_spec.Link.from_dict({"operationId": "getUser"})
         # Deprecated compat: pre-0.4.0 attribute access (removed in 0.5.0)
-        assert link.operationId == "getUser"
+        assert link.operationId == "getUser"  # ty: ignore[unresolved-attribute]
 
 
 class TestPathItemTypedFields:
