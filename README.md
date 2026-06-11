@@ -16,7 +16,7 @@ It's fast, minimal, fully typed, and pythonic.
 - **Tested at scale**: We run tests against 4000+ real schemas from [APIs.guru OpenAPI Directory](https://github.com/APIs-guru/openapi-directory).
 - **Pydantic models**: All models are type-safe.
 - **Multiple input formats**: Files, URLs, or in-memory data.
-- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications.
+- **OpenAPI 3.x support**: Works with OpenAPI 3.0 and 3.1 specifications, including native handling of 3.1 type arrays (`Schema.is_nullable`, `Schema.primary_type`).
 - **Minimal dependencies**: Just Pydantic and pyyaml. Everything else is stdlib.
 - **Simple API**: Easy to use, hard to misuse.
 - **Modern Python**: Fully typed with 100% test coverage.
