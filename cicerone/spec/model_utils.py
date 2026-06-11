@@ -119,9 +119,7 @@ class SpecModel(pydantic.BaseModel):
                         kwargs[wire_name] = nested.parser(value)
                 case "collection":
                     if isinstance(value, dict):
-                        kwargs[wire_name] = {
-                            name: nested.parser(item) for name, item in value.items() if isinstance(item, dict)
-                        }
+                        kwargs[wire_name] = parse_collection(data, wire_name, nested.parser)
                 case "list":
                     if isinstance(value, list):
                         kwargs[wire_name] = [nested.parser(item) for item in value if isinstance(item, dict)]
@@ -176,6 +174,10 @@ def parse_collection(
 ) -> dict[str, T]:
     """Parse a collection of objects into a dictionary.
 
+    Malformed entries degrade gracefully: a non-dict collection yields an
+    empty dict, non-dict items are skipped, and non-string keys (e.g. YAML
+    parsing an unquoted ``no:`` key as boolean False) are coerced to str.
+
     Args:
         data: Source dictionary
         field_name: Name of field containing the collection
@@ -187,9 +189,14 @@ def parse_collection(
     Example:
         parse_collection(data, "examples", Example.from_dict)
     """
-    if field_name in data:
-        return {name: parser_func(item_data) for name, item_data in data[field_name].items()}
-    return {}
+    collection = data.get(field_name)
+    if not isinstance(collection, dict):
+        return {}
+    return {
+        (name if isinstance(name, str) else str(name)): parser_func(item_data)
+        for name, item_data in collection.items()
+        if isinstance(item_data, dict)
+    }
 
 
 def parse_list(
