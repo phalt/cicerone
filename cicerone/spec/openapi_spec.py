@@ -43,6 +43,9 @@ class OpenAPISpec(pydantic.BaseModel):
     tags: list[spec_tag.Tag] = pydantic.Field(default_factory=list)
     external_docs: spec_tag.ExternalDocumentation | None = pydantic.Field(None, alias="externalDocs")
 
+    # Lazily created, shared resolver so resolved references are cached per spec
+    _resolver: spec_reference_resolver.ReferenceResolver | None = pydantic.PrivateAttr(default=None)
+
     def __str__(self) -> str:
         """Return a readable string representation of the OpenAPI spec."""
         title = self.raw.get("info", {}).get("title", "Untitled")
@@ -83,6 +86,46 @@ class OpenAPISpec(pydantic.BaseModel):
         """
         yield from itertools.chain(self.paths.all_operations(), self.webhooks.all_operations())
 
+    def operations_by_tag(self, tag: str) -> typing.Generator[spec_operation.Operation, None, None]:
+        """Yield all operations (from paths and webhooks) carrying the given tag.
+
+        Args:
+            tag: The tag name to filter by
+
+        Yields:
+            Operation objects tagged with the given tag
+
+        Example:
+            >>> from cicerone.parse import parse_spec_from_file
+            >>> spec = parse_spec_from_file("openapi.yaml")
+            >>> for op in spec.operations_by_tag("users"):
+            ...     print(op.operation_id)
+        """
+        for operation in self.all_operations():
+            if tag in operation.tags:
+                yield operation
+
+    def tags_to_operations(self) -> dict[str, list[spec_operation.Operation]]:
+        """Group all operations by tag.
+
+        Operations with multiple tags appear under each of their tags.
+        Untagged operations are not included.
+
+        Returns:
+            Dictionary mapping tag names to lists of Operation objects
+
+        Example:
+            >>> from cicerone.parse import parse_spec_from_file
+            >>> spec = parse_spec_from_file("openapi.yaml")
+            >>> grouped = spec.tags_to_operations()
+            >>> user_ops = grouped.get("users", [])
+        """
+        grouped: dict[str, list[spec_operation.Operation]] = {}
+        for operation in self.all_operations():
+            for tag in operation.tags:
+                grouped.setdefault(tag, []).append(operation)
+        return grouped
+
     def resolve_reference(
         self,
         ref: spec_reference.Reference | str,
@@ -113,8 +156,7 @@ class OpenAPISpec(pydantic.BaseModel):
             >>> # Returns a Schema object, not a dict
             >>> print(type(user_schema))  # <class 'cicerone.spec.schema.Schema'>
         """
-        resolver = spec_reference_resolver.ReferenceResolver(self)
-        return resolver.resolve_reference(ref, follow_nested=follow_nested)
+        return self._get_resolver().resolve_reference(ref, follow_nested=follow_nested)
 
     def get_all_references(self) -> dict[str, spec_reference.Reference]:
         """Get all references in the specification.
@@ -135,5 +177,10 @@ class OpenAPISpec(pydantic.BaseModel):
             >>> local_refs = {k: v for k, v in all_refs.items() if v.is_local}
             >>> print(f"Found {len(all_refs)} references")
         """
-        resolver = spec_reference_resolver.ReferenceResolver(self)
-        return resolver.get_all_references()
+        return self._get_resolver().get_all_references()
+
+    def _get_resolver(self) -> spec_reference_resolver.ReferenceResolver:
+        """Return the spec's shared, lazily created reference resolver."""
+        if self._resolver is None:
+            self._resolver = spec_reference_resolver.ReferenceResolver(self)
+        return self._resolver
