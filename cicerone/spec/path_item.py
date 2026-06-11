@@ -8,6 +8,7 @@ import typing
 
 import pydantic
 
+from cicerone.spec import model_utils
 from cicerone.spec import operation as spec_operation
 from cicerone.spec import parameter as spec_parameter
 
@@ -27,6 +28,10 @@ class PathItem(pydantic.BaseModel):
     operations: dict[str, spec_operation.Operation] = pydantic.Field(default_factory=dict)
     # Path-level parameters, also merged into each operation's parameters below
     parameters: list[spec_parameter.Parameter] = pydantic.Field(default_factory=list)
+
+    # Malformed scalar values fall back to the field default instead of
+    # rejecting the whole document
+    _lenient_scalars = model_utils.lenient_validator("ref", "summary", "description")
 
     def __str__(self) -> str:
         """Return a readable string representation of the path item."""
@@ -62,13 +67,12 @@ class PathItem(pydantic.BaseModel):
                     # No path-level parameters, use operation data as-is
                     operations[method] = spec_operation.Operation.from_dict(method.upper(), path, data[method])
 
-        excluded = set(HTTP_METHODS) | {"parameters", "summary", "description", "$ref"}
+        # The splat resolves $ref/summary/description via Pydantic aliases and
+        # routes unknown keys into model_extra
+        excluded = set(HTTP_METHODS) | {"parameters"}
         return cls(
             path=path,
             operations=operations,
-            summary=data.get("summary"),
-            description=data.get("description"),
             parameters=[spec_parameter.Parameter.from_dict(p) for p in path_level_parameters if isinstance(p, dict)],
-            **{"$ref": data.get("$ref")} if "$ref" in data else {},
             **{k: v for k, v in data.items() if k not in excluded},
         )

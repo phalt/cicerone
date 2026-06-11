@@ -36,3 +36,7 @@ class Header(model_utils.SpecModel):
     explode: bool | None = None
     example: typing.Any | None = None
     examples: dict[str, spec_example.Example] = pydantic.Field(default_factory=dict)
+
+    # Malformed scalar values fall back to the field default instead of
+    # rejecting the whole document
+    _lenient_scalars = model_utils.lenient_validator("ref", "description", "required", "deprecated", "style", "explode")

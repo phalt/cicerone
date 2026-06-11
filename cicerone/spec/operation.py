@@ -67,6 +67,12 @@ class Operation(pydantic.BaseModel):
     servers: list[spec_server.Server] = pydantic.Field(default_factory=list)
     external_docs: spec_tag.ExternalDocumentation | None = pydantic.Field(None, alias="externalDocs")
 
+    # Malformed scalar values fall back to the field default instead of
+    # rejecting the whole document
+    _lenient_scalars = model_utils.lenient_validator(
+        "operation_id", "summary", "description", "tags", "deprecated", "security"
+    )
+
     def __str__(self) -> str:
         """Return a readable string representation of the operation."""
         parts = [f"{self.method} {self.path}"]
