@@ -69,7 +69,9 @@ The top-level model representing an entire OpenAPI specification.
 
 - `operation_by_operation_id(operation_id)`: Find an operation object by its operationId
 - `all_operations()`: Generator yielding all operation objects
-- `resolve_reference(ref)`: Resolve a $ref reference
+- `operations_by_tag(tag)`: Generator yielding all operations carrying the given tag
+- `tags_to_operations()`: Group all operations by tag
+- `resolve_reference(ref)`: Resolve a $ref reference (results are cached per spec)
 - `get_all_references()`: Get all references in the spec
 
 **Example:**
@@ -127,18 +129,36 @@ Represents a JSON Schema / OpenAPI Schema object. This is one of the most common
 
 **Key Attributes:**
 
-- `type` (str | None): Schema type (object, array, string, number, integer, boolean, null)
+- `ref` (str | None): The `$ref` string when this schema is a reference
+- `type` (str | list[str] | None): Schema type; OpenAPI 3.1 allows type arrays like `["string", "null"]`
+- `format` (str | None): Type format (date-time, uuid, int64, etc.)
 - `title` (str | None): Schema title
 - `description` (str | None): Schema description
 - `properties` (dict[str, Schema]): Object properties (for type=object)
 - `required` (list[str]): Required property names
 - `items` (Schema | None): Array item schema (for type=array)
+- `enum` (list | None): Allowed values
+- `default` / `const`: Default and constant values (see `has_default` / `has_const`)
+- `deprecated` (bool): Whether the schema is deprecated
+- `nullable` (bool | None): OpenAPI 3.0 nullable keyword
+- `read_only` / `write_only` (bool | None): readOnly / writeOnly keywords
+- `example` / `examples`: Example values
+- `discriminator` (Discriminator | None): Discriminator for oneOf/anyOf composition
+- `additional_properties` (Schema | bool | None): additionalProperties keyword
 - `all_of` (list[Schema] | None): allOf composition
 - `one_of` (list[Schema] | None): oneOf composition
 - `any_of` (list[Schema] | None): anyOf composition
 - `not_` (Schema | None): not composition
+- Validation constraints: `minimum`, `maximum`, `exclusive_minimum`, `exclusive_maximum`, `multiple_of`, `min_length`, `max_length`, `pattern`, `min_items`, `max_items`, `unique_items`, `min_properties`, `max_properties`
 
-**Note:** Schema models allow extra fields to support the full JSON Schema vocabulary (like format, enum, minimum, maximum, pattern, etc.)
+**Key Properties:**
+
+- `types` (list[str]): Always-a-list view of `type` (empty list when unset)
+- `primary_type` (str | None): First non-`"null"` type
+- `is_nullable` (bool): True if the schema accepts null - unifies the 3.0 `nullable` keyword, 3.1 type arrays containing `"null"`, and anyOf/oneOf with a `{"type": "null"}` member
+- `has_default` / `has_const` (bool): True when the keyword is explicitly declared (distinguishes `default: null` from no default)
+
+**Note:** Schema models still allow extra fields, so the rest of the JSON Schema vocabulary (prefixItems, patternProperties, etc.) and vendor extensions remain available via `model_extra`.
 
 **Example:**
 
@@ -152,13 +172,35 @@ print(f"Required: {user_schema.required}")
 
 # Explore properties
 for prop_name, prop_schema in user_schema.properties.items():
-    print(f"  {prop_name}: {prop_schema.type}")
+    print(f"  {prop_name}: {prop_schema.primary_type}")
+    if prop_schema.is_nullable:
+        print("    (nullable)")
     if prop_name in user_schema.required:
-        print(f"    (required)")
+        print("    (required)")
 
-# Access additional JSON Schema fields
-if hasattr(user_schema, 'format'):
-    print(f"Format: {user_schema.format}")
+# Typed JSON Schema fields
+print(f"Format: {user_schema.format}")
+if user_schema.enum:
+    print(f"Allowed values: {user_schema.enum}")
+```
+
+### Discriminator
+
+Represents an OpenAPI Discriminator Object, used with oneOf/anyOf/allOf composition.
+
+**Key Attributes:**
+
+- `property_name` (str): The property whose value selects the matching schema
+- `mapping` (dict[str, str]): Mapping of property values to schema names or references
+
+**Example:**
+
+```python
+pet = spec.components.schemas.get("Pet")
+if pet.discriminator:
+    print(f"Discriminated by: {pet.discriminator.property_name}")
+    for value, target in pet.discriminator.mapping.items():
+        print(f"  {value} -> {target}")
 ```
 
 ### Components
@@ -210,16 +252,19 @@ Container for all API paths.
 **Key Methods:**
 
 - `all_operations()`: Generator yielding all operations across all paths
+- Iteration yields `(path, PathItem)` pairs; `len(spec.paths)` returns the number of paths
 
 **Example:**
 
 ```python
 print(spec.paths)  # <Paths: 5 paths, 12 operations [/users, /users/{id}, ...]>
 
-# Iterate paths
-for path_str, path_item in spec.paths.items.items():
+# Iterate paths directly
+for path_str, path_item in spec.paths:
     print(f"Path: {path_str}")
-    
+
+print(f"{len(spec.paths)} paths")
+
 # Get all operations
 for operation in spec.paths.all_operations():
     print(f"{operation.method.upper()} {operation.path}")

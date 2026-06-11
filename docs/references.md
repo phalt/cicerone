@@ -287,18 +287,21 @@ Check if a reference creates a circular dependency.
 
 ## Best Practices
 
-1. **Check for references before accessing**: Use `Reference.is_reference()` to check if data contains a $ref
+1. **Check for references before accessing**: Use the typed `ref` field (`schema.ref`, `parameter.ref`, etc.) or `Reference.is_reference()` for raw dicts
 2. **Handle circular references**: Use `is_circular_reference()` before full resolution
-3. **Cache resolved references**: If resolving the same reference multiple times, cache the results
-4. **Validate references**: Verify that all references in your spec can be resolved
+3. **Validate references**: Verify that all references in your spec can be resolved
+
+Resolution behavior notes:
+
+- `OpenAPISpec.resolve_reference()` caches results per spec: resolving the same reference twice returns the same object.
+- When a reference path cannot be found, the error message includes the available keys at the failure point and a did-you-mean suggestion for close matches.
 
 ## Limitations
 
 Current limitations (we'll address these in future versions):
 
 - External references (file paths, URLs) are not yet supported
-- `operationRef` in Link Objects is not yet implemented
-- `mapping` in Discriminator Objects is not yet implemented
+- `operationRef` in Link Objects is parsed (`Link.operation_ref`) but not resolved to an Operation
 - Dynamic references (`$dynamicRef`) from JSON Schema 2020-12 / OAS 3.1 are not yet supported
 
 ## See Also
