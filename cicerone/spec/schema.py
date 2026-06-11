@@ -15,11 +15,12 @@ from cicerone.spec import discriminator as spec_discriminator
 from cicerone.spec import model_utils
 
 
-class Schema(pydantic.BaseModel):
-    """Represents a JSON Schema / OpenAPI Schema object."""
+class Schema(model_utils.SpecModel):
+    """Represents a JSON Schema / OpenAPI Schema object.
 
-    # Allow extra fields to support full JSON Schema vocabulary and vendor extensions
-    model_config = {"extra": "allow", "populate_by_name": True}
+    Extra fields are allowed to support the full JSON Schema vocabulary and
+    vendor extensions.
+    """
 
     # Keys whose values are themselves schemas (or schema containers) and need
     # recursive parsing in from_dict() rather than plain Pydantic validation

@@ -49,6 +49,7 @@ class TestSchemaDiscriminator:
         )
         assert isinstance(schema.discriminator, cicerone_spec.Discriminator)
         assert schema.discriminator.property_name == "petType"
+        assert schema.one_of is not None
         assert schema.one_of[0].ref == "#/components/schemas/Dog"
 
     def test_schema_without_discriminator(self):
