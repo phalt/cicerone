@@ -1,6 +1,6 @@
 # Implementation Plan: cicerone 0.5.0 (`cicerone-next`)
 
-Status: draft for review, 21 October 2026. Next: Task 1.
+Status: approved 21 October 2026. Next: Task 1.
 
 Spec: [specs/SPEC-cicerone-next.md](../specs/SPEC-cicerone-next.md) (approved 21 October 2026). Tasks: [tasks/todo.md](todo.md).
 
