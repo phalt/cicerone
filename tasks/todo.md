@@ -87,17 +87,17 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 
 ## Task 4: OAI conformance ratchet
 
-**Description:** Vendor `versions/3.0.0.md` to `versions/3.2.1.md` (non-editors files) from OAI/OpenAPI-Specification at a pinned commit into `tests/fixtures/oai/`, with the commit recorded in a `SOURCE` file and a refresh script. Add two tests. Field coverage: parse the `| <a name=...>` fixed-field tables from 3.0.4, 3.1.2 and 3.2.1 (150, 153, 176 rows) and assert each (object, field) maps to a typed model field, via an explicit mapping table. Examples: extract every ```yaml and ```json block from every patch version, classify it as a full document (has `openapi`) or a fragment of the object named by its section heading, and parse it with zero error diagnostics. Both tests read an allowlist (`tests/fixtures/oai/allowlist.toml`) of known gaps with a reason per entry; anything not allowlisted must pass, and an allowlisted entry that now passes fails the test (forcing its removal).
+**Description:** Vendor `versions/3.0.0.md` to `versions/3.2.1.md` (non-editors files) from OAI/OpenAPI-Specification at a pinned commit into `tests/fixtures/oai/`, with the commit recorded in a `SOURCE` file and a refresh script. Add two tests. Field coverage: parse the `| <a name=...>` fixed-field tables from 3.0.4, 3.1.2 and 3.2.1 (145, 148, 171 fixed-field rows; patterned rows such as `/{path}` excluded) and assert each (object, field) maps to a typed model field, via an explicit mapping table. Examples: extract every ```yaml and ```json block from every patch version, classify it as a full document (has `openapi`) or a fragment of the object named by its section heading, and parse it with zero error diagnostics. Both tests read an allowlist (`tests/fixtures/oai/allowlist.toml`) of known gaps with a reason per entry; anything not allowlisted must pass, and an allowlisted entry that now passes fails the test (forcing its removal).
 
 **Acceptance criteria:**
-- [ ] Pinned vendored copy plus `scripts/refresh_oai.py`; tests do not touch the network
-- [ ] Field-coverage test enumerates all 479 table rows; today's gaps are allowlisted with reasons
-- [ ] Example test classifies every block; non-document blocks with no object mapping are listed with a reason, not silently skipped
+- [x] Pinned vendored copy plus `scripts/refresh_oai.py`; tests do not touch the network
+- [x] Field-coverage test enumerates all 464 fixed-field rows; today's gaps are allowlisted with reasons
+- [x] Example test classifies every block; non-document blocks with no object mapping are listed with a reason, not silently skipped
 
 **Verification:**
-- [ ] Tests pass: `uv run pytest tests/conformance -vv`
-- [ ] Checks pass
-- [ ] Manual check: print allowlist sizes and record them in the PR description as the starting ratchet
+- [x] Tests pass: `uv run pytest tests/conformance -vv`
+- [x] Checks pass
+- [x] Manual check: print allowlist sizes and record them in the PR description as the starting ratchet
 
 **Dependencies:** 2
 
@@ -173,6 +173,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 - [ ] Every Schema in a parsed spec has a correct `Location`, including inside `properties`, `items`, `allOf` and so on
 - [ ] Malformed Schema scalars produce one diagnostic each with code, location and the raw value in the message
 - [ ] Parsing without a context (`Schema.from_dict(d)`) still works and defaults to the latest dialect
+- [ ] `tests/conformance/checks.example_failure` also fails on any error-severity diagnostic, not only on exceptions (found in Task 4: today it can only catch crashes)
 
 **Verification:**
 - [ ] Tests pass: `uv run pytest tests/spec/test_schema*.py tests/test_diagnostics.py -vv`
@@ -198,6 +199,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 - [ ] `get: "oops"` parses with one diagnostic at `#/paths/~1a/get`
 - [ ] Locations recorded for every Operation, PathItem and Callback, with RFC 6901-escaped path keys
 - [ ] Callback and PathItem import cycle handled without `model_rebuild(raise_errors=False)` hacks where possible
+- [ ] `PathItem.servers` is typed (found in Task 4; closes its three `[fields]` allowlist entries)
 
 **Verification:**
 - [ ] Tests pass: `uv run pytest tests/spec/test_operation.py tests/spec/test_path_item.py tests/spec/test_paths.py tests/spec/test_webhooks.py tests/spec/test_callback.py tests/regressions -vv`
@@ -245,6 +247,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 - [ ] Finding #7 passes for every model type, not just Schema
 - [ ] `strict=True` on a document with three bad values raises once with three diagnostics
 - [ ] Assigning to a field of a frozen model raises
+- [ ] A numeric `info.version` (YAML `version: 1.0`) is coerced to a string with a warning instead of aborting the parse, and `Tag.external_docs` gets its `externalDocs` alias (found in Task 4; closes 12 `[examples]` and 3 `[fields]` allowlist entries)
 
 **Verification:**
 - [ ] Tests pass: `uv run pytest -vv`

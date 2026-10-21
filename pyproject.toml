@@ -37,6 +37,8 @@ packages = ["cicerone"]
 
 [tool.ruff]
 line-length = 120
+# Vendored OpenAPI specification text, kept byte-for-byte as published
+extend-exclude = ["tests/fixtures/oai"]
 
 [tool.ruff.lint]
 select = [
@@ -74,5 +76,5 @@ python_functions = ["test_*"]
 
 [tool.coverage.report]
 # Ratchet: raise this whenever coverage goes up, never lower it
-fail_under = 97.76
+fail_under = 97.92
 precision = 2

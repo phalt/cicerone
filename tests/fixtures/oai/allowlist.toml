@@ -1,0 +1,101 @@
+# Known conformance gaps, checked by tests/conformance.
+#
+# Every entry needs a reason. Entries naming a task are real gaps that task
+# must close (and remove from here). Entries starting 'by design:' or
+# 'erratum:' can never pass and stay, subject to sign-off in Task 36.
+# Tests fail on any gap not listed here and on any listed entry that now passes.
+
+[fields]
+# version/Object/field from the spec's fixed-field tables
+"3.0.4/Header Object/content" = "content is a raw dict, needs dict[str, MediaType] (Task 15)"
+"3.0.4/Parameter Object/allowReserved" = "allowReserved untyped (Task 15)"
+"3.0.4/Parameter Object/content" = "content is a raw dict, needs dict[str, MediaType] (Task 15)"
+"3.0.4/Path Item Object/servers" = "PathItem.servers not modelled; missed by the spec's findings (Task 8)"
+"3.0.4/Schema Object/externalDocs" = "Schema.externalDocs untyped (Task 20)"
+"3.0.4/Schema Object/xml" = "Schema.xml needs the XML model (Task 15)"
+"3.0.4/Tag Object/externalDocs" = "Tag.external_docs has no wire alias, parsed by hand (Task 10)"
+"3.0.4/XML Object/attribute" = "No XML model yet (Task 15)"
+"3.0.4/XML Object/name" = "No XML model yet (Task 15)"
+"3.0.4/XML Object/namespace" = "No XML model yet (Task 15)"
+"3.0.4/XML Object/prefix" = "No XML model yet (Task 15)"
+"3.0.4/XML Object/wrapped" = "No XML model yet (Task 15)"
+"3.1.2/Components Object/pathItems" = "components.pathItems dropped, Finding #10 (Task 15)"
+"3.1.2/Header Object/content" = "content is a raw dict, needs dict[str, MediaType] (Task 15)"
+"3.1.2/Parameter Object/allowReserved" = "allowReserved untyped (Task 15)"
+"3.1.2/Parameter Object/content" = "content is a raw dict, needs dict[str, MediaType] (Task 15)"
+"3.1.2/Path Item Object/servers" = "PathItem.servers not modelled; missed by the spec's findings (Task 8)"
+"3.1.2/Schema Object/externalDocs" = "Schema.externalDocs untyped (Task 20)"
+"3.1.2/Schema Object/xml" = "Schema.xml needs the XML model (Task 15)"
+"3.1.2/Tag Object/externalDocs" = "Tag.external_docs has no wire alias, parsed by hand (Task 10)"
+"3.1.2/XML Object/attribute" = "No XML model yet (Task 15)"
+"3.1.2/XML Object/name" = "No XML model yet (Task 15)"
+"3.1.2/XML Object/namespace" = "No XML model yet (Task 15)"
+"3.1.2/XML Object/prefix" = "No XML model yet (Task 15)"
+"3.1.2/XML Object/wrapped" = "No XML model yet (Task 15)"
+"3.2.1/Components Object/mediaTypes" = "OAS 3.2 media types (Task 28)"
+"3.2.1/Components Object/pathItems" = "components.pathItems dropped, Finding #10 (Task 15)"
+"3.2.1/Discriminator Object/defaultMapping" = "OAS 3.2 field (Task 29)"
+"3.2.1/Encoding Object/encoding" = "OAS 3.2 media types (Task 28)"
+"3.2.1/Encoding Object/itemEncoding" = "OAS 3.2 media types (Task 28)"
+"3.2.1/Encoding Object/prefixEncoding" = "OAS 3.2 media types (Task 28)"
+"3.2.1/Example Object/dataValue" = "OAS 3.2 field (Task 29)"
+"3.2.1/Example Object/serializedValue" = "OAS 3.2 field (Task 29)"
+"3.2.1/Header Object/content" = "content is a raw dict, needs dict[str, MediaType] (Task 15)"
+"3.2.1/Media Type Object/itemEncoding" = "OAS 3.2 media types (Task 28)"
+"3.2.1/Media Type Object/itemSchema" = "OAS 3.2 media types (Task 28)"
+"3.2.1/Media Type Object/prefixEncoding" = "OAS 3.2 media types (Task 28)"
+"3.2.1/OAuth Flow Object/deviceAuthorizationUrl" = "OAS 3.2 field (Task 29)"
+"3.2.1/OAuth Flows Object/deviceAuthorization" = "OAS 3.2 field (Task 29)"
+"3.2.1/OpenAPI Object/$self" = "OAS 3.2 document-level field (Task 26)"
+"3.2.1/Parameter Object/allowReserved" = "allowReserved untyped (Task 15)"
+"3.2.1/Parameter Object/content" = "content is a raw dict, needs dict[str, MediaType] (Task 15)"
+"3.2.1/Path Item Object/additionalOperations" = "OAS 3.2 operations (Task 27)"
+"3.2.1/Path Item Object/query" = "OAS 3.2 operations (Task 27)"
+"3.2.1/Path Item Object/servers" = "PathItem.servers not modelled; missed by the spec's findings (Task 8)"
+"3.2.1/Response Object/summary" = "OAS 3.2 field (Task 29)"
+"3.2.1/Schema Object/externalDocs" = "Schema.externalDocs untyped (Task 20)"
+"3.2.1/Schema Object/xml" = "Schema.xml needs the XML model (Task 15)"
+"3.2.1/Security Scheme Object/deprecated" = "OAS 3.2 field (Task 29)"
+"3.2.1/Security Scheme Object/oauth2MetadataUrl" = "OAS 3.2 field (Task 29)"
+"3.2.1/Server Object/name" = "OAS 3.2 document-level field (Task 26)"
+"3.2.1/Tag Object/externalDocs" = "Tag.external_docs has no wire alias, parsed by hand (Task 10)"
+"3.2.1/Tag Object/kind" = "OAS 3.2 document-level field (Task 26)"
+"3.2.1/Tag Object/parent" = "OAS 3.2 document-level field (Task 26)"
+"3.2.1/Tag Object/summary" = "OAS 3.2 document-level field (Task 26)"
+"3.2.1/XML Object/attribute" = "No XML model yet (Task 15)"
+"3.2.1/XML Object/name" = "No XML model yet (Task 15)"
+"3.2.1/XML Object/namespace" = "No XML model yet (Task 15)"
+"3.2.1/XML Object/nodeType" = "OAS 3.2 XML nodeType (Task 29)"
+"3.2.1/XML Object/prefix" = "No XML model yet (Task 15)"
+"3.2.1/XML Object/wrapped" = "No XML model yet (Task 15)"
+
+[examples]
+# section/content-hash of a fenced example; one entry covers every version with that text
+"(no object)/133261cc48ac" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.0 line 5407
+"(no object)/134d001afcf1" = "by design: serialisation input data, not an OpenAPI object (under 'Undefined Values and Manual URI Template Construction')"  # 3.0.4 line 4093
+"(no object)/19d4dc2f5135" = "by design: a standalone JSON Schema document used as an external $ref target"  # 3.2.0 line 5382
+"(no object)/1eb4dd5fe321" = "erratum: the published JSON is invalid (Expecting ',' delimiter: line 12 column 23 (char 206))"  # 3.0.4 line 4321
+"(no object)/22e58745d072" = "by design: serialisation input data, not an OpenAPI object (under 'Examples')"  # 3.0.4 line 3983
+"(no object)/23f8710f345f" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.0 line 5422
+"(no object)/2417327fcd4b" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.0 line 5261
+"(no object)/315a98830cf2" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.1 line 5452
+"(no object)/31f9301276c7" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.1 line 5291
+"(no object)/6fe296a9a97f" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.1 line 5276
+"(no object)/7651d1b43444" = "by design: serialisation input data, not an OpenAPI object (under 'Format')"  # 3.0.4 line 102
+"(no object)/83157ea91f31" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.0 line 5366
+"(no object)/a19fb358bdfe" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.1 line 5396
+"(no object)/a4679e1472b8" = "by design: serialisation input data, not an OpenAPI object (under 'Illegal Variable Names as Parameter Names')"  # 3.0.4 line 4142
+"(no object)/b513c90125a2" = "by design: serialisation input data, not an OpenAPI object (under 'Expansion with Non-RFC6570-Supported Options')"  # 3.0.4 line 4072
+"(no object)/c84d6cb5be92" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.1 line 5437
+"(no object)/dd66a9063837" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.0 line 5246
+"(no object)/f506f11d0f4c" = "by design: serialisation input data, not an OpenAPI object (under 'Undefined Values and Manual URI Template Construction')"  # 3.0.4 line 4110
+"(no object)/fe1d5fb24476" = "by design: serialisation input data, not an OpenAPI object (under 'Format')"  # 3.0.0 line 115
+"Example Object/4f7651165f98" = "by design: several unrelated snippets in one block, with inconsistent indentation"  # 3.0.0 line 1908
+"Examples Object/ea341af7e5b9" = "by design: several unrelated snippets in one block, with inconsistent indentation"  # 3.0.0 line 2198
+"Header Object/e8ec293a13d4" = "erratum: the published YAML is invalid (while parsing a flow mapping)"  # 3.2.0 line 2796
+"Parameter Object/7a8a33ed6782" = "erratum: the published JSON is invalid (Illegal trailing comma before end of object: line 8 column 6 (char 136))"  # 3.0.0 line 1149
+"Schema Object/e1e64adcd3e1" = "erratum: the published JSON is invalid (Expecting ',' delimiter: line 4 column 3 (char 36))"  # 3.2.0 line 3151
+"Security Scheme Object/8489507da43f" = "erratum: the published JSON is invalid (Illegal trailing comma before end of object: line 4 column 24 (char 65))"  # 3.0.0 line 3247
+"Server Object/2d6492860f2d" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.1 line 290
+"Server Object/8a756e3c258f" = "Info.version given as a YAML number (version: 1.0) aborts the whole parse (Task 10)"  # 3.2.0 line 290
+"XML Object/0083db217e18" = "erratum: the published YAML is invalid (while scanning a simple key)"  # 3.2.0 line 4409

@@ -1,0 +1,6 @@
+repository: https://github.com/OAI/OpenAPI-Specification.git
+commit: 4f86429f134f7e48b6351563549b4502fc69de52
+committed: 2026-10-18T18:34:56+01:00
+files: versions/3.*.md (released versions only, -editors drafts excluded)
+license: Apache-2.0 (OpenAPI Specification text)
+refresh: uv run python scripts/refresh_oai.py [COMMIT]
