@@ -45,13 +45,13 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Description:** Make `import cicerone` useful: re-export the parse functions, `OpenAPISpec`, every model and the exceptions, and expose `__version__` via `importlib.metadata`. Delete `cicerone/settings.py` (Finding #12). Add `cicerone/errors.py` with `CiceroneError`, `ParseError` (carries `diagnostics`), `UnsupportedVersionError`, `RefResolutionError`, `CircularReferenceError`, `RemoteRefDisallowedError`. Nothing raises them yet except where noted in later tasks.
 
 **Acceptance criteria:**
-- [ ] `cicerone.__version__` equals the installed distribution version
-- [ ] `cicerone.__all__` lists the public API; `from cicerone import *` works and imports nothing private
-- [ ] No module named `cicerone.settings`
+- [x] `cicerone.__version__` equals the installed distribution version
+- [x] `cicerone.__all__` lists the public API; `from cicerone import *` works and imports nothing private
+- [x] No module named `cicerone.settings`
 
 **Verification:**
-- [ ] Tests pass: `uv run pytest tests/test_package.py -vv`
-- [ ] Checks pass
+- [x] Tests pass: `uv run pytest tests/test_package.py -vv`
+- [x] Checks pass
 
 **Dependencies:** 1
 

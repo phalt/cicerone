@@ -1,6 +1,6 @@
 # Implementation Plan: cicerone 0.5.0 (`cicerone-next`)
 
-Status: approved 21 October 2026. Next: Task 2.
+Status: approved 21 October 2026. Next: Task 3.
 
 Spec: [specs/SPEC-cicerone-next.md](../specs/SPEC-cicerone-next.md) (approved 21 October 2026). Tasks: [tasks/todo.md](todo.md).
 
@@ -89,7 +89,7 @@ Full task definitions, acceptance criteria and verification steps live in [tasks
 
 ### Phase 1: Foundation (spec PR 1)
 - [x] Task 1: Tooling floor (Python 3.11+, CI matrix, ruff rules, `py.typed`)
-- [ ] Task 2: Package surface and exception hierarchy
+- [x] Task 2: Package surface and exception hierarchy
 - [ ] Task 3: Regression tests for every Finding as strict xfails
 - [ ] Task 4: OAI conformance ratchet (field coverage + spec examples)
 - [ ] Task 5: Clientele smoke script

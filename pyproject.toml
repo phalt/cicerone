@@ -70,5 +70,5 @@ python_functions = ["test_*"]
 
 [tool.coverage.report]
 # Ratchet: raise this whenever coverage goes up, never lower it
-fail_under = 97.73
+fail_under = 97.76
 precision = 2
