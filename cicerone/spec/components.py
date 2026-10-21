@@ -84,7 +84,7 @@ class Components(pydantic.BaseModel):
         return self.schemas.get(schema_name)
 
     @classmethod
-    def from_spec(cls, raw: typing.Mapping[str, typing.Any]) -> "Components":
+    def from_spec(cls, raw: typing.Mapping[str, typing.Any]) -> Components:
         """Create Components from spec data."""
         # OpenAPI 3.x: components object
         if "components" in raw:

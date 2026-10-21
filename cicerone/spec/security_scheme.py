@@ -30,7 +30,7 @@ class SecurityScheme(pydantic.BaseModel):
     openIdConnectUrl: str | None = pydantic.Field(None, alias="openIdConnectUrl")
 
     @classmethod
-    def from_dict(cls, data: dict[str, typing.Any]) -> "SecurityScheme":
+    def from_dict(cls, data: dict[str, typing.Any]) -> SecurityScheme:
         """Create a SecurityScheme from a dictionary."""
         excluded = {"type", "description", "name", "in", "scheme", "bearerFormat", "flows", "openIdConnectUrl"}
         return cls(

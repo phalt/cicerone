@@ -5,7 +5,7 @@ description = "Turn OpenAPI schemas into Pydantic models"
 authors = [{ name = "Paul Hallett", email = "paulandrewhallett@gmail.com" }]
 license = { text = "MIT" }
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = ["pydantic>=2.9", "pyyaml>=6.0.1"]
 
 [project.urls]
@@ -16,6 +16,7 @@ Issues = "https://github.com/phalt/cicerone/issues"
 
 [dependency-groups]
 dev = [
+    "hypothesis>=6.100",
     "ipython>=8.14.0",
     "mkdocs>=1.4.3",
     "mkdocs-material>=9.1.19",
@@ -46,10 +47,20 @@ select = [
     "W",
     # isort
     "I001",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # Ruff-specific rules
+    "RUF",
+    # flake8-type-checking
+    "TC",
 ]
 
 [tool.ty.environment]
-python-version = "3.14"
+python-version = "3.11"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -37,9 +37,8 @@ class Webhooks(pydantic.BaseModel):
         Yields:
             Operation objects
         """
-        for webhook_name, path_item in self.items.items():
-            for operation in path_item.operations.values():
-                yield operation
+        for path_item in self.items.values():
+            yield from path_item.operations.values()
 
     @classmethod
     def from_dict(cls, data: dict[str, typing.Any]) -> Webhooks:

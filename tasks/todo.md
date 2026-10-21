@@ -21,14 +21,14 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Description:** Raise `requires-python` to `>=3.11`, extend the ruff rule set with `UP`, `B`, `SIM`, `RUF`, `TC` and fix the fallout, update `ci.yml` to a 3.11 to 3.15 matrix with current major versions of `actions/checkout`, `actions/setup-python` and `astral-sh/setup-uv`, add `cicerone/py.typed`, and add `hypothesis` to the dev group. No behaviour change.
 
 **Acceptance criteria:**
-- [ ] `pyproject.toml` says `>=3.11`; CI runs 3.11, 3.12, 3.13, 3.14, 3.15
-- [ ] New ruff rules enabled with no per-file ignores beyond the existing pattern
-- [ ] `py.typed` ships in the wheel (`uv build` then inspect)
+- [x] `pyproject.toml` says `>=3.11`; CI runs 3.11, 3.12, 3.13, 3.14, 3.15
+- [x] New ruff rules enabled with no per-file ignores beyond the existing pattern
+- [x] `py.typed` ships in the wheel (`uv build` then inspect)
 
 **Verification:**
-- [ ] Tests pass: `uv run pytest`
-- [ ] Checks pass
-- [ ] Manual check: `unzip -l dist/*.whl | grep py.typed`
+- [x] Tests pass: `uv run pytest`
+- [x] Checks pass
+- [x] Manual check: `unzip -l dist/*.whl | grep py.typed`
 
 **Dependencies:** None
 

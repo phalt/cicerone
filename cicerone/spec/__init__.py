@@ -36,7 +36,6 @@ __all__ = [
     "Callback",
     "Components",
     "Contact",
-    "Contact",
     "Discriminator",
     "Encoding",
     "Example",

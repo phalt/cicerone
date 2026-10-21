@@ -58,7 +58,7 @@ class Paths(pydantic.BaseModel):
             yield from path_item.operations.values()
 
     @classmethod
-    def from_dict(cls, data: typing.Mapping[str, typing.Any]) -> "Paths":
+    def from_dict(cls, data: typing.Mapping[str, typing.Any]) -> Paths:
         """Create Paths from a dictionary."""
         items = {}
         for path, path_data in data.items():

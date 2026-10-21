@@ -13,7 +13,6 @@ import pathlib
 import shutil
 import subprocess
 import sys
-from typing import List, Tuple
 
 from cicerone import parse as cicerone_parse
 
@@ -29,7 +28,7 @@ def clone_openapi_directory(target_dir: pathlib.Path) -> None:
     print(f"Repository cloned to {target_dir}")
 
 
-def find_schema_files(base_dir: pathlib.Path) -> List[pathlib.Path]:
+def find_schema_files(base_dir: pathlib.Path) -> list[pathlib.Path]:
     """Find all OpenAPI schema files in the directory."""
     print("Finding schema files...")
     schema_files = []
@@ -46,7 +45,7 @@ def find_schema_files(base_dir: pathlib.Path) -> List[pathlib.Path]:
     return sorted(schema_files)
 
 
-def test_schema_file(schema_path: pathlib.Path) -> Tuple[str, str, Exception | None]:
+def test_schema_file(schema_path: pathlib.Path) -> tuple[str, str, Exception | None]:
     """Test parsing a single schema file.
 
     Returns:
@@ -75,12 +74,12 @@ def test_schema_file(schema_path: pathlib.Path) -> Tuple[str, str, Exception | N
 
         return "success", "", None
     except Exception as e:
-        return "failed", f"{type(e).__name__}: {str(e)}", e
+        return "failed", f"{type(e).__name__}: {e!s}", e
 
 
 def test_all_schemas(
-    schema_files: List[pathlib.Path], base_dir: pathlib.Path, verbose: bool = False, fail_fast: bool = False
-) -> Tuple[int, int, int, List[Tuple[pathlib.Path, str, Exception | None]], List[Tuple[pathlib.Path, str]]]:
+    schema_files: list[pathlib.Path], base_dir: pathlib.Path, verbose: bool = False, fail_fast: bool = False
+) -> tuple[int, int, int, list[tuple[pathlib.Path, str, Exception | None]], list[tuple[pathlib.Path, str]]]:
     """Test parsing all schema files.
 
     Returns:

@@ -35,7 +35,7 @@ class PathItem(pydantic.BaseModel):
 
     def __str__(self) -> str:
         """Return a readable string representation of the path item."""
-        methods = ", ".join(m.upper() for m in self.operations.keys())
+        methods = ", ".join(m.upper() for m in self.operations)
         return f"<PathItem: {self.path} [{methods}]>"
 
     @classmethod

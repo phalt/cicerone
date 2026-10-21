@@ -279,7 +279,7 @@ class TestReferenceResolver:
         assert isinstance(all_refs, dict)
         assert len(all_refs) > 0
         assert all(isinstance(v, Reference) for v in all_refs.values())
-        assert all(isinstance(k, str) for k in all_refs.keys())
+        assert all(isinstance(k, str) for k in all_refs)
 
         # Check that we found the User schema references
         user_refs = {k: v for k, v in all_refs.items() if "User" in k}
@@ -450,7 +450,7 @@ class TestOpenAPISpecReferenceIntegration:
         assert isinstance(all_refs, dict)
         assert len(all_refs) > 0
         assert all(isinstance(v, Reference) for v in all_refs.values())
-        assert all(isinstance(k, str) for k in all_refs.keys())
+        assert all(isinstance(k, str) for k in all_refs)
 
         # All refs should be local in this fixture
         assert all(v.is_local for v in all_refs.values())
@@ -517,7 +517,7 @@ class TestOpenAPISpecReferenceIntegration:
         assert len(path_refs) > 0
 
         # Resolve one of them
-        first_ref_key = list(path_refs.keys())[0]
+        first_ref_key = next(iter(path_refs))
         resolved = spec.resolve_reference(path_refs[first_ref_key])
         assert isinstance(resolved, Schema)
         assert resolved.type == "object"

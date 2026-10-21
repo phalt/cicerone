@@ -116,7 +116,7 @@ class TestScalability:
         assert len(spec.components.schemas) >= 100
 
         # All schemas should be accessible
-        for name, schema in spec.components.schemas.items():
+        for schema in spec.components.schemas.values():
             assert schema.type is not None
 
     def test_operation_lookup_efficiency(self, complex_spec_path):

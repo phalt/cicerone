@@ -62,7 +62,7 @@ class Operation(pydantic.BaseModel):
     request_body: spec_request_body.RequestBody | None = pydantic.Field(None, alias="requestBody")
     # None means "inherit the global security requirements", distinct from [] (no security)
     security: list[dict[str, list[str]]] | None = None
-    callbacks: dict[str, "spec_callback.Callback"] = pydantic.Field(default_factory=dict)
+    callbacks: dict[str, spec_callback.Callback] = pydantic.Field(default_factory=dict)
     deprecated: bool = False
     servers: list[spec_server.Server] = pydantic.Field(default_factory=list)
     external_docs: spec_tag.ExternalDocumentation | None = pydantic.Field(None, alias="externalDocs")
@@ -87,7 +87,7 @@ class Operation(pydantic.BaseModel):
         return f"<Operation: {', '.join(parts)}>"
 
     @classmethod
-    def from_dict(cls, method: str, path: str, data: typing.Mapping[str, typing.Any]) -> "Operation":
+    def from_dict(cls, method: str, path: str, data: typing.Mapping[str, typing.Any]) -> Operation:
         """Create an Operation from a dictionary."""
         # Skip non-dict entries so malformed specs degrade gracefully; the raw
         # values are still available via the mirrored model_extra copies

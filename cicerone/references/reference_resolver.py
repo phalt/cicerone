@@ -91,7 +91,7 @@ class ReferenceResolver:
 
         # Check for circular references
         if ref.ref in self._resolution_stack:
-            raise RecursionError(f"Circular reference detected: {' -> '.join(self._resolution_stack + [ref.ref])}")
+            raise RecursionError(f"Circular reference detected: {' -> '.join([*self._resolution_stack, ref.ref])}")
 
         # Return cached results for references that aren't currently in flight
         cache_key = (ref.ref, follow_nested)
@@ -152,7 +152,7 @@ class ReferenceResolver:
             except (KeyError, IndexError, ValueError) as e:
                 message = f"Reference path not found: {ref.ref} (failed at {path_so_far})"
                 if isinstance(current, dict):
-                    available = sorted(str(key) for key in current.keys())
+                    available = sorted(str(key) for key in current)
                     if close_matches := difflib.get_close_matches(part, available, n=1):
                         message += f". Did you mean '{close_matches[0]}'?"
                     preview = ", ".join(available[:20])
@@ -186,9 +186,8 @@ class ReferenceResolver:
             return data
 
         # Map component types to their constructors
-        if parts[0] == "components" and len(parts) >= 3:
-            if constructor := COMPONENT_TYPE_MAP.get(parts[1]):
-                return constructor(data)
+        if parts[0] == "components" and len(parts) >= 3 and (constructor := COMPONENT_TYPE_MAP.get(parts[1])):
+            return constructor(data)
 
         # Map paths to PathItem objects
         if parts[0] == "paths" and len(parts) >= 2:
@@ -267,9 +266,8 @@ class ReferenceResolver:
         Returns:
             Resolved object if $ref found, otherwise the model with nested refs resolved
         """
-        if ref := self._get_ref_from_model(model):
-            if resolved := self._try_resolve_ref(ref):
-                return resolved
+        if (ref := self._get_ref_from_model(model)) and (resolved := self._try_resolve_ref(ref)):
+            return resolved
         return self._resolve_nested_references(model)
 
     def _resolve_model_field(
