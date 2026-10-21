@@ -279,7 +279,7 @@ Every Findings row is a failing test before its fix lands; the corpus and client
 | Downstream | `scripts/clientele_smoke.py`, CI job | Install clientele `main` against cicerone `HEAD`, generate and import every clientele fixture |
 | Performance | `tests/test_performance.py` | Existing benchmarks plus Twilio (largest fixture, ~26k lines): parse time no worse than 1.5x 0.3.0 |
 
-Coverage stays at 100% line and branch for `cicerone/`.
+Coverage never slips: total line and branch coverage for `cicerone/` must not drop below its current level, and every new or changed line and branch is covered. No chasing 100% on untouched code.
 
 The experiment harness from this analysis (three-way generation and diff) is the seed for `clientele_smoke.py`.
 
@@ -314,7 +314,7 @@ While PRs 1 to 9 are in flight, run `clientele_smoke.py` against cicerone `HEAD`
 - Clientele snapshots: Stage 1 identical to pre-migration; Stage 2 diffs limited to the listed items. 1Password has typed bodies and responses; the 3.1 fixture has `maybe: int | str`.
 - Corpus: at least 99.5% of APIs.guru 3.x specs parse in lenient mode, at least 99% of their refs resolve, and the badge shows the real figure.
 - 100% OAS 3.x compatibility: all patch versions 3.0.0 to 3.0.4, 3.1.0 to 3.1.2 and 3.2.0 to 3.2.1 accepted; 100% of fixed fields typed; 100% of the spec's own examples parse with zero error diagnostics.
-- 100% line and branch coverage; ruff and ty clean.
+- Coverage no lower than at the start of this work (98% branch on 21 October 2026), with all code added by this work fully covered; ruff and ty clean.
 
 ## Boundaries
 

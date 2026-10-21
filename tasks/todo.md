@@ -8,7 +8,7 @@ Standard checks for every task (referred to below as **checks**):
 uv run ruff format --check . && uv run ruff check . && uv run ty check .
 ```
 
-Every task also keeps the full suite green (`uv run pytest`) and coverage at 100% line and branch for `cicerone/` (`uv run pytest --cov=cicerone --cov-branch`). When a task fixes a Finding, it deletes that test's `xfail` marker in the same change. When it closes a conformance gap, it removes the entry from the Task 4 allowlist in the same change.
+Every task also keeps the full suite green (`uv run pytest`) and coverage from slipping (`uv run pytest --cov=cicerone --cov-branch`): total coverage never drops, and every line and branch the task adds or changes is covered. Don't chase coverage on code the task doesn't touch. When a task fixes a Finding, it deletes that test's `xfail` marker in the same change. When it closes a conformance gap, it removes the entry from the Task 4 allowlist in the same change.
 
 Finding numbers (#1 to #13) refer to the Defects table in the spec.
 
@@ -132,7 +132,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Small
 
 ## Checkpoint 1: Foundation
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Regression xfails and conformance allowlists recorded as the baseline
 - [ ] Smoke script runs against clientele `main`
 - [ ] Review with human before proceeding
@@ -261,7 +261,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Medium
 
 ## Checkpoint 2: Parse context
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Every model built through `ParseContext`; no hand-written `from_dict` bodies remain outside `model_utils.py`
 - [ ] Realworld fixtures parse with diagnostics counts recorded in the PR
 - [ ] Review with human before proceeding
@@ -315,7 +315,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Small
 
 ## Checkpoint 3: Public API shape
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Start a clientele branch for C2 against cicerone `main`; run `clientele_smoke.py` and record what breaks
 - [ ] Review with human before proceeding
 
@@ -392,7 +392,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Medium
 
 ## Checkpoint 4: Structurally correct 3.0 / 3.1
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Findings #1, #4 to #10 passing
 - [ ] Review with human before proceeding
 
@@ -496,7 +496,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Medium
 
 ## Checkpoint 5: Codegen-ready references
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Findings #1 to #11 passing
 - [ ] Clientele C2 branch can replace `get_param_from_ref`, `get_schema_from_ref` and `schema_ref` with `deref` / `component_key`
 - [ ] Review with human before proceeding
@@ -552,7 +552,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Medium
 
 ## Checkpoint 6: 3.1 complete
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Every shim-diff regression passing
 - [ ] Review with human before proceeding
 
@@ -651,7 +651,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Medium
 
 ## Checkpoint 7: Multi-document specs
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Security review of Tasks 22 and 23 done by the human
 - [ ] Clientele C2 branch generates from a multi-file fixture via `named_schemas`
 - [ ] Review with human before proceeding
@@ -767,7 +767,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Small
 
 ## Checkpoint 8: 3.2 complete
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Field-coverage allowlist empty
 - [ ] Review with human before proceeding
 
@@ -859,7 +859,7 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Estimated scope:** Small
 
 ## Checkpoint 9: Release gates green
-- [ ] All tests pass, checks clean, coverage 100%
+- [ ] All tests pass, checks clean, coverage not lower than the previous checkpoint and new code fully covered
 - [ ] Corpus at or above 99.5% / 99%; fuzz clean; performance within ceiling
 - [ ] Review with human before proceeding
 
