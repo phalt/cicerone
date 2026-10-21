@@ -115,13 +115,14 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Description:** Turn the analysis harness into `scripts/clientele_smoke.py`: given a clientele checkout (path argument, default `../clientele`), generate a client for every fixture under its `example_openapi_specs/`, `tests/fixtures/` and `server_examples/` using the cicerone in the current environment, import each generated package, and optionally diff against a saved baseline directory. Exit non-zero on crash or import failure. Add a CI job that runs it against clientele `main`, marked `continue-on-error: true` until Task 36.
 
 **Acceptance criteria:**
-- [ ] Runs end to end against clientele `main` with today's cicerone and reports 26 fixtures, 1 empty-file skip
-- [ ] `--baseline DIR` and `--write-baseline DIR` produce and compare outputs
-- [ ] CI job present and non-blocking
+- [x] Runs end to end against clientele `main` with today's cicerone and reports 26 fixtures, 1 empty-file skip
+- [x] `--baseline DIR` and `--write-baseline DIR` produce and compare outputs
+- [x] CI job present and non-blocking
+- [x] Fixtures that already fail with clientele's pinned cicerone 0.3.0 are listed in `scripts/clientele_known_failures.toml` with reasons; a known failure that starts working fails the run (added in Task 5: four generated clients fail to import on clientele `main` today)
 
 **Verification:**
-- [ ] Manual check: `uv run python scripts/clientele_smoke.py ../clientele` succeeds locally
-- [ ] Checks pass
+- [x] Manual check: `uv run python scripts/clientele_smoke.py ../clientele` succeeds locally
+- [x] Checks pass
 
 **Dependencies:** 2
 

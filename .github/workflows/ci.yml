@@ -57,3 +57,37 @@ jobs:
         uses: codecov/codecov-action@v7
         with:
           token: ${{secrets.CODECOV_TOKEN}}
+
+  clientele-smoke:
+    # Generate and import a clientele client for every clientele fixture using
+    # this cicerone. Informational until the release gate (tasks/todo.md Task 36)
+    # makes it blocking.
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Check out cicerone
+        uses: actions/checkout@v7
+      - name: Check out clientele main
+        uses: actions/checkout@v7
+        with:
+          repository: phalt/clientele
+          path: clientele
+      - name: Set up python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Install UV
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Install cicerone
+        run: uv sync --frozen
+      - name: Install clientele against this cicerone
+        # clientele pins an older cicerone, so install it without dependencies
+        # and add its other requirements separately
+        run: |
+          uv pip install --no-deps ./clientele
+          uv pip install $(uv run --no-sync python scripts/clientele_smoke.py requirements ./clientele)
+      - name: Generate and import every clientele fixture
+        run: uv run --no-sync python scripts/clientele_smoke.py run ./clientele

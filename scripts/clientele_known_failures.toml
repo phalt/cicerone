@@ -1,0 +1,12 @@
+# clientele fixtures whose generated client fails to import even with the
+# cicerone clientele pins (0.3.0), so they are clientele generator bugs rather
+# than cicerone regressions. Verified 21 October 2026 against clientele 228d66f.
+#
+# scripts/clientele_smoke.py reports these as "known". When one starts working
+# it reports as "fixed" and fails the run until its entry is removed.
+
+[known_failures]
+"tests/fixtures/openapi_examples/petstore.json" = "clientele bug: generated client raises NameError: name 'default' is not defined"
+"tests/fixtures/openapi_examples/petstore-expanded.json" = "clientele bug: generated client raises NameError: name 'default' is not defined"
+"tests/fixtures/openapi_examples/tictactoe.json" = "clientele bug: response_map value for status 200 is not a model class"
+"tests/fixtures/realworld/ably.yaml" = "clientele bug: generated client references undefined ZapierRulePatch"
