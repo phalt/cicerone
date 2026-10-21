@@ -62,6 +62,10 @@ select = [
 [tool.ty.environment]
 python-version = "3.11"
 
+[tool.ty.rules]
+# Fails CI once an API lands and its ty: ignore in tests/regressions goes stale
+unused-ignore-comment = "error"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]

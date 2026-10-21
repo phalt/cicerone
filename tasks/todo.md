@@ -8,7 +8,7 @@ Standard checks for every task (referred to below as **checks**):
 uv run ruff format --check . && uv run ruff check . && uv run ty check .
 ```
 
-Every task also keeps the full suite green (`uv run pytest`) and coverage from slipping (`uv run pytest --cov=cicerone --cov-branch`): total coverage never drops, and every line and branch the task adds or changes is covered. Don't chase coverage on code the task doesn't touch. When a task fixes a Finding, it deletes that test's `xfail` marker in the same change. When it closes a conformance gap, it removes the entry from the Task 4 allowlist in the same change.
+Every task also keeps the full suite green (`uv run pytest`) and coverage from slipping (`uv run pytest --cov=cicerone --cov-branch`): total coverage never drops, and every line and branch the task adds or changes is covered. Don't chase coverage on code the task doesn't touch. When a task fixes a Finding, it deletes that test's `xfail` marker and any `ty: ignore` on its lines in the same change (ty fails on unused suppressions). When it closes a conformance gap, it removes the entry from the Task 4 allowlist in the same change.
 
 Finding numbers (#1 to #13) refer to the Defects table in the spec.
 
@@ -68,14 +68,14 @@ Finding numbers (#1 to #13) refer to the Defects table in the spec.
 **Description:** Add `tests/regressions/test_findings.py` with one test per Finding #1 to #11 and #13's measurable part (the badge JSON is produced from data, checked in Task 32), plus the three shim-diff rows: Twilio `$ref` + sibling `type` under 3.0, 1Password request body / response deref, 3.1 multi-type `type` array. Each asserts the spec's intended behaviour and is marked `xfail(strict=True, reason="Finding #N")`. Fixtures are minimal inline dicts, not the large realworld files.
 
 **Acceptance criteria:**
-- [ ] One clearly named test per Finding, each xfailing for the reason recorded in the spec
-- [ ] Tests assert the target behaviour from the spec, not today's behaviour
-- [ ] Shim-diff rows assert on cicerone APIs only (no clientele import)
+- [x] One clearly named test per Finding, each xfailing for the reason recorded in the spec
+- [x] Tests assert the target behaviour from the spec, not today's behaviour
+- [x] Shim-diff rows assert on cicerone APIs only (no clientele import)
 
 **Verification:**
-- [ ] Tests pass (as xfails): `uv run pytest tests/regressions -vv`
-- [ ] Checks pass
-- [ ] Manual check: temporarily drop one marker and confirm the test fails for the stated reason
+- [x] Tests pass (as xfails): `uv run pytest tests/regressions -vv`
+- [x] Checks pass
+- [x] Manual check: temporarily drop one marker and confirm the test fails for the stated reason
 
 **Dependencies:** 2
 
